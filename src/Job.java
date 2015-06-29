@@ -5,6 +5,7 @@ import java.io.Serializable;
  */
 public class Job implements Serializable {
 
+    //Job type is determined by file name
     public enum Type{
         CREATE_DIR,     //C
         RM_DIR,         //R
@@ -14,11 +15,12 @@ public class Job implements Serializable {
         OTHER
     }
 
-    public Job(String s){path = s; state = JobAgreementProtocol.State.NOT_STARTED; type = determineType(path);}
+    public Job(String s){fileName = s; state = JobAgreementProtocol.State.NOT_STARTED; type = determineType(fileName);}
 
-    public Type determineType(String path)
+    //job type is determined by file name
+    public Type determineType(String fileName)
     {
-        switch (path.charAt(0))
+        switch (fileName.charAt(0))
         {
             case 'C':
                 return Type.CREATE_DIR;
@@ -35,7 +37,7 @@ public class Job implements Serializable {
         }
     }
 
-    public String path;
+    public String fileName;
     public JobAgreementProtocol.State state;
     public Type type;
 }

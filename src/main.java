@@ -17,7 +17,7 @@ public class main {
                     worker.join();
                 }
             } else if (args[0].equals("-m")) {
-                manager = new Manager();
+                manager = new Manager(null);
                 manager.start();
                 for (int i = 1; i < args.length; i++) {
                     Runtime.getRuntime().exec("ssh " + args[i] + " java ~/.dc/copy");
@@ -27,7 +27,7 @@ public class main {
             }
             else if (args[0].equals("-l")){
                 System.out.println("Connecting to self.");
-                manager = new Manager();
+                manager = new Manager(null);
                 manager.start();
                 Worker worker1 = new Worker("localhost");
                 worker1.start();
@@ -39,6 +39,7 @@ public class main {
                 worker4.start();
                 Worker worker5 = new Worker("localhost");
                 worker5.start();
+
                 worker1.join();
                 worker2.join();
                 worker3.join();
@@ -49,12 +50,6 @@ public class main {
             else {System.out.println("Argument " + args[0] + " not understood.");}
         } catch (Exception e) {
             System.err.println("Failed to start services.");
-        }
-        finally{
-            if(manager != null )
-                manager.safeClose();
-            if(worker != null)
-                worker.safeClose();
         }
     }
 }

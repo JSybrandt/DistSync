@@ -34,9 +34,16 @@ public class JobAgreementProtocol {
                 state = State.RUNNING;
                 return "";
         }
+        else if (state == State.RUNNING && input.equals("REQ_HELP")){
+            return "TBD";
+        }
         else if (state == State.RUNNING && input.equals("FINISHED")){
             state = State.FINISHED;
             return "";
+        }
+        else if (state == State.FINISHED && input.equals("RESTART")){
+            state = State.RUNNING;
+            return pathToJobFile;
         }
         else if (state == State.RUNNING && input.equals("ERROR")){
             state = State.ERROR;

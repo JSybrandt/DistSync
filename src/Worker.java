@@ -27,9 +27,10 @@ public class Worker extends Thread {
         }
     }
 
-    void safeClose()
-    {
+    @Override
+    public void finalize(){
         try {
+            System.out.println("Finalize Called");
             in.close();
             out.close();
             socket.close();
@@ -39,20 +40,26 @@ public class Worker extends Thread {
             System.err.println("Worker failed to close.");
         }
     }
+
     @Override
     public void run()
     {
         try {
-            String received = in.readLine();
-            System.out.println("Client Received:" + received);
-            out.println("STARTED");
-            sleep(1000);
-            Random rand = new Random();
-            //if(rand.nextInt(100)<20)
-            //    out.println("ERROR");
-            //else
+
+            while(true) {
+                String received = in.readLine();
+                System.out.println("Client Received:" + received);
+                if (received.equals("QUIT")) {
+                    return;
+                }
+                out.println("STARTED");
+                sleep(1000);
+                //Random rand = new Random();
+                //if(rand.nextInt(100)<20)
+                //    out.println("ERROR");
+                //else
                 out.println("FINISHED");
-            safeClose();
+            }
         }
         catch(Exception e){
             System.err.println("Client Failed to listen :(" + e);

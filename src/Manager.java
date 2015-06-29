@@ -12,21 +12,21 @@ import java.util.concurrent.TimeoutException;
 
 public class Manager extends Thread {
 
-    ServerSocket listener;
     ArrayList<JobSender> senders = new ArrayList<>();
+    ArrayList<Socket> sockets = new ArrayList<>();
+    ConcurrentHashMap<Socket,Boolean> connectionStatus = new ConcurrentHashMap<>();//true represents running
+    ArrayList<String> workerURLs; // to be used to spawn on run
     Job[] jobs;
     public final String TEMP_DIR = "./tmp/";
     public final String JOB_DIR = TEMP_DIR + "jobs/";
 
-    int maxConnectionID = 0;
 
 
-    Manager() throws IOException
+    Manager(ArrayList<String> workerURLs) throws IOException
     {
-        listener = new ServerSocket(NetConstants.PORT);
-        listener.setSoTimeout(5000);
         setUpDirStructure();
         jobs = getJobFiles();
+        this.workerURLs = workerURLs;
     }
 
 
@@ -42,25 +42,22 @@ public class Manager extends Thread {
         if(file.isDirectory())
         {
             File children[] = file.listFiles();
-            for (File f : children) {
-                deletePath(f);
-            }
+            if(children != null)
+                for (File f : children) {
+                    deletePath(f);
+                }
         }
-
         file.delete();
-
     }
 
-    public void safeClose(){
+    @Override
+    public void finalize(){
         try {
 
             deletePath(new File(TEMP_DIR));
 
-            for(JobSender sender : senders) {
-                sender.join();
-                sender.safeClose();
-            }
-            listener.close();
+            for(Socket s : sockets)
+                s.close();
         }
         catch(Exception e){
             System.err.println("Sever failed to close.");
@@ -78,30 +75,64 @@ public class Manager extends Thread {
         return j;
     }
 
+    public void getConnections() throws IOException
+    {
+        ServerSocket listener = new ServerSocket(NetConstants.PORT);
+        listener.setSoTimeout(2000);
+
+        if(workerURLs != null)
+        {
+            //spawn workers using ssh to start main.java on remotes
+        }
+        while(!listener.isClosed())
+        {
+            try {
+                Socket s = listener.accept();
+                sockets.add(s);
+                connectionStatus.put(s, false);
+                System.out.println("Made Connection with " + s.getLocalAddress().toString());
+            }catch(SocketTimeoutException e){listener.close();/*who cares*/}
+        }
+    }
+
+    //returns true if finished
+    public boolean checkIsFinished(){
+        for(Job j : jobs)
+        {
+            if(j.state == JobAgreementProtocol.State.NOT_STARTED)
+                return false;
+        }
+        for(JobSender s : senders)
+        {
+            if(s.protocol.state != JobAgreementProtocol.State.FINISHED
+                    && s.protocol.state != JobAgreementProtocol.State.ERROR)
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+
     @Override
     public void run()
     {
         try {
-            boolean newJobsRunning = true;
-            while (newJobsRunning && !listener.isClosed())
+            getConnections();
+
+            while (!checkIsFinished())
             {
-                newJobsRunning = false;
                 for(Job j : jobs) {
                     if(j.state== JobAgreementProtocol.State.NOT_STARTED) {
-                        try {
-                            newJobsRunning = true;
-                            System.out.println("Server is waiting...");
-                            JobSender s = new JobSender(listener.accept(), j);
-                            senders.add(s);
-                            j.state= JobAgreementProtocol.State.ASSIGNED;
-                            s.start();
-                            System.out.println("Made Connection");
-                            maxConnectionID++;
-                        } catch (SocketTimeoutException e) {
-                            System.err.println("Server timed out.");
-                            listener.close();
-                        } finally {
-                            //listener.close();
+                        for(Socket s : sockets)
+                        {
+                            if(!connectionStatus.get(s))
+                            {
+                                JobSender sender = new JobSender(s,j);
+                                senders.add(sender);
+                                j.state = JobAgreementProtocol.State.ASSIGNED;
+                                sender.start();
+                                break;
+                            }
                         }
                     }
                 }
@@ -121,6 +152,14 @@ public class Manager extends Thread {
         catch(Exception e ){
             //DoNothing
         }
+        for(Socket s : sockets)
+        {
+            try {
+                new PrintWriter(s.getOutputStream(), true).println("QUIT");
+            }
+            catch(IOException e)
+            {System.out.println("Failed to send quit to " + s.getLocalAddress());}
+        }
 
     }
 
@@ -135,18 +174,18 @@ public class Manager extends Thread {
         {
             job = j;
             socket = s;
-            protocol = new JobAgreementProtocol(job.path);
+            protocol = new JobAgreementProtocol(job.fileName);
 
             in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             out = new PrintWriter(socket.getOutputStream(),true);
 
         }
 
-        void safeClose(){
+        @Override
+        public void finalize(){
             try {
                 in.close();
                 out.close();
-                socket.close();
             }
             catch(Exception e)
             {
@@ -157,6 +196,7 @@ public class Manager extends Thread {
         @Override
         public void run(){
             try{
+                connectionStatus.put(socket,true);
                 String msg = "";
                 while(protocol.state!= JobAgreementProtocol.State.FINISHED && protocol.state!= JobAgreementProtocol.State.ERROR)
                 {
@@ -166,22 +206,23 @@ public class Manager extends Thread {
                     }
                     System.out.println(protocol.state);
                     job.state = protocol.state;
-                    msg = in.readLine();
+                    if(protocol.state!= JobAgreementProtocol.State.FINISHED)
+                        msg = in.readLine();
                 }
-                safeClose();
             }
             catch (Exception e)
             {
                 System.err.println("IO Failed " + e);
             }
             finally {
-                try {
-                    socket.close();
-                }
-                catch (Exception e)
-                {
-                    System.err.println("Failed to close socket.");
-                }
+                //try {
+                    //socket.close();
+                //}
+                //catch (Exception e)
+                //{
+                    //System.err.println("Failed to close socket.");
+                //}
+                connectionStatus.put(socket,false);
             }
         }
 
