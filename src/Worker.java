@@ -48,9 +48,9 @@ public class Worker extends Thread {
             out.println("STARTED");
             sleep(1000);
             Random rand = new Random();
-            if(rand.nextInt(100)<20)
-                out.println("ERROR");
-            else
+            //if(rand.nextInt(100)<20)
+            //    out.println("ERROR");
+            //else
                 out.println("FINISHED");
             safeClose();
         }

@@ -7,6 +7,7 @@ public class JobAgreementProtocol {
 
     public enum State{
         NOT_STARTED,
+        ASSIGNED,
         MADE_CONTACT,
         RUNNING,
         FINISHED,
