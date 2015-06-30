@@ -17,8 +17,6 @@ public class Manager extends Thread {
     ArrayList<String> workerURLs; // to be used to spawn on run
     Job[] jobs;
 
-
-
     Manager(ArrayList<String> workerURLs) throws IOException
     {
         setUpDirStructure();
