@@ -3,10 +3,13 @@
  */
 
 import java.io.*;
+import java.lang.reflect.Array;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketTimeoutException;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.PriorityQueue;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class Manager extends Thread {
@@ -20,7 +23,7 @@ public class Manager extends Thread {
     Manager(ArrayList<String> workerURLs) throws IOException
     {
         setUpDirStructure();
-        jobs = getJobFiles();
+        jobs = getSortedJobFiles();
         this.workerURLs = workerURLs;
     }
 
@@ -28,17 +31,17 @@ public class Manager extends Thread {
     {
         new File(Constants.TEMP_DIR).mkdir();
         new File(Constants.JOB_DIR).mkdir();
-        new File(Constants.JOB_DIR + "Cd1.temp").createNewFile();
-        new File(Constants.JOB_DIR + "Cd2.temp").createNewFile();
-        new File(Constants.JOB_DIR + "Cd3.temp").createNewFile();
-        new File(Constants.JOB_DIR + "Cd4.temp").createNewFile();
-        new File(Constants.JOB_DIR + "Cd5.temp").createNewFile();
-        new File(Constants.JOB_DIR + "Cd6.temp").createNewFile();
-        new File(Constants.JOB_DIR + "Cd7.temp").createNewFile();
-        new File(Constants.JOB_DIR + "Cd8.temp").createNewFile();
-        new File(Constants.JOB_DIR + "Cd9.temp").createNewFile();
-        new File(Constants.JOB_DIR + "Cd10.temp").createNewFile();
-        new File(Constants.JOB_DIR + "Cd11.temp").createNewFile();
+        new File(Constants.JOB_DIR + "C1.temp").createNewFile();
+        new File(Constants.JOB_DIR + "R1.temp").createNewFile();
+        new File(Constants.JOB_DIR + "A1.temp").createNewFile();
+        new File(Constants.JOB_DIR + "D1.temp").createNewFile();
+        new File(Constants.JOB_DIR + "M1.temp").createNewFile();
+        new File(Constants.JOB_DIR + "C2.temp").createNewFile();
+        new File(Constants.JOB_DIR + "C3.temp").createNewFile();
+        new File(Constants.JOB_DIR + "R2.temp").createNewFile();
+        new File(Constants.JOB_DIR + "A2.temp").createNewFile();
+        new File(Constants.JOB_DIR + "D2.temp").createNewFile();
+        new File(Constants.JOB_DIR + "M2.temp").createNewFile();
     }
 
     public void deletePath(File file)
@@ -51,7 +54,7 @@ public class Manager extends Thread {
                     deletePath(f);
                 }
         }
-        System.out.println("Removing: "+file.getName());
+        System.out.println("Removing: " + file.getName());
         file.delete();
     }
 
@@ -66,15 +69,20 @@ public class Manager extends Thread {
         }
     }
 
-    public Job[] getJobFiles()
+    private Job[] getSortedJobFiles()
     {
-        String[] s = new File(Constants.JOB_DIR).list();
-        Job [] j = new Job[s.length];
-        for(int i = 0 ; i< s.length;i++)
-        {
-            j[i] = new Job(s[i]);
+        try {
+            String[] s = new File(Constants.JOB_DIR).list();
+            Job[] j = new Job[s.length];
+            for (int i = 0; i < s.length; i++) {
+                j[i] = new Job(s[i]);
+            }
+            Arrays.sort(j);
+            return j;
+        }catch(IOException e){
+            System.err.println("Something went wonky in the file system.");
+            return null;
         }
-        return j;
     }
 
     public void getConnections() throws IOException
@@ -115,29 +123,64 @@ public class Manager extends Thread {
         return true;
     }
 
+    //determines which job should be sent out next
+    private Job selectNextJob()
+    {
+        boolean maySelectCreateFiles=true;
+        boolean maySelectRemoveDirectories=true;
+        //takes advantage of priority queue
+        for(Job j : jobs)
+        {
+            if(j.state != Constants.State.FINISHED && j.state!= Constants.State.ERROR){
+                if(j.type == Job.Type.CREATE_DIR)
+                    maySelectCreateFiles = false;
+                else if(j.type == Job.Type.RM_FILES)
+                    maySelectRemoveDirectories=false;
+
+                if(j.state==Constants.State.NOT_STARTED)
+                {
+                    if(j.type == Job.Type.CREATE_FILES) {
+                        if (maySelectCreateFiles) {
+                            return j;
+                        }
+                    }
+                    else if(j.type == Job.Type.RM_DIR) {
+                        if (maySelectRemoveDirectories) {
+                            return j;
+                        }
+                    }
+                    else return j;
+                }
+            }
+        }
+        return null;
+    }
+
     @Override
     public void run()
     {
+
         int cons = 0;
         try {
             getConnections();
 
             while (!checkIsFinished())
             {
-                for(Job j : jobs) {
-                    if(j.state== Constants.State.NOT_STARTED) {
-                        for(Socket s : sockets)
+                Job j = selectNextJob();
+                if(j!=null)
+                {
+                    //System.out.println("Selected " + j);
+                    for(Socket s : sockets)
+                    {
+                        if(!connectionStatus.get(s))
                         {
-                            if(!connectionStatus.get(s))
-                            {
-                                cons++;
-                                JobSender sender = new JobSender(s,j,cons);
-                                senders.add(sender);
-                                j.state = Constants.State.ASSIGNED;
-                                connectionStatus.put(s,true);
-                                sender.start();
-                                break;
-                            }
+                            cons++;
+                            JobSender sender = new JobSender(s,j,cons);
+                            senders.add(sender);
+                            j.state = Constants.State.ASSIGNED;
+                            connectionStatus.put(s,true);
+                            sender.start();
+                            break;
                         }
                     }
                 }

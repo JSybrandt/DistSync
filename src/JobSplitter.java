@@ -11,21 +11,7 @@ public class JobSplitter extends Thread{
 
     @Override
     public void run(){
-
-    }
-
-    public double getWeight(Job j) throws IOException
-    {
-        double weight = 0;
-
-        Scanner scan = new Scanner(new File(j.fileName));
-        while(scan.hasNext()) {
-            int size = scan.nextInt();
-            String length = scan.next();
-
-
-        }
-        return weight;
+        //we'll figure out what to do later
     }
 
 }
