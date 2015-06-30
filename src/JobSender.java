@@ -20,7 +20,7 @@ public class JobSender extends Thread{
         manager = m;
         job = j;
         socket = s;
-        protocol = new JobAgreementProtocol(job.fileName);
+        protocol = new JobAgreementProtocol();
         ID = id;
         out = new ObjectOutputStream(socket.getOutputStream());
         in = new ObjectInputStream(socket.getInputStream());
@@ -51,7 +51,7 @@ public class JobSender extends Thread{
                 }
                 System.out.println(ID + ":" + protocol.state);
                 job.state = protocol.state;
-                if(protocol.state!= Constants.State.FINISHED)
+                if(protocol.state!= Constants.State.FINISHED && protocol.state!= Constants.State.ERROR)
                     msg = (String)in.readObject();
             }
         }
@@ -67,7 +67,7 @@ public class JobSender extends Thread{
             //{
             //System.err.println("Failed to close socket.");
             //}
-            manager.connectionStatus.put(socket,false);
+            manager.connectionStatus.put(socket, false);
         }
     }
 }

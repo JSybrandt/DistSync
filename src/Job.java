@@ -36,9 +36,10 @@ public class Job implements Serializable, Comparable {
     public Job(String s) throws IOException{
 
         fileName = s;
+        path = Constants.JOB_DIR+fileName;
         state = Constants.State.NOT_STARTED;
         type = determineType(fileName);
-        weight = calculateWeight(Constants.JOB_DIR + fileName);
+        weight = calculateWeight();
 
     }
 
@@ -62,10 +63,12 @@ public class Job implements Serializable, Comparable {
         }
     }
 
-    public String fileName;
+    public String fileName, path;
     public Constants.State state;
     public Type type;
     public double weight;
+    public String upToDateMountPoint = "./datCurr/";
+    public String outOfDateMountPoint = "./datOld/";
 
     private final double RM_FILE_WEIGHT=0.1;
     private final double CP_FILE_WEIGHT=1;
@@ -73,7 +76,7 @@ public class Job implements Serializable, Comparable {
     private final double CP_DIR_WEIGHT=0.15;
     private final double SYNC_FILE_WEIGHT=0.5;
 
-    private double calculateWeight(String path) throws IOException{
+    private double calculateWeight() throws IOException{
         double res = 0;
         Scanner scan = new Scanner(new File(path));
         while (scan.hasNext()) {
@@ -97,5 +100,5 @@ public class Job implements Serializable, Comparable {
         return Integer.compare(getTypeVal(type),getTypeVal(((Job)o).type));
     }
 
-    public String toString(){return fileName+"\t"+type;}
+    public String toString(){return fileName+"\t"+type+"\t"+weight;}
 }

@@ -22,7 +22,7 @@ public class Manager extends Thread {
 
     Manager(ArrayList<String> workerURLs) throws IOException
     {
-        setUpDirStructure();
+        //setUpDirStructure();
         jobs = getSortedJobFiles();
         this.workerURLs = workerURLs;
     }
@@ -208,7 +208,7 @@ public class Manager extends Thread {
             catch(IOException e)
             {System.out.println("Failed to send quit to " + s.getLocalAddress());}
         }
-        deletePath(new File(Constants.TEMP_DIR));
+        //deletePath(new File(Constants.TEMP_DIR));
     }
 
 

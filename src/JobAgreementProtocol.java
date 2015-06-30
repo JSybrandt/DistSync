@@ -7,17 +7,11 @@ public class JobAgreementProtocol {
 
     public enum Action{
         DO_NOTHING,
-        SEND_JOB,
-        QUIT
+        SEND_JOB
     }
 
-    String pathToJobFile;
     Constants.State state = Constants.State.NOT_STARTED;
 
-    JobAgreementProtocol(String path)
-    {
-        pathToJobFile=path;
-    }
 
     //the server will send a job, the client will say that job has begun,
     //the server has the option to stop the job, the client will report the job is done, or the job is in error
