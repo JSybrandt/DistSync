@@ -5,6 +5,11 @@ import java.io.IOException;
  */
 public class JobAgreementProtocol {
 
+    public enum Action{
+        DO_NOTHING,
+        SEND_JOB,
+        QUIT
+    }
 
     String pathToJobFile;
     Constants.State state = Constants.State.NOT_STARTED;
@@ -17,30 +22,30 @@ public class JobAgreementProtocol {
     //the server will send a job, the client will say that job has begun,
     //the server has the option to stop the job, the client will report the job is done, or the job is in error
 
-    public String processInput(String input) throws IOException {
+    public Action processInput(String input) throws IOException {
         if (state == Constants.State.NOT_STARTED) {
             state = Constants.State.MADE_CONTACT;
-            return pathToJobFile;
+            return Action.SEND_JOB;
             //start communication by sending the client the job file
         }
         else if (state == Constants.State.MADE_CONTACT && input.equals("STARTED")){
                 state = Constants.State.RUNNING;
-                return "";
+                return Action.DO_NOTHING;
         }
         else if (state == Constants.State.RUNNING && input.equals("REQ_HELP")){
-            return "TBD";
+            return Action.DO_NOTHING;
         }
         else if (state == Constants.State.RUNNING && input.equals("FINISHED")){
             state = Constants.State.FINISHED;
-            return "";
+            return Action.DO_NOTHING;
         }
         else if (state == Constants.State.FINISHED && input.equals("RESTART")){
             state = Constants.State.RUNNING;
-            return pathToJobFile;
+            return Action.SEND_JOB;
         }
         else if (state == Constants.State.RUNNING && input.equals("ERROR")){
             state = Constants.State.ERROR;
-            return "";
+            return Action.DO_NOTHING;
         }
         else
             throw new IOException("Protocol not followed. On State: " +state+ " Received: " + input);

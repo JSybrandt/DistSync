@@ -175,7 +175,7 @@ public class Manager extends Thread {
                         if(!connectionStatus.get(s))
                         {
                             cons++;
-                            JobSender sender = new JobSender(s,j,cons);
+                            JobSender sender = new JobSender(s,j,cons,this);
                             senders.add(sender);
                             j.state = Constants.State.ASSIGNED;
                             connectionStatus.put(s,true);
@@ -203,77 +203,12 @@ public class Manager extends Thread {
         for(Socket s : sockets)
         {
             try {
-                new PrintWriter(s.getOutputStream(), true).println("QUIT");
+                new ObjectOutputStream(s.getOutputStream()).writeObject(null);
             }
             catch(IOException e)
             {System.out.println("Failed to send quit to " + s.getLocalAddress());}
         }
         deletePath(new File(Constants.TEMP_DIR));
-    }
-
-    private class JobSender extends Thread
-    {
-        private Socket socket;
-        private Job job;
-        BufferedReader in;
-        PrintWriter out;
-        public JobAgreementProtocol protocol;
-        public int ID;
-        JobSender(Socket s, Job j, int id) throws IOException
-        {
-            job = j;
-            socket = s;
-            protocol = new JobAgreementProtocol(job.fileName);
-            ID = id;
-            in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-            out = new PrintWriter(socket.getOutputStream(),true);
-
-        }
-
-        @Override
-        public void finalize(){
-            try {
-                in.close();
-                out.close();
-            }
-            catch(Exception e)
-            {
-                System.err.println("Server connection failed to close.");
-            }
-        }
-
-        @Override
-        public void run(){
-            try{
-                String msg = "";
-                while(protocol.state!= Constants.State.FINISHED && protocol.state!= Constants.State.ERROR)
-                {
-                    String s = protocol.processInput(msg);
-                    if(s!=""){
-                        out.println(s);
-                    }
-                    System.out.println(ID + ":" + protocol.state);
-                    job.state = protocol.state;
-                    if(protocol.state!= Constants.State.FINISHED)
-                        msg = in.readLine();
-                }
-            }
-            catch (Exception e)
-            {
-                System.err.println("IO Failed " + e);
-            }
-            finally {
-                //try {
-                    //socket.close();
-                //}
-                //catch (Exception e)
-                //{
-                    //System.err.println("Failed to close socket.");
-                //}
-                connectionStatus.put(socket,false);
-            }
-        }
-
     }
 
 

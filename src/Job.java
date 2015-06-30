@@ -97,5 +97,5 @@ public class Job implements Serializable, Comparable {
         return Integer.compare(getTypeVal(type),getTypeVal(((Job)o).type));
     }
 
-    public String toString(){return fileName;}
+    public String toString(){return fileName+"\t"+type;}
 }
