@@ -1,0 +1,16 @@
+/**
+ * Created by jsybrand on 6/29/15.
+ */
+public class JobSplitter extends Thread{
+
+    //will find all of the job files, give each one a weight, and split large jobs unto smaller ones
+    JobSplitter(){}
+
+    @Override
+    public void run(){
+
+    }
+
+
+
+}

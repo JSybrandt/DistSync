@@ -8,7 +8,6 @@ import java.net.Socket;
 import java.net.SocketTimeoutException;
 import java.util.ArrayList;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.TimeoutException;
 
 public class Manager extends Thread {
 
@@ -17,8 +16,6 @@ public class Manager extends Thread {
     ConcurrentHashMap<Socket,Boolean> connectionStatus = new ConcurrentHashMap<>();//true represents running
     ArrayList<String> workerURLs; // to be used to spawn on run
     Job[] jobs;
-    public final String TEMP_DIR = "./tmp/";
-    public final String JOB_DIR = TEMP_DIR + "jobs/";
 
 
 
@@ -29,12 +26,21 @@ public class Manager extends Thread {
         this.workerURLs = workerURLs;
     }
 
-
     public void setUpDirStructure() throws IOException
     {
-        new File(TEMP_DIR).mkdir();
-        new File(JOB_DIR).mkdir();
-        new File(JOB_DIR + "cd.temp").createNewFile();
+        new File(Constants.TEMP_DIR).mkdir();
+        new File(Constants.JOB_DIR).mkdir();
+        new File(Constants.JOB_DIR + "Cd1.temp").createNewFile();
+        new File(Constants.JOB_DIR + "Cd2.temp").createNewFile();
+        new File(Constants.JOB_DIR + "Cd3.temp").createNewFile();
+        new File(Constants.JOB_DIR + "Cd4.temp").createNewFile();
+        new File(Constants.JOB_DIR + "Cd5.temp").createNewFile();
+        new File(Constants.JOB_DIR + "Cd6.temp").createNewFile();
+        new File(Constants.JOB_DIR + "Cd7.temp").createNewFile();
+        new File(Constants.JOB_DIR + "Cd8.temp").createNewFile();
+        new File(Constants.JOB_DIR + "Cd9.temp").createNewFile();
+        new File(Constants.JOB_DIR + "Cd10.temp").createNewFile();
+        new File(Constants.JOB_DIR + "Cd11.temp").createNewFile();
     }
 
     public void deletePath(File file)
@@ -47,15 +53,13 @@ public class Manager extends Thread {
                     deletePath(f);
                 }
         }
+        System.out.println("Removing: "+file.getName());
         file.delete();
     }
 
     @Override
     public void finalize(){
         try {
-
-            deletePath(new File(TEMP_DIR));
-
             for(Socket s : sockets)
                 s.close();
         }
@@ -66,7 +70,7 @@ public class Manager extends Thread {
 
     public Job[] getJobFiles()
     {
-        String[] s = new File(JOB_DIR).list();
+        String[] s = new File(Constants.JOB_DIR).list();
         Job [] j = new Job[s.length];
         for(int i = 0 ; i< s.length;i++)
         {
@@ -77,7 +81,7 @@ public class Manager extends Thread {
 
     public void getConnections() throws IOException
     {
-        ServerSocket listener = new ServerSocket(NetConstants.PORT);
+        ServerSocket listener = new ServerSocket(Constants.PORT);
         listener.setSoTimeout(2000);
 
         if(workerURLs != null)
@@ -99,13 +103,13 @@ public class Manager extends Thread {
     public boolean checkIsFinished(){
         for(Job j : jobs)
         {
-            if(j.state == JobAgreementProtocol.State.NOT_STARTED)
+            if(j.state == Constants.State.NOT_STARTED)
                 return false;
         }
         for(JobSender s : senders)
         {
-            if(s.protocol.state != JobAgreementProtocol.State.FINISHED
-                    && s.protocol.state != JobAgreementProtocol.State.ERROR)
+            if(s.protocol.state != Constants.State.FINISHED
+                    && s.protocol.state != Constants.State.ERROR)
             {
                 return false;
             }
@@ -116,20 +120,23 @@ public class Manager extends Thread {
     @Override
     public void run()
     {
+        int cons = 0;
         try {
             getConnections();
 
             while (!checkIsFinished())
             {
                 for(Job j : jobs) {
-                    if(j.state== JobAgreementProtocol.State.NOT_STARTED) {
+                    if(j.state== Constants.State.NOT_STARTED) {
                         for(Socket s : sockets)
                         {
                             if(!connectionStatus.get(s))
                             {
-                                JobSender sender = new JobSender(s,j);
+                                cons++;
+                                JobSender sender = new JobSender(s,j,cons);
                                 senders.add(sender);
-                                j.state = JobAgreementProtocol.State.ASSIGNED;
+                                j.state = Constants.State.ASSIGNED;
+                                connectionStatus.put(s,true);
                                 sender.start();
                                 break;
                             }
@@ -143,7 +150,7 @@ public class Manager extends Thread {
             }
 
             for(JobSender j : senders){
-                if(j.protocol.state == JobAgreementProtocol.State.ERROR)
+                if(j.protocol.state == Constants.State.ERROR)
                 {
                     System.err.println(j.job + " FAILED TO COMPLETE.");
                 }
@@ -160,7 +167,7 @@ public class Manager extends Thread {
             catch(IOException e)
             {System.out.println("Failed to send quit to " + s.getLocalAddress());}
         }
-
+        deletePath(new File(Constants.TEMP_DIR));
     }
 
     private class JobSender extends Thread
@@ -170,12 +177,13 @@ public class Manager extends Thread {
         BufferedReader in;
         PrintWriter out;
         public JobAgreementProtocol protocol;
-        JobSender(Socket s, Job j) throws IOException
+        public int ID;
+        JobSender(Socket s, Job j, int id) throws IOException
         {
             job = j;
             socket = s;
             protocol = new JobAgreementProtocol(job.fileName);
-
+            ID = id;
             in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             out = new PrintWriter(socket.getOutputStream(),true);
 
@@ -196,17 +204,16 @@ public class Manager extends Thread {
         @Override
         public void run(){
             try{
-                connectionStatus.put(socket,true);
                 String msg = "";
-                while(protocol.state!= JobAgreementProtocol.State.FINISHED && protocol.state!= JobAgreementProtocol.State.ERROR)
+                while(protocol.state!= Constants.State.FINISHED && protocol.state!= Constants.State.ERROR)
                 {
                     String s = protocol.processInput(msg);
                     if(s!=""){
                         out.println(s);
                     }
-                    System.out.println(protocol.state);
+                    System.out.println(ID + ":" + protocol.state);
                     job.state = protocol.state;
-                    if(protocol.state!= JobAgreementProtocol.State.FINISHED)
+                    if(protocol.state!= Constants.State.FINISHED)
                         msg = in.readLine();
                 }
             }

@@ -15,7 +15,7 @@ public class Job implements Serializable {
         OTHER
     }
 
-    public Job(String s){fileName = s; state = JobAgreementProtocol.State.NOT_STARTED; type = determineType(fileName);}
+    public Job(String s){fileName = s; state = Constants.State.NOT_STARTED; type = determineType(fileName);}
 
     //job type is determined by file name
     public Type determineType(String fileName)
@@ -38,6 +38,6 @@ public class Job implements Serializable {
     }
 
     public String fileName;
-    public JobAgreementProtocol.State state;
+    public Constants.State state;
     public Type type;
 }

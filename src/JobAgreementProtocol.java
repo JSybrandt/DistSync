@@ -5,16 +5,9 @@ import java.io.IOException;
  */
 public class JobAgreementProtocol {
 
-    public enum State{
-        NOT_STARTED,
-        ASSIGNED,
-        MADE_CONTACT,
-        RUNNING,
-        FINISHED,
-        ERROR
-    }
+
     String pathToJobFile;
-    State state = State.NOT_STARTED;
+    Constants.State state = Constants.State.NOT_STARTED;
 
     JobAgreementProtocol(String path)
     {
@@ -25,32 +18,32 @@ public class JobAgreementProtocol {
     //the server has the option to stop the job, the client will report the job is done, or the job is in error
 
     public String processInput(String input) throws IOException {
-        if (state == State.NOT_STARTED) {
-            state = State.MADE_CONTACT;
+        if (state == Constants.State.NOT_STARTED) {
+            state = Constants.State.MADE_CONTACT;
             return pathToJobFile;
             //start communication by sending the client the job file
         }
-        else if (state == State.MADE_CONTACT && input.equals("STARTED")){
-                state = State.RUNNING;
+        else if (state == Constants.State.MADE_CONTACT && input.equals("STARTED")){
+                state = Constants.State.RUNNING;
                 return "";
         }
-        else if (state == State.RUNNING && input.equals("REQ_HELP")){
+        else if (state == Constants.State.RUNNING && input.equals("REQ_HELP")){
             return "TBD";
         }
-        else if (state == State.RUNNING && input.equals("FINISHED")){
-            state = State.FINISHED;
+        else if (state == Constants.State.RUNNING && input.equals("FINISHED")){
+            state = Constants.State.FINISHED;
             return "";
         }
-        else if (state == State.FINISHED && input.equals("RESTART")){
-            state = State.RUNNING;
+        else if (state == Constants.State.FINISHED && input.equals("RESTART")){
+            state = Constants.State.RUNNING;
             return pathToJobFile;
         }
-        else if (state == State.RUNNING && input.equals("ERROR")){
-            state = State.ERROR;
+        else if (state == Constants.State.RUNNING && input.equals("ERROR")){
+            state = Constants.State.ERROR;
             return "";
         }
         else
-            throw new IOException("Protocol not followed. Received " + input);
+            throw new IOException("Protocol not followed. On State: " +state+ " Received: " + input);
     }
 
 
