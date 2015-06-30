@@ -194,7 +194,7 @@ public class Worker extends Thread {
                 Process p = r.exec(cmd);
                 p.waitFor();
                 if(p.exitValue()!=0)
-                    throw new IOException("RM -r Proc Error");
+                    throw new IOException("RM -r Proc Error while attempting to remove " + cmd[2]);
             } catch(InterruptedException e){System.err.println("RM Interupted. " + e);}
         }
     }
