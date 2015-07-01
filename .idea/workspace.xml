@@ -6,186 +6,7 @@
     </artifacts-to-build>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="30f412aa-f65f-49c7-be2c-2daaaee86faa" name="Default" comment="Init Commit">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/META-INF/MANIFEST.MF" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/datCurr/1" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/datCurr/10" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/datCurr/3" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/datCurr/5" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/datCurr/7" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/datCurr/9" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/datCurr/d2/1" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/datCurr/d2/2" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/datCurr/d2/3" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/datCurr/d2/4" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/datCurr/d2/5" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/datCurr/d3/1" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/datCurr/d3/2" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/datCurr/d3/3" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/datCurr/d3/4" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/datCurr/d3/5" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/datCurr/d4/d1/1" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/datCurr/d4/d1/2" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/datCurr/d4/d1/3" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/datCurr/d4/d1/4" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/datCurr/d4/d1/5" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/datCurr/d4/d1/6" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/datCurr/d4/d1/d3/1" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/datCurr/d4/d1/d3/2" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/datCurr/d4/d1/d3/3" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/datCurr/d4/d1/d3/d1/1" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/datCurr/d4/d1/d3/d1/2" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/datCurr/d4/d1/d3/d1/3" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/datCurr/d4/d1/d3/d1/4" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/datCurr/d5/d2/1" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/datCurr/d5/d2/2" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/datCurr/d5/d2/3" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/datCurr/d6/1" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/datCurr/d6/2" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/datCurr/d6/3" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/datCurr/d6/4" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/datCurr/d6/5" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/datCurr/d6/6" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/datCurr/d6/7" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/datOld/1" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/datOld/10" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/datOld/2" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/datOld/3" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/datOld/4" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/datOld/5" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/datOld/6" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/datOld/7" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/datOld/8" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/datOld/9" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/datOld/d1/1" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/datOld/d1/2" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/datOld/d1/3" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/datOld/d1/4" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/datOld/d1/5" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/datOld/d2/1" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/datOld/d2/2" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/datOld/d2/3" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/datOld/d2/4" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/datOld/d2/5" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/datOld/d3/1" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/datOld/d3/2" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/datOld/d3/3" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/datOld/d3/4" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/datOld/d3/5" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/datOld/d4/d1/1" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/datOld/d4/d1/2" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/datOld/d4/d1/3" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/datOld/d4/d1/4" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/datOld/d4/d1/5" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/datOld/d4/d1/6" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/datOld/d4/d1/d3/1" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/datOld/d4/d1/d3/2" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/datOld/d4/d1/d3/3" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/datOld/d4/d1/d3/d1/1" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/datOld/d4/d1/d3/d1/2" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/datOld/d4/d1/d3/d1/3" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/datOld/d5/d1/d1/d1/d1/d1/d1/d1/d1/d1/d1/1" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/datOld/d5/d1/d1/d1/d1/d1/d1/d1/d1/d1/d1/2" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/datOld/d5/d1/d1/d1/d1/d1/d1/d1/d1/d1/d1/3" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/datOld/d5/d1/d1/d1/d1/d1/d1/d1/d1/d1/d1/4" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/exampleCurr/1" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/exampleCurr/10" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/exampleCurr/3" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/exampleCurr/5" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/exampleCurr/7" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/exampleCurr/9" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/exampleCurr/d2/1" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/exampleCurr/d2/2" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/exampleCurr/d2/3" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/exampleCurr/d2/4" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/exampleCurr/d2/5" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/exampleCurr/d3/1" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/exampleCurr/d3/2" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/exampleCurr/d3/3" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/exampleCurr/d3/4" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/exampleCurr/d3/5" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/exampleCurr/d4/d1/1" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/exampleCurr/d4/d1/2" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/exampleCurr/d4/d1/3" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/exampleCurr/d4/d1/4" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/exampleCurr/d4/d1/5" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/exampleCurr/d4/d1/6" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/exampleCurr/d4/d1/d3/1" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/exampleCurr/d4/d1/d3/2" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/exampleCurr/d4/d1/d3/3" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/exampleCurr/d4/d1/d3/d1/1" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/exampleCurr/d4/d1/d3/d1/2" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/exampleCurr/d4/d1/d3/d1/3" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/exampleCurr/d4/d1/d3/d1/4" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/exampleCurr/d5/d2/1" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/exampleCurr/d5/d2/2" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/exampleCurr/d5/d2/3" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/exampleCurr/d6/1" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/exampleCurr/d6/2" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/exampleCurr/d6/3" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/exampleCurr/d6/4" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/exampleCurr/d6/5" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/exampleCurr/d6/6" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/exampleCurr/d6/7" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/exampleJobs/A.txt" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/exampleJobs/C.txt" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/exampleJobs/D.txt" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/exampleJobs/M.txt" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/exampleJobs/R.txt" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/exampleOld/1" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/exampleOld/10" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/exampleOld/2" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/exampleOld/3" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/exampleOld/4" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/exampleOld/5" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/exampleOld/6" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/exampleOld/7" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/exampleOld/8" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/exampleOld/9" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/exampleOld/d1/1" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/exampleOld/d1/2" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/exampleOld/d1/3" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/exampleOld/d1/4" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/exampleOld/d1/5" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/exampleOld/d2/1" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/exampleOld/d2/2" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/exampleOld/d2/3" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/exampleOld/d2/4" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/exampleOld/d2/5" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/exampleOld/d3/1" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/exampleOld/d3/2" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/exampleOld/d3/3" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/exampleOld/d3/4" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/exampleOld/d3/5" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/exampleOld/d4/d1/1" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/exampleOld/d4/d1/2" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/exampleOld/d4/d1/3" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/exampleOld/d4/d1/4" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/exampleOld/d4/d1/5" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/exampleOld/d4/d1/6" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/exampleOld/d4/d1/d3/1" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/exampleOld/d4/d1/d3/2" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/exampleOld/d4/d1/d3/3" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/exampleOld/d4/d1/d3/d1/1" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/exampleOld/d4/d1/d3/d1/2" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/exampleOld/d4/d1/d3/d1/3" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/exampleOld/d5/d1/d1/d1/d1/d1/d1/d1/d1/d1/d1/1" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/exampleOld/d5/d1/d1/d1/d1/d1/d1/d1/d1/d1/d1/2" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/exampleOld/d5/d1/d1/d1/d1/d1/d1/d1/d1/d1/d1/3" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/exampleOld/d5/d1/d1/d1/d1/d1/d1/d1/d1/d1/d1/4" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/tmp/jobs/A.txt" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/tmp/jobs/C.txt" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/tmp/jobs/D.txt" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/tmp/jobs/M.txt" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/tmp/jobs/R.txt" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Job.java" afterPath="$PROJECT_DIR$/src/Job.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/JobSender.java" afterPath="$PROJECT_DIR$/src/JobSender.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/JobSplitter.java" afterPath="$PROJECT_DIR$/src/JobSplitter.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Manager.java" afterPath="$PROJECT_DIR$/src/Manager.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Worker.java" afterPath="$PROJECT_DIR$/src/Worker.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main.java" afterPath="$PROJECT_DIR$/src/main.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-    </list>
+    <list default="true" id="30f412aa-f65f-49c7-be2c-2daaaee86faa" name="Default" comment="Init Commit" />
     <ignored path="Distributed_Copy.iws" />
     <ignored path=".idea/workspace.xml" />
     <ignored path="$PROJECT_DIR$/out/" />
@@ -209,8 +30,8 @@
       <file leaf-file-name="main.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="19" column="40" selection-start-line="19" selection-start-column="40" selection-end-line="19" selection-end-column="40" />
+            <state vertical-scroll-proportion="0.45454547">
+              <caret line="38" column="57" selection-start-line="38" selection-start-column="57" selection-end-line="38" selection-end-column="57" />
               <folding>
                 <element signature="docComment;class#main#0" expanded="false" />
               </folding>
@@ -632,7 +453,7 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="25" width="1280" height="775" extended-state="6" />
-    <editor active="false" />
+    <editor active="true" />
     <layout>
       <window_info id="Palette&#9;" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
@@ -700,7 +521,7 @@
       <breakpoints-defaults>
         <breakpoint suspend="THREAD" type="java-line" />
       </breakpoints-defaults>
-      <option name="time" value="31" />
+      <option name="time" value="32" />
     </breakpoint-manager>
     <watches-manager />
   </component>
@@ -1147,8 +968,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="19" column="40" selection-start-line="19" selection-start-column="40" selection-end-line="19" selection-end-column="40" />
+        <state vertical-scroll-proportion="0.45454547">
+          <caret line="38" column="57" selection-start-line="38" selection-start-column="57" selection-end-line="38" selection-end-column="57" />
           <folding>
             <element signature="docComment;class#main#0" expanded="false" />
           </folding>
