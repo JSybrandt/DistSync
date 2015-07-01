@@ -1,0 +1,9 @@
+#!/bin/bash
+
+rm -r datCurr
+rm -r datOld
+rm -r tmp/jobs/
+
+cp -r exampleCurr datCurr
+cp -r exampleOld datOld
+cp -r exampleJobs tmp/jobs
