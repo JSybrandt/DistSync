@@ -13,4 +13,6 @@ public abstract class Constants {
         FINISHED,
         ERROR
     }
+
+    public static String JAR_FILE_NAME = "distsync.jar";
 }
