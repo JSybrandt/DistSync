@@ -27,10 +27,11 @@ public class JobSender extends Thread{
     }
 
     @Override
-    public void finalize(){
+    public void finalize() throws Throwable{
         try {
             in.close();
             out.close();
+            super.finalize();
         }
         catch(Exception e)
         {
@@ -49,7 +50,9 @@ public class JobSender extends Thread{
                 if(action== JobAgreementProtocol.Action.SEND_JOB){
                     out.writeObject(job);
                 }
-                System.out.println(ID + ":" + protocol.state);
+                //System.out.println(ID + ":" + protocol.state);
+                if(protocol.state== Constants.State.ERROR)
+                    System.err.println(ID+"ERR Occured.");
                 job.state = protocol.state;
                 if(protocol.state!= Constants.State.FINISHED && protocol.state!= Constants.State.ERROR)
                     msg = (String)in.readObject();

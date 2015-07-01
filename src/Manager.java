@@ -2,14 +2,14 @@
  * Created by jsybrand on 6/25/15.
  */
 
-import java.io.*;
-import java.lang.reflect.Array;
+import java.io.File;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketTimeoutException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.PriorityQueue;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class Manager extends Thread {
@@ -17,15 +17,8 @@ public class Manager extends Thread {
     ArrayList<JobSender> senders = new ArrayList<>();
     ArrayList<Socket> sockets = new ArrayList<>();
     ConcurrentHashMap<Socket,Boolean> connectionStatus = new ConcurrentHashMap<>();//true represents running
-    ArrayList<String> workerURLs; // to be used to spawn on run
     Job[] jobs;
 
-    Manager(ArrayList<String> workerURLs) throws IOException
-    {
-        //setUpDirStructure();
-        jobs = getSortedJobFiles();
-        this.workerURLs = workerURLs;
-    }
 
     public void setUpDirStructure() throws IOException
     {
@@ -90,10 +83,6 @@ public class Manager extends Thread {
         ServerSocket listener = new ServerSocket(Constants.PORT);
         listener.setSoTimeout(2000);
 
-        if(workerURLs != null)
-        {
-            //spawn workers using ssh to start main.java on remotes
-        }
         while(!listener.isClosed())
         {
             try {
@@ -163,6 +152,11 @@ public class Manager extends Thread {
         int cons = 0;
         try {
             getConnections();
+            JobSplitter jobSplitter = new JobSplitter();
+            jobSplitter.run();
+
+            jobSplitter.join();
+            jobs = jobSplitter.getResults();
 
             while (!checkIsFinished())
             {
@@ -198,7 +192,8 @@ public class Manager extends Thread {
             }
         }
         catch(Exception e ){
-            //DoNothing
+            System.err.println(e);
+            e.printStackTrace();
         }
         for(Socket s : sockets)
         {
@@ -206,7 +201,7 @@ public class Manager extends Thread {
                 new ObjectOutputStream(s.getOutputStream()).writeObject(null);
             }
             catch(IOException e)
-            {System.out.println("Failed to send quit to " + s.getLocalAddress());}
+            {System.err.println("Failed to send quit to " + s.getLocalAddress());}
         }
         //deletePath(new File(Constants.TEMP_DIR));
     }

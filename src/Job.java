@@ -1,8 +1,5 @@
-import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
-import java.util.Objects;
-import java.util.Scanner;
 
 /**
  * Created by jsybrand on 6/29/15.

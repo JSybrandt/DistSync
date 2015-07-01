@@ -1,7 +1,7 @@
 /**
  * Created by jsybrand on 6/25/15.
  */
-import java.util.*;
+
 public class main {
     public static void main(String[] args) {
         Manager manager = null;
@@ -12,12 +12,12 @@ public class main {
             else if (args[0].equals("-w")) {
                 if (args.length < 2) System.out.println("Specify manager hostname.");
                 else {
-                    worker = new Worker(args[2]);
+                    worker = new Worker(args[1]);
                     worker.start();
                     worker.join();
                 }
             } else if (args[0].equals("-m")) {
-                manager = new Manager(null);
+                manager = new Manager();
                 manager.start();
                 for (int i = 1; i < args.length; i++) {
                     Runtime.getRuntime().exec("ssh " + args[i] + " java ~/.dc/copy");
@@ -26,8 +26,9 @@ public class main {
                 manager.join();
             }
             else if (args[0].equals("-l")){
+                Runtime.getRuntime().exec("./resetExpirement");
                 System.out.println("Connecting to self.");
-                manager = new Manager(null);
+                manager = new Manager();
                 manager.start();
                 Worker worker1 = new Worker("localhost");
                 worker1.start();
@@ -49,7 +50,8 @@ public class main {
             }
             else {System.out.println("Argument " + args[0] + " not understood.");}
         } catch (Exception e) {
-            System.err.println("Failed to start services.");
+            System.err.println("Failed to start services. " + e);
+            e.printStackTrace();
         }
     }
 }

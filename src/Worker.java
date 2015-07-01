@@ -1,4 +1,7 @@
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.Scanner;
 import java.util.Stack;
@@ -27,12 +30,13 @@ public class Worker extends Thread {
     }
 
     @Override
-    public void finalize(){
+    public void finalize() throws Throwable{
         try {
-            System.out.println("Finalize Called");
+            //System.out.println("Finalize Called");
             in.close();
             out.close();
             socket.close();
+            super.finalize();
         }
         catch(Exception e)
         {
@@ -84,7 +88,7 @@ public class Worker extends Thread {
             }
         }
         catch(Exception e){
-            System.err.println("Client Failed to listen :(" + e);
+            System.err.println("Client Failed to listen: " + e);
         }
 
     }
@@ -111,12 +115,13 @@ public class Worker extends Thread {
 
         while(scan.hasNext())
         {
-            for(Process p : procs) {
-                if(scan.hasNext() && (p==null || !isRunning(p))) {
+            for(int i = 0;i < procs.length; i++) {
+                if(scan.hasNext() && (procs[i]==null || !isRunning(procs[i]))) {
                     String path = scan.next();
+                    String size = scan.next();
                     cmd[1]=job.upToDateMountPoint+path;
                     cmd[2]=job.outOfDateMountPoint+path;
-                    p = r.exec(cmd);
+                    procs[i] = r.exec(cmd);
                 }
             }
         }
@@ -139,6 +144,7 @@ public class Worker extends Thread {
         while(scan.hasNext())
         {
             String path = job.outOfDateMountPoint+scan.next();
+            String size = scan.next();
             new File(path).mkdir();
         }
     }
@@ -155,21 +161,22 @@ public class Worker extends Thread {
 
         while(scan.hasNext())
         {
-            for(Process p : procs) {
-                if(scan.hasNext() && (p==null || !isRunning(p))) {
+            for(int i = 0; i<procs.length;i++) {
+                if(scan.hasNext() && (procs[i]==null || !isRunning(procs[i]))) {
                     String path = scan.next();
+                    String size = scan.next();
                     cmd[1]=job.outOfDateMountPoint+path;
-                    p = r.exec(cmd);
+                    procs[i] = r.exec(cmd);
                 }
             }
         }
 
-        for(Process p : procs)
+        for(int i = 0; i<procs.length;i++)
         {
             try {
-                if(p != null) {
-                    p.waitFor();
-                    if(p.exitValue()!=0)//err
+                if(procs[i] != null) {
+                    procs[i].waitFor();
+                    if(procs[i].exitValue()!=0)//err
                         throw new IOException("CP Proc Error");
                 }
             }
@@ -185,6 +192,7 @@ public class Worker extends Thread {
         Stack<String> stack = new Stack<>();
         while(scan.hasNext()){
             String path = job.outOfDateMountPoint+scan.next();
+            String size = scan.next();
             stack.push(path);
         }
         String cmd[] = {"rm","-r",""};
@@ -211,22 +219,23 @@ public class Worker extends Thread {
 
         while(scan.hasNext())
         {
-            for(Process p : procs) {
-                if(scan.hasNext() && (p==null || !isRunning(p))) {
+            for(int i = 0; i<procs.length;i++){
+                if(scan.hasNext() && (procs[i]==null || !isRunning(procs[i]))) {
                     String path = scan.next();
+                    String size = scan.next();
                     cmd[1]=job.upToDateMountPoint+path;
                     cmd[2]=job.outOfDateMountPoint+path;
-                    p = r.exec(cmd);
+                    procs[i] = r.exec(cmd);
                 }
             }
         }
 
-        for(Process p : procs)
+        for(int i = 0; i<procs.length;i++)
         {
             try {
-                if(p != null) {
-                    p.waitFor();
-                    if(p.exitValue()!=0)//err
+                if(procs[i] != null) {
+                    procs[i].waitFor();
+                    if(procs[i].exitValue()!=0)//err
                         throw new IOException("RSYNC Proc Error");
                 }
             }

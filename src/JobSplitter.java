@@ -1,5 +1,8 @@
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Scanner;
 
 /**
@@ -27,26 +30,44 @@ public class JobSplitter extends Thread{
     JobSplitter(){}
 
     private Job initialJobs[];
-    ArrayList<Job> finalJobs = new ArrayList<>();
+    private ArrayList<Job> finalJobs = new ArrayList<>();
+
+    public Job[] getResults(){
+        Job [] j = finalJobs.toArray(new Job[finalJobs.size()]);
+        Arrays.sort(j);
+        return j;
+    }
+
     @Override
     public void run(){
         //we'll figure out what to do later
         String[] s = new File(Constants.JOB_DIR).list();
-        initialJobs = new Job[s.length];
-        try {
-            for (Job j : initialJobs)
-                evalAndSplitJob(j); //populates finalJobs
-        }catch (IOException e){
-            System.err.println("Invalid input format");
+        if(s!=null && s.length > 0) {
+            initialJobs = new Job[s.length];
+            try {
+                for (int i = 0; i < s.length; i++) {
+                    initialJobs[i] = new Job(s[i]);
+                    evalAndSplitJob(initialJobs[i]); //populates finalJobs
+                }
+            } catch (IOException e) {
+                System.err.println("Invalid input format");
+            }
         }
     }
 
     private void evalAndSplitJob(Job j) throws IOException
     {
-        double currWeight =9999; //we will make a new job the first iteration
+        //there are certain jobs we WONT split
+        if(j.type== Job.Type.CREATE_DIR || j.type== Job.Type.RM_DIR)
+        {
+            finalJobs.add(j);
+            return;
+        }
+
+        double currWeight = MAX_JOB_WEIGHT+100; //we will make a new job the first iteration
         int currFileID = 0;
         Scanner in = new Scanner(new File(j.path));
-        PrintWriter out;
+        PrintWriter out=null;
 
         while(in.hasNext())
         {
@@ -55,7 +76,7 @@ public class JobSplitter extends Thread{
                 currWeight = 0;
                 if(out!=null) {
                     out.close();
-                    finalJobs.add(new Job(j.path+currFileID));
+                    finalJobs.add(new Job(j.fileName + currFileID));
                 }
                 currFileID++;
                 out = new PrintWriter(j.path+currFileID);
@@ -67,15 +88,21 @@ public class JobSplitter extends Thread{
             switch (j.type){
                 case CREATE_DIR:    currWeight+=size*CP_DIR_WEIGHT + CP_DIR_LINE_WEIGHT; break;
                 case RM_DIR:        currWeight+=size*RM_DIR_WEIGHT + RM_DIR_LINE_WEIGHT; break;
-                case CREATE_FILES:  currWeight+=size*CP_DIR_WEIGHT + CP_DIR_LINE_WEIGHT; break;
+                case CREATE_FILES:  currWeight+=size*CP_FILE_WEIGHT + CP_FILE_LINE_WEIGHT; break;
                 case RM_FILES:     currWeight+=size*RM_FILE_WEIGHT + RM_FILE_LINE_WEIGHT; break;
                 case MODIFY_FILES: currWeight+=size*SYNC_FILE_WEIGHT + SYNC_FILE_LINE_WEIGHT; break;
                 default:            currWeight+=size+1;
             }
 
-            out.println(file);
+            out.println(file + "\t" + size);
 
         }
+        if(out!=null){
+            out.close();
+            finalJobs.add(new Job(j.fileName + currFileID));
+        }
+
+        in.close();
     }
 
 }
