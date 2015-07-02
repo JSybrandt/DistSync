@@ -86,7 +86,7 @@ public class Worker extends Thread {
                 }
                 catch(IOException e)
                 {
-                    out.writeObject("ERROR");
+                    out.writeObject(e);
                     System.err.println(e);
                 }
             }

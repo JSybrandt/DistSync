@@ -54,8 +54,15 @@ public class JobSender extends Thread{
                 if(protocol.state== Constants.State.ERROR)
                     System.err.println(ID+"ERR Occured.");
                 job.state = protocol.state;
-                if(protocol.state!= Constants.State.FINISHED && protocol.state!= Constants.State.ERROR)
-                    msg = (String)in.readObject();
+                if(protocol.state!= Constants.State.FINISHED && protocol.state!= Constants.State.ERROR){
+                    Object obj = in.readObject();
+                    if(obj instanceof IOException) {
+                        System.out.println("Error Received:");
+                        ((IOException) obj).printStackTrace();
+                    }
+                    else msg = (String) obj;
+                }
+
             }
         }
         catch (Exception e)
