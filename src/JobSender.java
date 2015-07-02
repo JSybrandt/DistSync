@@ -51,14 +51,15 @@ public class JobSender extends Thread{
                     out.writeObject(job);
                 }
                 //System.out.println(ID + ":" + protocol.state);
-                if(protocol.state== Constants.State.ERROR)
-                    System.err.println(ID+"ERR Occured.");
+                //if(protocol.state == Constants.State.ERROR)
+                    //System.err.println(ID+"ERR Occured.");
                 job.state = protocol.state;
                 if(protocol.state!= Constants.State.FINISHED && protocol.state!= Constants.State.ERROR){
                     Object obj = in.readObject();
                     if(obj instanceof IOException) {
                         System.out.println("Error Received:");
                         ((IOException) obj).printStackTrace();
+                        msg = "ERROR";
                     }
                     else msg = (String) obj;
                 }
