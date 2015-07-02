@@ -49,12 +49,16 @@ public class Worker extends Thread {
     {
         try {
             while(true) {
+                if(socket.isClosed())
+                    break;
                 out = new ObjectOutputStream(socket.getOutputStream());
                 in = new ObjectInputStream(socket.getInputStream());
                 Job received = (Job)in.readObject();
                 System.out.println("Client Received:" + received);
+
                 if (received==null) {
-                    return;
+                    out.writeObject(null);
+                    break;
                 }
                 out.writeObject("STARTED");
 
@@ -89,6 +93,7 @@ public class Worker extends Thread {
         }
         catch(Exception e){
             System.err.println("Client Failed to listen: " + e);
+            e.printStackTrace();
         }
 
     }

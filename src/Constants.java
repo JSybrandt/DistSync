@@ -3,7 +3,7 @@
  */
 public abstract class Constants {
     public static final int PORT = 31415;
-    public static final String TEMP_DIR = "./tmp/";
+    public static final String TEMP_DIR = "tmp/";
     public static final String JOB_DIR = TEMP_DIR + "jobs/";
     public enum State{
         NOT_STARTED,
@@ -14,5 +14,7 @@ public abstract class Constants {
         ERROR
     }
 
-    public static String JAR_FILE_NAME = "distsync.jar";
+    public static final String JAR_FILE_NAME = "distsync.jar";
+
+
 }

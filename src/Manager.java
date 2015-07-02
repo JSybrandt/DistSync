@@ -2,9 +2,7 @@
  * Created by jsybrand on 6/25/15.
  */
 
-import java.io.File;
-import java.io.IOException;
-import java.io.ObjectOutputStream;
+import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketTimeoutException;
@@ -198,12 +196,27 @@ public class Manager extends Thread {
         for(Socket s : sockets)
         {
             try {
-                new ObjectOutputStream(s.getOutputStream()).writeObject(null);
+
+
+                ObjectOutputStream o = new ObjectOutputStream(s.getOutputStream());
+                ObjectInputStream i = new ObjectInputStream(s.getInputStream());
+                o.writeObject(null);
+                if(i.readObject()!=null)
+                    System.err.println("Failed to get shutdown response from client.");
+                else
+                    System.out.println("Shutdown " + s.getLocalAddress());
+
+
             }
-            catch(IOException e)
-            {System.err.println("Failed to send quit to " + s.getLocalAddress());}
+            catch(Exception e)
+            {
+                System.err.println("Failed to send quit to " + s.getLocalAddress());
+                System.err.println("\t" + e);
+            }
         }
         //deletePath(new File(Constants.TEMP_DIR));
+
+        System.out.println("SYNC COMPLETE!");
     }
 
 

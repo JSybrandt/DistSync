@@ -1,9 +1,15 @@
 #!/bin/bash
 
-rm -r datCurr
-rm -r datOld
+rm -r fresh
+rm -r stale
 rm -r tmp/jobs/
 
-cp -r exampleCurr datCurr
-cp -r exampleOld datOld
-cp -r exampleJobs tmp/jobs
+unzip -o expirement.zip
+
+mv  exampleCurr fresh
+mv  exampleOld stale
+mv  exampleJobs tmp/jobs
+
+#rm -r exampleCurr
+#rm -r exampleOld
+#rm -r exampleJobs

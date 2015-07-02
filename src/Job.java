@@ -63,8 +63,9 @@ public class Job implements Serializable, Comparable {
     public String fileName, path;
     public Constants.State state;
     public Type type;
-    public String upToDateMountPoint = "./datCurr/";
-    public String outOfDateMountPoint = "./datOld/";
+
+    public static String upToDateMountPoint = "datCurr/";
+    public static String outOfDateMountPoint = "datOld/";
 
 
     public int compareTo(Object o)
