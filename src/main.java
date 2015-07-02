@@ -44,14 +44,16 @@ public class main {
 
                 if(args[i].equals("-f")){
                     i++;
-                    Job.upToDateMountPoint = args[i];
+                    Job.upToDateMountPoint = new File(args[i]).getAbsolutePath();
                     if(!Job.upToDateMountPoint.endsWith("/"))Job.upToDateMountPoint+="/";
+                    System.out.println("Fresh: " + Job.upToDateMountPoint);
                 }
                 else if(args[i].equals("-s"))
                 {
                     i++;
-                    Job.outOfDateMountPoint=args[i];
+                    Job.outOfDateMountPoint=new File(args[i]).getAbsolutePath();
                     if(!Job.outOfDateMountPoint.endsWith("/"))Job.outOfDateMountPoint+="/";
+                    System.out.println("Stale: " + Job.outOfDateMountPoint);
                 }
 
                 else if (args[i].equals("-w")) {

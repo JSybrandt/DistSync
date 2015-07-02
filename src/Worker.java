@@ -241,7 +241,7 @@ public class Worker extends Thread {
                 if(procs[i] != null) {
                     procs[i].waitFor();
                     if(procs[i].exitValue()!=0)//err
-                        throw new IOException("RSYNC Proc Error");
+                        throw new IOException("RSYNC Proc Error: " + procs[i]);
                 }
             }
             catch(InterruptedException e) {
