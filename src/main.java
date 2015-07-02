@@ -122,5 +122,6 @@ public class main {
     public static void createTempDirs(){
         new File(Constants.TEMP_DIR).mkdir();
         new File(Constants.JOB_DIR).mkdir();
+        new File(Constants.LOG_DIR).mkdir();
     }
 }

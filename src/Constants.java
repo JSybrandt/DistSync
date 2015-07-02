@@ -5,6 +5,7 @@ public abstract class Constants {
     public static final int PORT = 31415;
     public static final String TEMP_DIR = "tmp/";
     public static final String JOB_DIR = TEMP_DIR + "jobs/";
+    public static final String LOG_DIR = TEMP_DIR + "logs/";
     public enum State{
         NOT_STARTED,
         ASSIGNED,

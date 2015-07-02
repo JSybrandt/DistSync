@@ -5,6 +5,7 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.Scanner;
 import java.util.Stack;
+import java.util.logging.Logger;
 
 /**
  * Created by jsybrand on 6/25/15.
@@ -55,12 +56,14 @@ public class Worker extends Thread {
                 in = new ObjectInputStream(socket.getInputStream());
                 Job received = (Job)in.readObject();
                 System.out.println("Client Received:" + received);
-
                 if (received==null) {
                     out.writeObject(null);
                     break;
                 }
+
                 out.writeObject("STARTED");
+
+                long startTime = System.nanoTime();
 
                 try {
                     switch(received.type) {
@@ -81,6 +84,9 @@ public class Worker extends Thread {
                             break;
                         case OTHER:break;
                     }
+
+                    Long diffTime = System.nanoTime()-startTime;
+                    CustomLog.log(diffTime.toString(),received.fileName);
 
                     out.writeObject("FINISHED");
                 }

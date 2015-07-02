@@ -146,7 +146,7 @@ public class Manager extends Thread {
     @Override
     public void run()
     {
-
+        long startTime = System.nanoTime();
         int cons = 0;
         try {
             getConnections();
@@ -217,6 +217,8 @@ public class Manager extends Thread {
         //deletePath(new File(Constants.TEMP_DIR));
 
         System.out.println("SYNC COMPLETE!");
+        Long diffTime = System.nanoTime() - startTime;
+        CustomLog.log(diffTime.toString(),"MASTER");
     }
 
 
