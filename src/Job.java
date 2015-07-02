@@ -1,5 +1,6 @@
 import java.io.IOException;
 import java.io.Serializable;
+import java.nio.file.Paths;
 
 /**
  * Created by jsybrand on 6/29/15.
@@ -33,7 +34,7 @@ public class Job implements Serializable, Comparable {
     public Job(String s) throws IOException{
 
         fileName = s;
-        path = Constants.JOB_DIR+fileName;
+        path = Paths.get("").toAbsolutePath().toString() + "/" + Constants.JOB_DIR+fileName;
         state = Constants.State.NOT_STARTED;
         type = determineType(fileName);
 
