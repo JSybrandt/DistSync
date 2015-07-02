@@ -49,6 +49,7 @@ public class JobSender extends Thread{
                 JobAgreementProtocol.Action action = protocol.processInput(msg);
                 if(action== JobAgreementProtocol.Action.SEND_JOB){
                     out.writeObject(job);
+                    System.out.println("Sent " + socket.getLocalAddress().toString() + " " + job.fileName);
                 }
                 //System.out.println(ID + ":" + protocol.state);
                 //if(protocol.state == Constants.State.ERROR)
