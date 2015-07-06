@@ -118,7 +118,7 @@ public class Manager extends Thread {
         //takes advantage of priority queue
         for(Job j : jobs)
         {
-            if(j.state != Constants.State.FINISHED && j.state!= Constants.State.ERROR){
+            if(j.state != Constants.State.FINISHED){
                 if(j.type == Job.Type.CREATE_DIR)
                     maySelectCreateFiles = false;
                 else if(j.type == Job.Type.RM_FILES)
@@ -186,6 +186,13 @@ public class Manager extends Thread {
                 if(j.protocol.state == Constants.State.ERROR)
                 {
                     System.err.println(j.job + " FAILED TO COMPLETE.");
+                    for(Job job : jobs)
+                    {
+                        if(j.job==job) {
+                            job.state = Constants.State.NOT_STARTED;
+                            System.err.println("Allowing " + job.fileName + " to restart.");
+                        }
+                    }
                 }
             }
         }

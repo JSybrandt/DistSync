@@ -16,7 +16,7 @@ public class main {
      *
      * @param args -w specifies this is a worker and must be followed with a hostname,
      *             -m specifies this is a manager and may be followed with a list of hosts to spawn wokers on
-     *             FOR -m TO WORK, EVERY HOST NEEDS EQUAL ACCESS TO THE .jar
+     *             FOR -m TO WORK, EVERY HOST NEEDS EQUAL ACCESS TO THE .jar and both file systems
      *             -f specifies the fresh directory
      *             -s specifies the stale directory
      */

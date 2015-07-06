@@ -79,7 +79,8 @@ public class JobSender extends Thread{
             //{
             //System.err.println("Failed to close socket.");
             //}
-            manager.connectionStatus.put(socket, false);
+            if(protocol.state!= Constants.State.ERROR)
+                manager.connectionStatus.put(socket, false);
         }
     }
 }
