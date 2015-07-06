@@ -176,24 +176,24 @@ public class Manager extends Thread {
                         }
                     }
                 }
+
+                for(JobSender js : senders){
+                    if(js.protocol.state == Constants.State.ERROR)
+                    {
+                        System.err.println(js.job + " FAILED TO COMPLETE.");
+                        for(Job job : jobs)
+                        {
+                            if(js.job==job) {
+                                job.state = Constants.State.NOT_STARTED;
+                                System.err.println("Allowing " + job.fileName + " to restart.");
+                            }
+                        }
+                    }
+                }
             }
             for(JobSender j : senders)
             {
                 j.join();
-            }
-
-            for(JobSender j : senders){
-                if(j.protocol.state == Constants.State.ERROR)
-                {
-                    System.err.println(j.job + " FAILED TO COMPLETE.");
-                    for(Job job : jobs)
-                    {
-                        if(j.job==job) {
-                            job.state = Constants.State.NOT_STARTED;
-                            System.err.println("Allowing " + job.fileName + " to restart.");
-                        }
-                    }
-                }
             }
         }
         catch(Exception e ){
