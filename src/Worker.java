@@ -226,7 +226,7 @@ public class Worker extends Thread {
 
         Scanner scan = new Scanner(new File(job.path));
 
-        String cmd[] = {"rsync","-tplHd","",""};
+        String cmd[] = {"rsync","-laSHAX","",""};
 
         while(scan.hasNext())
         {
