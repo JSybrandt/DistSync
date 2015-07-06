@@ -184,7 +184,7 @@ public class Manager extends Thread {
                         for(Job job : jobs)
                         {
                             if(js.job==job) {
-                                job.state = Constants.State.NOT_STARTED;
+                                js.protocol.state = job.state = Constants.State.NOT_STARTED;
                                 System.err.println("Allowing " + job.fileName + " to restart.");
                             }
                         }
