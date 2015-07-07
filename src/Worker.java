@@ -234,8 +234,8 @@ public class Worker extends Thread {
                 if(scan.hasNext() && (procs[i]==null || !isRunning(procs[i]))) {
                     String path = scan.next();
                     String size = scan.next();
-                    cmd[1]=job.upToDateMountPoint+path;
-                    cmd[2]=job.outOfDateMountPoint+path;
+                    cmd[2]=job.upToDateMountPoint+path;
+                    cmd[3]=job.outOfDateMountPoint+path;
                     procs[i] = r.exec(cmd);
 
                     String s="";
@@ -250,8 +250,9 @@ public class Worker extends Thread {
             try {
                 if(procs[i] != null) {
                     procs[i].waitFor();
-                    if(procs[i].exitValue()!=0)//err
-                        throw new IOException("RSYNC Proc Error: " + commands[i]);
+                    int val = procs[i].exitValue();
+                    if(val!=0)//err
+                        throw new IOException("RSYNC ["+val+"] Proc Error: " + commands[i]);
                 }
             }
             catch(InterruptedException e) {
