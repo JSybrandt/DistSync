@@ -179,7 +179,9 @@ public class Manager extends Thread {
 
         System.out.println("SYNC COMPLETE!");
         Long diffTime = System.nanoTime() - startTime;
-        CustomLog.log(diffTime.toString(),"MASTER");
+        try {
+            CustomLog.log(diffTime.toString(), "MASTER.log");
+        }catch(IOException e){System.err.println("Log failed");}
     }
 
 

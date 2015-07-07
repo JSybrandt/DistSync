@@ -6,16 +6,13 @@ import java.util.Date;
  */
 public class CustomLog {
 
-    public static void log(String msg, String logName)
+    public static void log(String msg, String logName) throws IOException
     {
-        try {
-            String logFile = Constants.LOG_DIR+logName;
-            PrintWriter printWriter = new PrintWriter(new BufferedWriter(new FileWriter(logFile, true)));
-            printWriter.println(msg);
-            printWriter.close();
-        } catch (IOException e) {
-            System.err.println("LogFailed:" + msg);
-        }
+        String logFile = Constants.LOG_DIR+logName;
+        PrintWriter printWriter = new PrintWriter(new BufferedWriter(new FileWriter(logFile, true)));
+        printWriter.println(msg);
+        printWriter.close();
+
     }
 }
 

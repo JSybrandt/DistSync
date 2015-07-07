@@ -86,7 +86,7 @@ public class Worker extends Thread {
                     }
 
                     Long diffTime = System.nanoTime()-startTime;
-                    CustomLog.log(diffTime.toString(),received.fileName +"_"+ socket.getInetAddress().getCanonicalHostName());
+                    CustomLog.log(diffTime.toString(),received.fileName+ ".log");
 
                     out.writeObject("FINISHED");
                 }
