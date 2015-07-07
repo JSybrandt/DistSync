@@ -66,7 +66,7 @@ public class Worker extends Thread {
                 long startTime = System.nanoTime();
 
                 try {
-                    switch(received.type) {
+                    switch(received.getType()) {
                         case CREATE_DIR:
                             preformCreateDir(received);
                             break;
@@ -86,7 +86,7 @@ public class Worker extends Thread {
                     }
 
                     Long diffTime = System.nanoTime()-startTime;
-                    CustomLog.log(diffTime.toString(),received.fileName);
+                    CustomLog.log(diffTime.toString(),received.fileName +"_"+ socket.getInetAddress().getCanonicalHostName());
 
                     out.writeObject("FINISHED");
                 }

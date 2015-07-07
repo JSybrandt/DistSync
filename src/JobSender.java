@@ -7,20 +7,23 @@ import java.net.Socket;
  * Created by jsybrand on 6/30/15.
  */
 public class JobSender extends Thread{
-    private Socket socket;
+    public Socket socket;
     public Job job;
+    public String ID;
+
+
+
+    private Manager manager;
     private ObjectInputStream in;
     private ObjectOutputStream out;
-    public JobAgreementProtocol protocol;
-    public String ID;
-    Manager manager;
+    private JobAgreementProtocol protocol;
 
     JobSender(Socket s, Job j, Manager m) throws IOException
     {
         manager = m;
         job = j;
         socket = s;
-        protocol = new JobAgreementProtocol();
+        protocol = new JobAgreementProtocol(j);
         ID = socket.getInetAddress().getCanonicalHostName();
         out = new ObjectOutputStream(socket.getOutputStream());
         in = new ObjectInputStream(socket.getInputStream());
@@ -44,23 +47,20 @@ public class JobSender extends Thread{
         try{
 
             String msg = "";
-            while(protocol.state!= Constants.State.FINISHED && protocol.state!= Constants.State.ERROR)
+            while(job.state!= Constants.State.FINISHED && job.state!= Constants.State.ERROR)
             {
                 JobAgreementProtocol.Action action = protocol.processInput(msg);
                 if(action== JobAgreementProtocol.Action.SEND_JOB){
                     out.writeObject(job);
                     System.out.println("Sent " + ID + " " + job.fileName);
                 }
-                //System.out.println(ID + ":" + protocol.state);
-                //if(protocol.state == Constants.State.ERROR)
-                    //System.err.println(ID+"ERR Occured.");
-                job.state = protocol.state;
-                if(protocol.state!= Constants.State.FINISHED && protocol.state!= Constants.State.ERROR){
+                if(job.state!= Constants.State.FINISHED && job.state!= Constants.State.ERROR){
                     Object obj = in.readObject();
                     if(obj instanceof IOException) {
                         System.out.println("Error Received:");
                         ((IOException) obj).printStackTrace();
                         msg = "ERROR";
+                        job.state = Constants.State.ERROR;
                     }
                     else msg = (String) obj;
                 }
@@ -70,17 +70,10 @@ public class JobSender extends Thread{
         catch (Exception e)
         {
             System.err.println(ID+": IO Failed " + e);
+            job.state = Constants.State.ERROR;
         }
         finally {
-            //try {
-            //socket.close();
-            //}
-            //catch (Exception e)
-            //{
-            //System.err.println("Failed to close socket.");
-            //}
-            if(protocol.state!= Constants.State.ERROR)
-                manager.connectionStatus.put(socket, false);
+                manager.connectionStatus.put(socket, job.state);
         }
     }
 }

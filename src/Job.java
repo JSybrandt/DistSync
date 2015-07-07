@@ -17,19 +17,7 @@ public class Job implements Serializable, Comparable {
         OTHER
     }
 
-    public int getTypeVal(Type t)
-    {
-        switch (t)
-        {
-            case CREATE_DIR:    return 1;
-            case RM_DIR:        return 2;
-            case CREATE_FILES:  return 2;
-            case RM_FILES:      return 1;
-            case MODIFY_FILES:  return 1;
-            case OTHER:         return 3;
-            default:            return 3;
-        }
-    }
+
 
     public Job(String s) throws IOException{
 
@@ -41,7 +29,7 @@ public class Job implements Serializable, Comparable {
     }
 
     //job type is determined by file name
-    public Type determineType(String fileName)
+    private static Type determineType(String fileName)
     {
         switch (fileName.charAt(0))
         {
@@ -63,7 +51,8 @@ public class Job implements Serializable, Comparable {
 
     public String fileName, path;
     public Constants.State state;
-    public Type type;
+    private Type type;
+    public Type getType(){return type;}
 
     public static String upToDateMountPoint = "datCurr/";
     public static String outOfDateMountPoint = "datOld/";
@@ -75,4 +64,18 @@ public class Job implements Serializable, Comparable {
     }
 
     public String toString(){return fileName+"\t"+type;}
+
+    private int getTypeVal(Type t)
+    {
+        switch (t)
+        {
+            case CREATE_DIR:    return 1;
+            case RM_DIR:        return 2;
+            case CREATE_FILES:  return 2;
+            case RM_FILES:      return 1;
+            case MODIFY_FILES:  return 1;
+            case OTHER:         return 3;
+            default:            return 3;
+        }
+    }
 }

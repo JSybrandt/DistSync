@@ -10,39 +10,47 @@ public class JobAgreementProtocol {
         SEND_JOB
     }
 
-    Constants.State state = Constants.State.NOT_STARTED;
+    JobAgreementProtocol(Job j){job = j;}
+    private Job job;
+
+
+    //jobs have state, protocols act on job state
+    public Constants.State getState(){return job.state;}
+    public void setState(Constants.State s){job.state=s;}
+
+    //Constants.State state = Constants.State.NOT_STARTED;
 
 
     //the server will send a job, the client will say that job has begun,
     //the server has the option to stop the job, the client will report the job is done, or the job is in error
 
     public Action processInput(String input) throws IOException {
-        if (state == Constants.State.NOT_STARTED) {
-            state = Constants.State.MADE_CONTACT;
+        if (getState() == Constants.State.NOT_STARTED) {
+            setState(Constants.State.MADE_CONTACT);
             return Action.SEND_JOB;
             //start communication by sending the client the job file
         }
-        else if (state == Constants.State.MADE_CONTACT && input.equals("STARTED")){
-                state = Constants.State.RUNNING;
+        else if (getState() == Constants.State.MADE_CONTACT && input.equals("STARTED")){
+            setState(Constants.State.RUNNING);
                 return Action.DO_NOTHING;
         }
-        else if (state == Constants.State.RUNNING && input.equals("REQ_HELP")){
+        else if (getState() == Constants.State.RUNNING && input.equals("REQ_HELP")){
             return Action.DO_NOTHING;
         }
-        else if (state == Constants.State.RUNNING && input.equals("FINISHED")){
-            state = Constants.State.FINISHED;
+        else if (getState() == Constants.State.RUNNING && input.equals("FINISHED")){
+            setState(Constants.State.FINISHED);
             return Action.DO_NOTHING;
         }
-        else if (state == Constants.State.FINISHED && input.equals("RESTART")){
-            state = Constants.State.RUNNING;
+        else if (getState() == Constants.State.FINISHED && input.equals("RESTART")){
+            setState(Constants.State.RUNNING);
             return Action.SEND_JOB;
         }
-        else if (state == Constants.State.RUNNING && input.equals("ERROR")){
-            state = Constants.State.ERROR;
+        else if (getState() == Constants.State.RUNNING && input.equals("ERROR")){
+            setState(Constants.State.ERROR);
             return Action.DO_NOTHING;
         }
         else
-            throw new IOException("Protocol not followed. On State: " +state+ " Received: " + input);
+            throw new IOException("Protocol not followed. On State: " +getState()+ " Received: " + input);
     }
 
 

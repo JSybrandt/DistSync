@@ -15,7 +15,7 @@ public class Manager extends Thread {
 
     ArrayList<JobSender> senders = new ArrayList<>();
     ArrayList<Socket> sockets = new ArrayList<>();
-    ConcurrentHashMap<Socket,Boolean> connectionStatus = new ConcurrentHashMap<>();//true represents running
+    ConcurrentHashMap<Socket,Constants.State> connectionStatus = new ConcurrentHashMap<>();//true represents running
     Job[] jobs;
 
 
@@ -47,7 +47,7 @@ public class Manager extends Thread {
             try {
                 Socket s = listener.accept();
                 sockets.add(s);
-                connectionStatus.put(s, false);
+                connectionStatus.put(s, Constants.State.NOT_STARTED);
                 System.out.println("Made Connection with " + s.getLocalAddress().toString());
             }catch(SocketTimeoutException e){listener.close();/*who cares*/}
         }
@@ -55,17 +55,24 @@ public class Manager extends Thread {
 
     //returns true if finished
     public boolean checkIsFinished(){
-        for(Job j : jobs)
+        boolean hasAliveSockets=false;
+        for(Socket s : sockets)
         {
-            if(j.state == Constants.State.NOT_STARTED)
-                return false;
+            if(connectionStatus.get(s)!= Constants.State.ERROR) {
+                hasAliveSockets = true;
+                break;
+            }
         }
-        for(JobSender s : senders)
-        {
-            if(s.protocol.state != Constants.State.FINISHED
-                    && s.protocol.state != Constants.State.ERROR)
-            {
-                return false;
+        if(hasAliveSockets) {
+            for (Job j : jobs) {
+                if (j.state == Constants.State.NOT_STARTED)
+                    return false;
+            }
+            for (JobSender s : senders) {
+                if (s.job.state != Constants.State.FINISHED
+                        && s.job.state != Constants.State.ERROR) {
+                    return false;
+                }
             }
         }
         return true;
@@ -80,19 +87,19 @@ public class Manager extends Thread {
         for(Job j : jobs)
         {
             if(j.state != Constants.State.FINISHED){
-                if(j.type == Job.Type.CREATE_DIR)
+                if(j.getType() == Job.Type.CREATE_DIR)
                     maySelectCreateFiles = false;
-                else if(j.type == Job.Type.RM_FILES)
+                else if(j.getType() == Job.Type.RM_FILES)
                     maySelectRemoveDirectories=false;
 
                 if(j.state==Constants.State.NOT_STARTED)
                 {
-                    if(j.type == Job.Type.CREATE_FILES) {
+                    if(j.getType() == Job.Type.CREATE_FILES) {
                         if (maySelectCreateFiles) {
                             return j;
                         }
                     }
-                    else if(j.type == Job.Type.RM_DIR) {
+                    else if(j.getType() == Job.Type.RM_DIR) {
                         if (maySelectRemoveDirectories) {
                             return j;
                         }
@@ -125,29 +132,16 @@ public class Manager extends Thread {
                     //System.out.println("Selected " + j);
                     for(Socket s : sockets)
                     {
-                        if(!connectionStatus.get(s))
+                        if(connectionStatus.get(s)==Constants.State.NOT_STARTED
+                                || connectionStatus.get(s) == Constants.State.FINISHED)
                         {
                             cons++;
                             JobSender sender = new JobSender(s,j,this);
                             senders.add(sender);
                             j.state = Constants.State.ASSIGNED;
-                            connectionStatus.put(s,true);
+                            connectionStatus.put(s, Constants.State.ASSIGNED);
                             sender.start();
                             break;
-                        }
-                    }
-                }
-
-                for(JobSender js : senders){
-                    if(js.protocol.state == Constants.State.ERROR)
-                    {
-                        System.err.println(js.job + " FAILED TO COMPLETE.");
-                        for(Job job : jobs)
-                        {
-                            if(js.job==job) {
-                                js.protocol.state = js.job.state = Constants.State.NOT_STARTED;
-                                System.err.println("Allowing " + job.fileName + " to restart.");
-                            }
                         }
                     }
                 }

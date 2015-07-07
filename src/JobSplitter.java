@@ -58,7 +58,7 @@ public class JobSplitter extends Thread{
     private void evalAndSplitJob(Job j) throws IOException
     {
         //there are certain jobs we WONT split
-        if(j.type== Job.Type.CREATE_DIR || j.type== Job.Type.RM_DIR)
+        if(j.getType()== Job.Type.CREATE_DIR || j.getType()== Job.Type.RM_DIR)
         {
             finalJobs.add(j);
             return;
@@ -85,7 +85,7 @@ public class JobSplitter extends Thread{
             String file = in.next();
             int size = in.nextInt();
 
-            switch (j.type){
+            switch (j.getType()){
                 case CREATE_DIR:    currWeight+=size*CP_DIR_WEIGHT + CP_DIR_LINE_WEIGHT; break;
                 case RM_DIR:        currWeight+=size*RM_DIR_WEIGHT + RM_DIR_LINE_WEIGHT; break;
                 case CREATE_FILES:  currWeight+=size*CP_FILE_WEIGHT + CP_FILE_LINE_WEIGHT; break;

@@ -9,7 +9,7 @@ public class CustomLog {
     public static void log(String msg, String logName)
     {
         try {
-            String logFile = Constants.LOG_DIR+(new Date().toString())+logName;
+            String logFile = Constants.LOG_DIR+logName;
             PrintWriter printWriter = new PrintWriter(new BufferedWriter(new FileWriter(logFile, true)));
             printWriter.println(msg);
             printWriter.close();
