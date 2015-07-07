@@ -204,7 +204,6 @@ public class Manager extends Thread {
         {
             try {
 
-
                 ObjectOutputStream o = new ObjectOutputStream(s.getOutputStream());
                 ObjectInputStream i = new ObjectInputStream(s.getInputStream());
                 o.writeObject(null);

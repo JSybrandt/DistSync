@@ -223,7 +223,7 @@ public class Worker extends Thread {
         //for right now we are just going to use cp, because its the dumb answer
 
         Process procs[] = new Process[NUM_AVAILABLE_PROCS];
-
+        String commands[] = new String[NUM_AVAILABLE_PROCS];
         Scanner scan = new Scanner(new File(job.path));
 
         String cmd[] = {"rsync","-laSHAX","",""};
@@ -237,6 +237,10 @@ public class Worker extends Thread {
                     cmd[1]=job.upToDateMountPoint+path;
                     cmd[2]=job.outOfDateMountPoint+path;
                     procs[i] = r.exec(cmd);
+
+                    String s="";
+                    for(String t : cmd) s+= t + " ";
+                    commands[i]=s;
                 }
             }
         }
@@ -247,7 +251,7 @@ public class Worker extends Thread {
                 if(procs[i] != null) {
                     procs[i].waitFor();
                     if(procs[i].exitValue()!=0)//err
-                        throw new IOException("RSYNC Proc Error: " + procs[i]);
+                        throw new IOException("RSYNC Proc Error: " + commands[i]);
                 }
             }
             catch(InterruptedException e) {
