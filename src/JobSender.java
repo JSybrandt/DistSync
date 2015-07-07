@@ -12,16 +12,16 @@ public class JobSender extends Thread{
     private ObjectInputStream in;
     private ObjectOutputStream out;
     public JobAgreementProtocol protocol;
-    public int ID;
+    public String ID;
     Manager manager;
 
-    JobSender(Socket s, Job j, int id,Manager m) throws IOException
+    JobSender(Socket s, Job j, Manager m) throws IOException
     {
         manager = m;
         job = j;
         socket = s;
         protocol = new JobAgreementProtocol();
-        ID = id;
+        ID = socket.getInetAddress().getCanonicalHostName();
         out = new ObjectOutputStream(socket.getOutputStream());
         in = new ObjectInputStream(socket.getInputStream());
     }
@@ -35,7 +35,7 @@ public class JobSender extends Thread{
         }
         catch(Exception e)
         {
-            System.err.println("Server connection failed to close.");
+            System.err.println(ID+": Server connection failed to close.");
         }
     }
 
@@ -49,7 +49,7 @@ public class JobSender extends Thread{
                 JobAgreementProtocol.Action action = protocol.processInput(msg);
                 if(action== JobAgreementProtocol.Action.SEND_JOB){
                     out.writeObject(job);
-                    System.out.println("Sent " + socket.getLocalAddress().toString() + " " + job.fileName);
+                    System.out.println("Sent " + ID + " " + job.fileName);
                 }
                 //System.out.println(ID + ":" + protocol.state);
                 //if(protocol.state == Constants.State.ERROR)
@@ -69,7 +69,7 @@ public class JobSender extends Thread{
         }
         catch (Exception e)
         {
-            System.err.println("IO Failed " + e);
+            System.err.println(ID+": IO Failed " + e);
         }
         finally {
             //try {

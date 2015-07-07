@@ -8,6 +8,7 @@ import java.net.Socket;
 import java.net.SocketTimeoutException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class Manager extends Thread {
@@ -22,31 +23,7 @@ public class Manager extends Thread {
     {
         new File(Constants.TEMP_DIR).mkdir();
         new File(Constants.JOB_DIR).mkdir();
-        new File(Constants.JOB_DIR + "C1.temp").createNewFile();
-        new File(Constants.JOB_DIR + "R1.temp").createNewFile();
-        new File(Constants.JOB_DIR + "A1.temp").createNewFile();
-        new File(Constants.JOB_DIR + "D1.temp").createNewFile();
-        new File(Constants.JOB_DIR + "M1.temp").createNewFile();
-        new File(Constants.JOB_DIR + "C2.temp").createNewFile();
-        new File(Constants.JOB_DIR + "C3.temp").createNewFile();
-        new File(Constants.JOB_DIR + "R2.temp").createNewFile();
-        new File(Constants.JOB_DIR + "A2.temp").createNewFile();
-        new File(Constants.JOB_DIR + "D2.temp").createNewFile();
-        new File(Constants.JOB_DIR + "M2.temp").createNewFile();
-    }
-
-    public void deletePath(File file)
-    {
-        if(file.isDirectory())
-        {
-            File children[] = file.listFiles();
-            if(children != null)
-                for (File f : children) {
-                    deletePath(f);
-                }
-        }
-        System.out.println("Removing: " + file.getName());
-        file.delete();
+        new File(Constants.LOG_DIR).mkdir();
     }
 
     @Override
@@ -57,22 +34,6 @@ public class Manager extends Thread {
         }
         catch(Exception e){
             System.err.println("Sever failed to close.");
-        }
-    }
-
-    private Job[] getSortedJobFiles()
-    {
-        try {
-            String[] s = new File(Constants.JOB_DIR).list();
-            Job[] j = new Job[s.length];
-            for (int i = 0; i < s.length; i++) {
-                j[i] = new Job(s[i]);
-            }
-            Arrays.sort(j);
-            return j;
-        }catch(IOException e){
-            System.err.println("Something went wonky in the file system.");
-            return null;
         }
     }
 
@@ -167,7 +128,7 @@ public class Manager extends Thread {
                         if(!connectionStatus.get(s))
                         {
                             cons++;
-                            JobSender sender = new JobSender(s,j,cons,this);
+                            JobSender sender = new JobSender(s,j,this);
                             senders.add(sender);
                             j.state = Constants.State.ASSIGNED;
                             connectionStatus.put(s,true);
@@ -184,7 +145,7 @@ public class Manager extends Thread {
                         for(Job job : jobs)
                         {
                             if(js.job==job) {
-                                js.protocol.state = job.state = Constants.State.NOT_STARTED;
+                                js.protocol.state = js.job.state = Constants.State.NOT_STARTED;
                                 System.err.println("Allowing " + job.fileName + " to restart.");
                             }
                         }
