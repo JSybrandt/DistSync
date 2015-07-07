@@ -25,7 +25,7 @@ public class JobAgreementProtocol {
     //the server has the option to stop the job, the client will report the job is done, or the job is in error
 
     public Action processInput(String input) throws IOException {
-        if (getState() == Constants.State.NOT_STARTED) {
+        if (getState() == Constants.State.ASSIGNED || getState()== Constants.State.NOT_STARTED) {
             setState(Constants.State.MADE_CONTACT);
             return Action.SEND_JOB;
             //start communication by sending the client the job file
