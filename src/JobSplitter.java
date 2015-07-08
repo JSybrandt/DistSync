@@ -63,6 +63,7 @@ public class JobSplitter extends Thread {
             for(EvalJob ej : evJs)
             {
                 try {
+                    System.out.println("Waiting for " + ej.job);
                     ej.join();
                     if(ej.exception != null) throw ej.exception;
                 }catch(Exception e){e.printStackTrace();}

@@ -55,6 +55,7 @@ public class Manager extends Thread {
 
     //returns true if finished
     public boolean checkIsFinished(){
+        System.out.println("Checking if Finished");
         boolean hasAliveSockets=false;
         for(Socket s : sockets)
         {
@@ -81,6 +82,7 @@ public class Manager extends Thread {
     //determines which job should be sent out next
     private Job selectNextJob()
     {
+
         boolean maySelectCreateFiles=true;
         boolean maySelectRemoveDirectories=true;
         //takes advantage of priority queue
@@ -117,11 +119,13 @@ public class Manager extends Thread {
         long startTime = System.nanoTime();
         int cons = 0;
         try {
+            System.out.println("Making Connections:");
             getConnections();
+            System.out.println("Reading and Splitting Jobs.");
             JobSplitter jobSplitter = new JobSplitter();
             jobSplitter.run();
-
             jobSplitter.join();
+            System.out.println("Getting Results:");
             jobs = jobSplitter.getResults();
 
             while (!checkIsFinished())
