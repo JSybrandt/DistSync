@@ -11,7 +11,7 @@ import java.util.Scanner;
  */
 public class JobSplitter extends Thread{
 
-    private final double MAX_JOB_WEIGHT = 10000;
+    private final double MAX_JOB_WEIGHT = 1000000;
 
     private final double RM_FILE_WEIGHT=0.1;
     private final double CP_FILE_WEIGHT=1;
@@ -76,6 +76,8 @@ public class JobSplitter extends Thread{
 
         while(in.hasNext())
         {
+
+
             if(currWeight > MAX_JOB_WEIGHT)
             {
                 currWeight = 0;
@@ -87,20 +89,26 @@ public class JobSplitter extends Thread{
                 out = new PrintWriter(j.path+currFileID);
             }
 
-            String file = in.next();
-            BigInteger size = in.nextBigInteger();
+            String line = in.nextLine();
+            Scanner scanLine = new Scanner(line);
+            try {
+                String file = scanLine.next();
+                BigInteger size = scanLine.nextBigInteger();
 
-            switch (j.getType()){
-                case CREATE_DIR:    currWeight+=size.doubleValue()*CP_DIR_WEIGHT + CP_DIR_LINE_WEIGHT; break;
-                case RM_DIR:        currWeight+=size.doubleValue()*RM_DIR_WEIGHT + RM_DIR_LINE_WEIGHT; break;
-                case CREATE_FILES:  currWeight+=size.doubleValue()*CP_FILE_WEIGHT + CP_FILE_LINE_WEIGHT; break;
-                case RM_FILES:     currWeight+=size.doubleValue()*RM_FILE_WEIGHT + RM_FILE_LINE_WEIGHT; break;
-                case MODIFY_FILES: currWeight+=size.doubleValue()*SYNC_FILE_WEIGHT + SYNC_FILE_LINE_WEIGHT; break;
-                default:            currWeight+=size.doubleValue()+1;
+
+                switch (j.getType()){
+                    case CREATE_DIR:    currWeight+=size.doubleValue()*CP_DIR_WEIGHT + CP_DIR_LINE_WEIGHT; break;
+                    case RM_DIR:        currWeight+=size.doubleValue()*RM_DIR_WEIGHT + RM_DIR_LINE_WEIGHT; break;
+                    case CREATE_FILES:  currWeight+=size.doubleValue()*CP_FILE_WEIGHT + CP_FILE_LINE_WEIGHT; break;
+                    case RM_FILES:     currWeight+=size.doubleValue()*RM_FILE_WEIGHT + RM_FILE_LINE_WEIGHT; break;
+                    case MODIFY_FILES: currWeight+=size.doubleValue()*SYNC_FILE_WEIGHT + SYNC_FILE_LINE_WEIGHT; break;
+                    default:            currWeight+=size.doubleValue()+1;
+                }
+
+                out.println(file + "\t" + size);
+            } catch(Exception e) {
+                System.err.println("Had an error with \""+line+"\"");
             }
-
-            out.println(file + "\t" + size);
-
         }
         if(out!=null){
             out.close();
