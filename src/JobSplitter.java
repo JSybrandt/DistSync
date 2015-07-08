@@ -1,3 +1,5 @@
+import sun.security.util.BigInt;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -90,11 +92,10 @@ public class JobSplitter extends Thread{
             }
 
             String line = in.nextLine();
-            Scanner scanLine = new Scanner(line);
             try {
-                String file = scanLine.next();
-                BigInteger size = scanLine.nextBigInteger();
-
+                String val[] = line.split("\\t");
+                String file = val[0];
+                BigInteger size = new BigInteger(val[1]);
 
                 switch (j.getType()){
                     case CREATE_DIR:    currWeight+=size.doubleValue()*CP_DIR_WEIGHT + CP_DIR_LINE_WEIGHT; break;
