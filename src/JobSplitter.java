@@ -13,7 +13,7 @@ import java.util.Scanner;
  */
 public class JobSplitter extends Thread{
 
-    private final double MAX_JOB_WEIGHT = 1000000;
+    private final double MAX_JOB_WEIGHT = 1e10;
 
     private final double RM_FILE_WEIGHT=0.1;
     private final double CP_FILE_WEIGHT=1;
