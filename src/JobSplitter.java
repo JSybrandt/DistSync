@@ -45,13 +45,17 @@ public class JobSplitter extends Thread{
         String[] s = new File(Constants.JOB_DIR).list();
         if(s!=null && s.length > 0) {
             initialJobs = new Job[s.length];
-            try {
-                for (int i = 0; i < s.length; i++) {
+            for (int i = 0; i < s.length; i++) {
+                try {
+
                     initialJobs[i] = new Job(s[i]);
                     evalAndSplitJob(initialJobs[i]); //populates finalJobs
+
+                } catch (Exception e) {
+                    System.err.println("Invalid input format");
+                    e.printStackTrace();
+                    System.err.println("Job:" + initialJobs[i]);
                 }
-            } catch (IOException e) {
-                System.err.println("Invalid input format");
             }
         }
     }
