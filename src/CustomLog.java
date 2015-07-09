@@ -9,7 +9,7 @@ public class CustomLog {
     public static void log(String msg, String logName) throws IOException
     {
         String logFile = Constants.LOG_DIR+logName;
-        PrintWriter printWriter = new PrintWriter(new BufferedWriter(new FileWriter(logFile, true)));
+        PrintWriter printWriter = new PrintWriter(logFile);
         printWriter.println(msg);
         printWriter.close();
 

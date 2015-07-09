@@ -55,7 +55,6 @@ public class Manager extends Thread {
 
     //returns true if finished
     public boolean checkIsFinished(){
-        System.out.println("Checking if Finished");
         boolean hasAliveSockets=false;
         for(Socket s : sockets)
         {

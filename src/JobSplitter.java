@@ -1,8 +1,6 @@
 import sun.security.util.BigInt;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.PrintWriter;
+import java.io.*;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -94,7 +92,7 @@ public class JobSplitter extends Thread {
 
                 //double currWeight = MAX_JOB_WEIGHT + 100; //we will make a new job the first iteration
                 int currFileID = 0;
-                Scanner in = new Scanner(new File(job.path));
+                Scanner in = new Scanner(new BufferedInputStream(new FileInputStream(job.path)));
                 PrintWriter out = null;
 
                 int lineCount = MAX_LINES_IN_FILE + 100;
