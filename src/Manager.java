@@ -121,11 +121,19 @@ public class Manager extends Thread {
             System.out.println("Making Connections:");
             getConnections();
             System.out.println("Reading and Splitting Jobs.");
-            JobSplitter jobSplitter = new JobSplitter();
-            jobSplitter.run();
-            jobSplitter.join();
-            System.out.println("Getting Results:");
-            jobs = jobSplitter.getResults();
+            //JobSplitter jobSplitter = new JobSplitter();
+            //jobSplitter.run();
+            //jobSplitter.join();
+            //System.out.println("Getting Results:");
+            //jobs = jobSplitter.getResults();
+            //GET JOB FILES FROM JOBS FOLDER
+
+            String[] strs = new File(Constants.JOB_DIR).list();
+            jobs = new Job[strs.length];
+            for(int i = 0; i<strs.length;i++){
+                jobs[i] = new Job(strs[i]);
+            }
+            Arrays.sort(jobs);
 
             while (!checkIsFinished())
             {
