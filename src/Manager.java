@@ -75,6 +75,9 @@ public class Manager extends Thread {
                 }
             }
         }
+        else {
+            System.err.println("All connections dead.");
+        }
         return true;
     }
 
@@ -120,7 +123,7 @@ public class Manager extends Thread {
         try {
             System.out.println("Making Connections:");
             getConnections();
-            System.out.println("Reading and Splitting Jobs.");
+            //System.out.println("Reading and Splitting Jobs.");
             //JobSplitter jobSplitter = new JobSplitter();
             //jobSplitter.run();
             //jobSplitter.join();
