@@ -141,6 +141,8 @@ public class Worker extends Thread {
             try {
                 if(p != null)
                 p.waitFor();
+                if(p.exitValue()!=0)
+                    throw new IOException("CP Proc Error while trying to cp " + cmd[1]);
             }
             catch(InterruptedException e) {
                 System.err.println("CP Interupted. " + e);
@@ -185,7 +187,7 @@ public class Worker extends Thread {
                 if(procs[i] != null) {
                     procs[i].waitFor();
                     if(procs[i].exitValue()!=0)//err
-                        throw new IOException("CP Proc Error");
+                        throw new IOException("RM Proc Error while trying to remove " + cmd[1]);
                 }
             }
             catch(InterruptedException e) {
