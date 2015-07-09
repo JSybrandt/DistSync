@@ -123,11 +123,14 @@ public class Worker extends Thread {
 
         Scanner scan = new Scanner(new File(job.path));
 
+        System.out.println("Sending shiftc my data.");
         while(scan.hasNext())
         {
             String path = scan.nextLine();
             writer.println(job.upToDateMountPoint+path + "\t" + job.outOfDateMountPoint+path);
         }
+
+        System.out.println("data sent!");
 
         writer.close();
 
