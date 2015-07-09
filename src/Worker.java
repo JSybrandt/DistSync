@@ -118,28 +118,34 @@ public class Worker extends Thread {
         Runtime r = Runtime.getRuntime();
         //for right now we are just going to use cp, because its the dumb answer
 
-        Process shiftc = r.exec("shiftc --hosts=16 --host-list=localhost --wait -P");
-        PrintWriter writer = new PrintWriter(shiftc.getOutputStream());
+        Process procs[] = new Process[NUM_AVAILABLE_PROCS];
 
         Scanner scan = new Scanner(new File(job.path));
 
-        System.out.println("Sending shiftc my data.");
+        String cmd[] = {"mcp","-P","--preserve=all","--sparse=never","",""};
+
         while(scan.hasNext())
         {
-            String path = scan.nextLine();
-            String line = job.upToDateMountPoint+path + "\t" + job.outOfDateMountPoint+path;
-            writer.println(line);
-            System.out.println(line);
+            for(int i = 0;i < procs.length; i++) {
+                if(scan.hasNext() && (procs[i]==null || !isRunning(procs[i]))) {
+                    String path = scan.nextLine();
+                    cmd[4]=job.upToDateMountPoint+path;
+                    cmd[5]=job.outOfDateMountPoint+path;
+                    procs[i] = r.exec(cmd);
+                }
+            }
         }
 
-        System.out.println("data sent!");
-
-        writer.close();
-
-        shiftc.waitFor();
-
-        if(shiftc.exitValue()!=0)
-            throw new IOException("SHIFTC CP had an error somewhere in " + job.fileName);
+        for(Process p : procs)
+        {
+            try {
+                if(p != null)
+                    p.waitFor();
+            }
+            catch(InterruptedException e) {
+                System.err.println("CP Interupted. " + e);
+            }
+        }
     }
 
     //this relies on the job file listing dirs in order
