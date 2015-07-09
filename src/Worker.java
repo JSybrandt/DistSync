@@ -151,7 +151,21 @@ public class Worker extends Thread {
         Runtime r = Runtime.getRuntime();
         //for right now we are just going to use cp, because its the dumb answer
 
-        Process p = r.exec("xargs rm <" + job.path);
+
+        final Process p = r.exec("xargs rm <" + job.path);
+
+        Thread t = new Thread(){
+            @Override
+            public void run() {
+                super.run();
+                try{sleep(10000);}catch(Exception e){}
+                if(isRunning(p)) {
+                    p.destroy();
+                }
+
+            }
+        };
+        t.start();
 
         p.waitFor();
 
@@ -185,10 +199,7 @@ public class Worker extends Thread {
 
     private void preformSyncFiles(Job job) throws IOException, InterruptedException{
         Runtime r = Runtime.getRuntime();
-        //for right now we are just going to use cp, because its the dumb answer
 
-        Process procs[] = new Process[NUM_AVAILABLE_PROCS];
-        String commands[] = new String[NUM_AVAILABLE_PROCS];
         Scanner scan = new Scanner(new File(job.path));
 
         Process shiftc = r.exec("shiftc --hosts=16 --sync-fast --host-list=localhost --wait -P");
