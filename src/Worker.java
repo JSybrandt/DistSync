@@ -114,40 +114,27 @@ public class Worker extends Thread {
         }
     }
 
-    private void preformCopy(Job job) throws IOException{
+    private void preformCopy(Job job) throws IOException, InterruptedException{
         Runtime r = Runtime.getRuntime();
         //for right now we are just going to use cp, because its the dumb answer
 
-        Process procs[] = new Process[NUM_AVAILABLE_PROCS];
+        Process shiftc = r.exec("shiftc --hosts=16 --host-list=localhost --wait -P");
+        PrintWriter writer = new PrintWriter(shiftc.getOutputStream());
 
         Scanner scan = new Scanner(new File(job.path));
 
-        String cmd[] = {"cp","",""};
-
         while(scan.hasNext())
         {
-            for(int i = 0;i < procs.length; i++) {
-                if(scan.hasNext() && (procs[i]==null || !isRunning(procs[i]))) {
-                    String path = scan.nextLine();
-                    cmd[1]=job.upToDateMountPoint+path;
-                    cmd[2]=job.outOfDateMountPoint+path;
-                    procs[i] = r.exec(cmd);
-                }
-            }
+            String path = scan.nextLine();
+            writer.println(job.upToDateMountPoint+path + "\t" + job.outOfDateMountPoint+path);
         }
 
-        for(Process p : procs)
-        {
-            try {
-                if(p != null)
-                p.waitFor();
-                if(p.exitValue()!=0)
-                    throw new IOException("CP Proc Error while trying to cp " + cmd[1]);
-            }
-            catch(InterruptedException e) {
-                System.err.println("CP Interupted. " + e);
-            }
-        }
+        writer.close();
+
+        shiftc.waitFor();
+
+        if(shiftc.exitValue()!=0)
+            throw new IOException("SHIFTC CP had an error somewhere in " + job.fileName);
     }
 
     //this relies on the job file listing dirs in order
@@ -160,46 +147,21 @@ public class Worker extends Thread {
         }
     }
 
-    private void preformRemoveFiles(Job job) throws IOException{
+    private void preformRemoveFiles(Job job) throws IOException, InterruptedException{
         Runtime r = Runtime.getRuntime();
         //for right now we are just going to use cp, because its the dumb answer
 
-        r.exec("xargs rm <" + job.path);
+        Process p = r.exec("xargs rm <" + job.path);
 
-        /*Process procs[] = new Process[NUM_AVAILABLE_PROCS];
+        p.waitFor();
 
-        Scanner scan = new Scanner(new File(job.path));
+        if(p.exitValue()!=0)
+            throw new IOException("RM proc had an error somewhere within " + job.fileName);
 
-        String cmd[] = {"rm",""};
-
-        while(scan.hasNext())
-        {
-            for(int i = 0; i<procs.length;i++) {
-                if(scan.hasNext() && (procs[i]==null || !isRunning(procs[i]))) {
-                    String path = scan.nextLine();
-                    cmd[1]=job.outOfDateMountPoint+path;
-                    procs[i] = r.exec(cmd);
-                }
-            }
-        }
-
-        for(int i = 0; i<procs.length;i++)
-        {
-            try {
-                if(procs[i] != null) {
-                    procs[i].waitFor();
-                    if(procs[i].exitValue()!=0)//err
-                        throw new IOException("RM Proc Error while trying to remove " + cmd[1]);
-                }
-            }
-            catch(InterruptedException e) {
-                System.err.println("RM Interupted. " + e);
-            }
-        }
-        */
     }
 
     private void preformRemoveDirectory(Job job) throws IOException{
+        boolean containedErrors = false;
         Runtime r = Runtime.getRuntime();
         Scanner scan = new Scanner(new File(job.path));
         Stack<String> stack = new Stack<>();
@@ -214,12 +176,14 @@ public class Worker extends Thread {
                 Process p = r.exec(cmd);
                 p.waitFor();
                 if(p.exitValue()!=0)
-                    throw new IOException("RM -r Proc Error while attempting to remove " + cmd[2]);
+                    containedErrors=true;
             } catch(InterruptedException e){System.err.println("RM Interupted. " + e);}
         }
+        if(containedErrors)
+            throw new IOException("RM -r Proc Error somewhere within " + job.fileName);
     }
 
-    private void preformSyncFiles(Job job) throws IOException{
+    private void preformSyncFiles(Job job) throws IOException, InterruptedException{
         Runtime r = Runtime.getRuntime();
         //for right now we are just going to use cp, because its the dumb answer
 
@@ -227,38 +191,21 @@ public class Worker extends Thread {
         String commands[] = new String[NUM_AVAILABLE_PROCS];
         Scanner scan = new Scanner(new File(job.path));
 
-        String cmd[] = {"rsync","-laSHAX","",""};
+        Process shiftc = r.exec("shiftc --hosts=16 --sync-fast --host-list=localhost --wait -P");
+        PrintWriter writer = new PrintWriter(shiftc.getOutputStream());
 
         while(scan.hasNext())
         {
-            for(int i = 0; i<procs.length;i++){
-                if(scan.hasNext() && (procs[i]==null || !isRunning(procs[i]))) {
-                    String path = scan.nextLine();
-                    cmd[2]=job.upToDateMountPoint+path;
-                    cmd[3]=job.outOfDateMountPoint+path;
-                    procs[i] = r.exec(cmd);
-
-                    String s="";
-                    for(String t : cmd) s+= t + " ";
-                    commands[i]=s;
-                }
-            }
+            String path = scan.nextLine();
+            writer.println(job.upToDateMountPoint+path + "\t" + job.outOfDateMountPoint+path);
         }
 
-        for(int i = 0; i<procs.length;i++)
-        {
-            try {
-                if(procs[i] != null) {
-                    procs[i].waitFor();
-                    int val = procs[i].exitValue();
-                    if(val!=0)//err
-                        throw new IOException("RSYNC ["+val+"] Proc Error: " + commands[i]);
-                }
-            }
-            catch(InterruptedException e) {
-                System.err.println("RSYNC Interupted. " + e);
-            }
-        }
+        writer.close();
+
+        shiftc.waitFor();
+
+        if(shiftc.exitValue()!=0)
+            throw new IOException("SHIFTC --sync had an error somewhere in " + job.fileName);
     }
 
     private void preformBuildLinks(Job job) throws IOException{
