@@ -164,7 +164,9 @@ public class Worker extends Thread {
         Runtime r = Runtime.getRuntime();
         //for right now we are just going to use cp, because its the dumb answer
 
-        Process procs[] = new Process[NUM_AVAILABLE_PROCS];
+        r.exec("xargs rm <" + job.path);
+
+        /*Process procs[] = new Process[NUM_AVAILABLE_PROCS];
 
         Scanner scan = new Scanner(new File(job.path));
 
@@ -194,6 +196,7 @@ public class Worker extends Thread {
                 System.err.println("RM Interupted. " + e);
             }
         }
+        */
     }
 
     private void preformRemoveDirectory(Job job) throws IOException{

@@ -73,7 +73,9 @@ public class JobSender extends Thread{
             job.state = Constants.State.ERROR;
         }
         finally {
-                manager.connectionStatus.put(socket, job.state);
+                //manager.connectionStatus.put(socket, job.state);
+            //DIABLED ERROR
+            manager.connectionStatus.put(socket, Constants.State.FINISHED);
         }
     }
 }

@@ -15,7 +15,7 @@ public class Manager extends Thread {
 
     ArrayList<JobSender> senders = new ArrayList<>();
     ArrayList<Socket> sockets = new ArrayList<>();
-    ConcurrentHashMap<Socket,Constants.State> connectionStatus = new ConcurrentHashMap<>();//true represents running
+    ConcurrentHashMap<Socket,Constants.State> connectionStatus = new ConcurrentHashMap<>();
     Job[] jobs;
 
 
