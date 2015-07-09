@@ -14,6 +14,7 @@ public class Job implements Serializable, Comparable {
         CREATE_FILES,   //A
         RM_FILES,       //D
         MODIFY_FILES,   //M
+        BUILD_LINKS,    //L
         OTHER
     }
 
@@ -42,8 +43,9 @@ public class Job implements Serializable, Comparable {
             case 'D':
                 return Type.RM_FILES;
             case 'M':
+                return Type.MODIFY_FILES;
             case 'L'://we are going to work on the assumption that the links can be run the same way
-                return  Type.MODIFY_FILES;
+                return  Type.BUILD_LINKS;
             default:
                 return Type.OTHER;
         }
@@ -54,8 +56,8 @@ public class Job implements Serializable, Comparable {
     private Type type;
     public Type getType(){return type;}
 
-    public static String upToDateMountPoint = "datCurr/";
-    public static String outOfDateMountPoint = "datOld/";
+    public static String upToDateMountPoint = null;
+    public static String outOfDateMountPoint = null;
 
 
     public int compareTo(Object o)
@@ -74,6 +76,7 @@ public class Job implements Serializable, Comparable {
             case CREATE_FILES:  return 2;
             case RM_FILES:      return 1;
             case MODIFY_FILES:  return 1;
+            case BUILD_LINKS:   return 1;
             case OTHER:         return 3;
             default:            return 3;
         }

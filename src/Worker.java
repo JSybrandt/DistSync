@@ -1,7 +1,4 @@
-import java.io.File;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
+import java.io.*;
 import java.net.Socket;
 import java.util.Scanner;
 import java.util.Stack;
@@ -82,6 +79,9 @@ public class Worker extends Thread {
                         case MODIFY_FILES:
                             preformSyncFiles(received);
                             break;
+                        case BUILD_LINKS:
+                            preformBuildLinks(received);
+                            break;
                         case OTHER:break;
                     }
 
@@ -128,8 +128,7 @@ public class Worker extends Thread {
         {
             for(int i = 0;i < procs.length; i++) {
                 if(scan.hasNext() && (procs[i]==null || !isRunning(procs[i]))) {
-                    String path = scan.next();
-                    String size = scan.next();
+                    String path = scan.nextLine().split("\\t")[0];
                     cmd[1]=job.upToDateMountPoint+path;
                     cmd[2]=job.outOfDateMountPoint+path;
                     procs[i] = r.exec(cmd);
@@ -154,8 +153,7 @@ public class Worker extends Thread {
         Scanner scan = new Scanner(new File(job.path));
         while(scan.hasNext())
         {
-            String path = job.outOfDateMountPoint+scan.next();
-            String size = scan.next();
+            String path = job.outOfDateMountPoint+scan.nextLine().split("\\t")[0];
             new File(path).mkdir();
         }
     }
@@ -174,8 +172,7 @@ public class Worker extends Thread {
         {
             for(int i = 0; i<procs.length;i++) {
                 if(scan.hasNext() && (procs[i]==null || !isRunning(procs[i]))) {
-                    String path = scan.next();
-                    String size = scan.next();
+                    String path = scan.nextLine().split("\\t")[0];
                     cmd[1]=job.outOfDateMountPoint+path;
                     procs[i] = r.exec(cmd);
                 }
@@ -202,8 +199,7 @@ public class Worker extends Thread {
         Scanner scan = new Scanner(new File(job.path));
         Stack<String> stack = new Stack<>();
         while(scan.hasNext()){
-            String path = job.outOfDateMountPoint+scan.next();
-            String size = scan.next();
+            String path = job.outOfDateMountPoint+scan.nextLine().split("\\t")[0];
             stack.push(path);
         }
         String cmd[] = {"rm","-r",""};
@@ -232,8 +228,7 @@ public class Worker extends Thread {
         {
             for(int i = 0; i<procs.length;i++){
                 if(scan.hasNext() && (procs[i]==null || !isRunning(procs[i]))) {
-                    String path = scan.next();
-                    String size = scan.next();
+                    String path = scan.nextLine().split("\\t")[0];
                     cmd[2]=job.upToDateMountPoint+path;
                     cmd[3]=job.outOfDateMountPoint+path;
                     procs[i] = r.exec(cmd);
@@ -259,5 +254,33 @@ public class Worker extends Thread {
                 System.err.println("RSYNC Interupted. " + e);
             }
         }
+    }
+
+    private void preformBuildLinks(Job job) throws IOException{
+        Scanner scan = new Scanner(new File(job.path));
+        String rsyncFile = Constants.TEMP_DIR + job.fileName + ".rsync";
+        PrintWriter writer = new PrintWriter(rsyncFile);
+
+        while(scan.hasNext())
+        {
+            String file = scan.nextLine().split("\\t")[0];
+            writer.println(file);
+        }
+        writer.close();
+
+        String cmd[] = {"rsync","-laSHAX","--files-from="+rsyncFile,Job.upToDateMountPoint,Job.outOfDateMountPoint};
+
+        Process p = Runtime.getRuntime().exec(cmd);
+        try {
+            p.waitFor();
+                int val = p.exitValue();
+                if(val!=0)//err
+                    throw new IOException("RSYNC failed to process links");
+
+        }
+        catch(InterruptedException e) {
+            System.err.println("RSYNC Interupted. " + e);
+        }
+
     }
 }

@@ -15,6 +15,8 @@ public class JobSplitter extends Thread {
 
     private final double MAX_JOB_WEIGHT = 1e10;
 
+    private final int MAX_LINES_IN_FILE = 10000;
+
     private final double RM_FILE_WEIGHT = 0.1;
     private final double CP_FILE_WEIGHT = 1;
     private final double RM_DIR_WEIGHT = 0.05;
@@ -52,6 +54,7 @@ public class JobSplitter extends Thread {
                 try {
 
                     initialJobs[i] = new Job(s[i]);
+                    System.out.println("Splitting Jobs");
                     evJs[i] = new EvalJob(initialJobs[i]); //populates finalJobs
                     evJs[i].start();
                 } catch (Exception e) {
@@ -80,21 +83,28 @@ public class JobSplitter extends Thread {
         public void run () {
             try {
                 //there are certain jobs we WONT split
-                if (job.getType() == Job.Type.CREATE_DIR || job.getType() == Job.Type.RM_DIR || job.getType() == Job.Type.MODIFY_FILES) {
+                if (job.getType() == Job.Type.CREATE_DIR
+                        || job.getType() == Job.Type.RM_DIR
+                        || job.getType() == Job.Type.MODIFY_FILES
+                        || job.getType() == Job.Type.BUILD_LINKS)
+                {
                     finalJobs.add(job);
                     return;
                 }
 
-                double currWeight = MAX_JOB_WEIGHT + 100; //we will make a new job the first iteration
+                //double currWeight = MAX_JOB_WEIGHT + 100; //we will make a new job the first iteration
                 int currFileID = 0;
                 Scanner in = new Scanner(new File(job.path));
                 PrintWriter out = null;
 
+                int lineCount = MAX_LINES_IN_FILE + 100;
+
                 while (in.hasNext()) {
 
-
-                    if (currWeight > MAX_JOB_WEIGHT) {
-                        currWeight = 0;
+                    if(lineCount > MAX_LINES_IN_FILE){
+                        lineCount = 0;
+                    //if (currWeight > MAX_JOB_WEIGHT) {
+                        //currWeight = 0;
                         if (out != null) {
                             out.close();
                             finalJobs.add(new Job(job.fileName + currFileID));
@@ -104,12 +114,13 @@ public class JobSplitter extends Thread {
                     }
 
                     String line = in.nextLine();
+                    lineCount++;
                     try {
                         String val[] = line.split("\\t");
                         String file = val[0];
                         BigInteger size = new BigInteger(val[1]);
 
-                        switch (job.getType()) {
+                        /*switch (job.getType()) {
                             case CREATE_DIR:
                                 currWeight += size.doubleValue() * CP_DIR_WEIGHT + CP_DIR_LINE_WEIGHT;
                                 break;
@@ -128,7 +139,9 @@ public class JobSplitter extends Thread {
                             default:
                                 currWeight += size.doubleValue() + 1;
                         }
+                        */
 
+                        //Initial jobs have the
                         out.println(file + "\t" + size);
                     } catch (Exception e) {
                         System.err.println("Had an error with \"" + line + "\"");
