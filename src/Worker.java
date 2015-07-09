@@ -127,7 +127,9 @@ public class Worker extends Thread {
         while(scan.hasNext())
         {
             String path = scan.nextLine();
-            writer.println(job.upToDateMountPoint+path + "\t" + job.outOfDateMountPoint+path);
+            String line = job.upToDateMountPoint+path + "\t" + job.outOfDateMountPoint+path;
+            writer.println(line);
+            System.out.println(line);
         }
 
         System.out.println("data sent!");
