@@ -45,6 +45,7 @@ public class Worker extends Thread {
     @Override
     public void run()
     {
+        long startTime = -1;
         try {
             while(true) {
                 if(socket.isClosed())
@@ -60,7 +61,7 @@ public class Worker extends Thread {
 
                 out.writeObject("STARTED");
 
-                long startTime = System.nanoTime();
+                startTime = System.nanoTime();
 
                 try {
                     switch(received.getType()) {
@@ -92,6 +93,12 @@ public class Worker extends Thread {
                 }
                 catch(IOException e)
                 {
+                    if(startTime > 0) {
+                        Long diffTime = System.nanoTime()-startTime;
+                        CustomLog.log(e.getMessage() + "\n" +diffTime.toString(), received.logFile);
+                    }
+                    else
+                        CustomLog.log(e.getMessage(),received.logFile);
                     out.writeObject(e);
                     System.err.println(e);
                 }
@@ -208,8 +215,10 @@ public class Worker extends Thread {
             try {
                 Process p = r.exec(cmd);
                 p.waitFor();
-                if(p.exitValue()!=0)
-                    containedErrors=true;
+                if(p.exitValue()!=0) {
+                    containedErrors = true;
+                    CustomLog.log("Failed to rm " + cmd[2],job.logFile);
+                }
             } catch(InterruptedException e){System.err.println("RM Interupted. " + e);}
         }
         if(containedErrors)
