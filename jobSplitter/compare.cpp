@@ -36,7 +36,7 @@ const int NUM_REQUIRED_DELIMS = ARR_LENGTH-1;
 const char flagSymbols[] = {'f','i','?','s','l','u','g','p','a','m','b','c','p'};
 
 const unsigned int NUM_ENTRIES_IN_JOB_FILE = 10000;
-const double MAX_JOB_FILE_SIZE = 1E9;
+const double MAX_JOB_FILE_SIZE = 1E12; //a tb
 
 
 
@@ -124,7 +124,7 @@ struct Record
 
 ostream& operator<<(ostream& out, const Record& rec)
 {
-  out<<rec[PATH];
+  out<<rec[PATH]<<" "<<rec.flags;
   return out;
 }
 
@@ -132,11 +132,11 @@ bool isRecModified(Record &rec1, Record &rec2)
 {
 
   for(int i = 0 ; i < ARR_LENGTH-1; i++)
-    if(i!=ACCESS_T && i!=INODE && rec1[i]!=rec2[i])//don't report access time change
+    if(i!=ACCESS_T && i!=INODE && i!=PATH && rec1[i]!=rec2[i])//don't report access time change
      {
-         return true;
+         rec1.flags += flagSymbols[i];
      }
-
+    if(rec1.flags!="")return true;
   return false;
 }
 
@@ -231,8 +231,8 @@ void evalJobSplit(Job & job, Record & r,  fstream & stream, string type)
     stream.close();
     jobFileCount++;
     string newFile = folder+type + SSTR(jobFileCount);
-    cout<<"Splitting new file: "<<newFile<<" rec:"<<job.fileCount<<endl;
     stream.open((newFile).c_str(),ios::out);
+    cout<<job.fileCount<<","<<job.totalSize<<endl;
     job.reset();
   }
 }
