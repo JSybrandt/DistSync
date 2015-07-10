@@ -162,26 +162,34 @@ public class Worker extends Thread {
         Runtime r = Runtime.getRuntime();
         //for right now we are just going to use cp, because its the dumb answer
 
+        Process procs[] = new Process[NUM_AVAILABLE_PROCS];
 
-        final Process p = r.exec("xargs rm <" + job.path);
+        Scanner scan = new Scanner(new File(job.path));
 
-        Thread t = new Thread(){
-            @Override
-            public void run() {
-                super.run();
-                try{sleep(10000);}catch(Exception e){}
-                if(isRunning(p)) {
-                    p.destroy();
+        String cmd[] = {"rm","",""};
+
+        while(scan.hasNext())
+        {
+            for(int i = 0;i < procs.length; i++) {
+                if(scan.hasNext() && (procs[i]==null || !isRunning(procs[i]))) {
+                    String path = scan.nextLine();
+                    cmd[1]=job.upToDateMountPoint+path;
+                    cmd[2]=job.outOfDateMountPoint+path;
+                    procs[i] = r.exec(cmd);
                 }
-
             }
-        };
-        t.start();
+        }
 
-        p.waitFor();
-
-        if(p.exitValue()!=0)
-            throw new IOException("RM proc had an error somewhere within " + job.fileName);
+        for(Process p : procs)
+        {
+            try {
+                if(p != null)
+                    p.waitFor();
+            }
+            catch(InterruptedException e) {
+                System.err.println("RM Interupted. " + e);
+            }
+        }
 
     }
 
@@ -209,7 +217,7 @@ public class Worker extends Thread {
     }
 
     private void preformSyncFiles(Job job) throws IOException, InterruptedException{
-        Runtime r = Runtime.getRuntime();
+        /*Runtime r = Runtime.getRuntime();
 
         Scanner scan = new Scanner(new File(job.path));
 
@@ -231,6 +239,38 @@ public class Worker extends Thread {
 
         if(shiftc.exitValue()!=0)
             throw new IOException("SHIFTC --sync had an error somewhere in " + job.fileName);
+           */
+        Runtime r = Runtime.getRuntime();
+        //for right now we are just going to use cp, because its the dumb answer
+
+        Process procs[] = new Process[NUM_AVAILABLE_PROCS];
+
+        Scanner scan = new Scanner(new File(job.path));
+
+        String cmd[] = {"rsync","laSHAXd","",""};
+
+        while(scan.hasNext())
+        {
+            for(int i = 0;i < procs.length; i++) {
+                if(scan.hasNext() && (procs[i]==null || !isRunning(procs[i]))) {
+                    String path = scan.nextLine();
+                    cmd[2]=job.upToDateMountPoint+path;
+                    cmd[3]=job.outOfDateMountPoint+path;
+                    procs[i] = r.exec(cmd);
+                }
+            }
+        }
+
+        for(Process p : procs)
+        {
+            try {
+                if(p != null)
+                    p.waitFor();
+            }
+            catch(InterruptedException e) {
+                System.err.println("RSYNC -laSHAXd Interupted. " + e);
+            }
+        }
     }
 
     private void preformBuildLinks(Job job) throws IOException{
