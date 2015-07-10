@@ -124,16 +124,19 @@ struct Record
 
 ostream& operator<<(ostream& out, const Record& rec)
 {
-  out<<rec[PATH];
+  out<<rec[PATH]<<" "<<rec.flags;
   return out;
 }
 
-bool isRecModified(Record rec1, Record rec2)
+bool isRecModified(Record &rec1, Record &rec2)
 {
 
   for(int i = 0 ; i < ARR_LENGTH-1; i++)
     if(i!=ACCESS_T && i!=CHANGE_T && i!= MOD_T && rec1[i]!=rec2[i])//don't report access time change
-      return true;
+     {
+         rec1.flags += flagSymbols[i];
+         return true;
+     }
 
   return false;
 }
