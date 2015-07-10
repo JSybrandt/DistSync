@@ -128,18 +128,14 @@ ostream& operator<<(ostream& out, const Record& rec)
   return out;
 }
 
-string compareLikeRecords(Record rec1, Record rec2)
+bool isRecModified(Record rec1, Record rec2)
 {
-  if(rec1[CHANGE_T]==rec2[CHANGE_T])
-    return "";
-
-  string res = "";
 
   for(int i = 0 ; i < ARR_LENGTH-1; i++)
-    if(i!=ACCESS_T && rec1[i]!=rec2[i])//don't report access time change
-      res+=flagSymbols[i];
+    if(i!=ACCESS_T && i!=CHANGE_T && i!= MOD_T && rec1[i]!=rec2[i])//don't report access time change
+      return true;
 
-  return res;
+  return false;
 }
 
 
@@ -284,8 +280,8 @@ int main(int argc, char** argv)
 			if(newRec.isValid && oldRec.isValid){
 				//cout<<"Comparing N:"<<newRec[PATH]<<" O:"<<oldRec[PATH]<<endl;
 				if(oldRec == newRec){
-					newRec.flags = compareLikeRecords(newRec, oldRec);
-					if(newRec.flags!=""){
+					if(isRecModified(newRec, oldRec))
+					{
 						outModified<<newRec<<endl;
 						nChanged++;
 						evalJobSplit(modJob,newRec,outModified,"M");
