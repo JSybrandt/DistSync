@@ -9,7 +9,7 @@ import java.util.logging.Logger;
  */
 public class Worker extends Thread {
 
-    final int NUM_AVAILABLE_PROCS = 8;//keep it low
+    final int NUM_AVAILABLE_PROCS = 16;//keep it low
 
     ObjectInputStream in;
     ObjectOutputStream out;
@@ -86,7 +86,7 @@ public class Worker extends Thread {
                     }
 
                     Long diffTime = System.nanoTime()-startTime;
-                    CustomLog.log(diffTime.toString(),received.fileName+ ".log");
+                    CustomLog.log(diffTime.toString(),received.logFile);
 
                     out.writeObject("FINISHED");
                 }

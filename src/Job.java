@@ -24,6 +24,7 @@ public class Job implements Serializable, Comparable {
 
         fileName = s;
         path = Paths.get("").toAbsolutePath().toString() + "/" + Constants.JOB_DIR+fileName;
+        logFile = Paths.get("").toAbsolutePath().toString() + "/" + Constants.LOG_DIR+fileName+".log";
         state = Constants.State.NOT_STARTED;
         type = determineType(fileName);
 
@@ -51,7 +52,7 @@ public class Job implements Serializable, Comparable {
         }
     }
 
-    public String fileName, path;
+    public String fileName, path, logFile;
     public Constants.State state;
     private Type type;
     public Type getType(){return type;}
