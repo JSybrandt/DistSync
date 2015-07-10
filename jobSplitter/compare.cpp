@@ -9,10 +9,11 @@
 #include <algorithm>
 using namespace std;
 
-
-#include <sstream>
-
+//int to string
 #define SSTR( x ) (dynamic_cast< std::ostringstream & >( std::ostringstream() << std::dec << x )).str()
+
+string folder;//used to house all of the job files
+
 
 const char DELIM = '|';
 
@@ -35,6 +36,9 @@ const int NUM_REQUIRED_DELIMS = ARR_LENGTH-1;
 const char flagSymbols[] = {'f','i','?','s','l','u','g','p','a','m','b','c','p'};
 
 const unsigned int NUM_ENTRIES_IN_JOB_FILE = 10000;
+const double MAX_JOB_FILE_SIZE = 1E9;
+
+
 
 struct Record
 {
@@ -66,14 +70,6 @@ struct Record
     flags="";
     isValid=true;
     fillAll();
-    //int delimCT_P = raw.find_last_of(DELIM);
-    //vals[PATH]=raw.substr(delimCT_P+1);
-    //int delimB_CT = raw.find_last_of(DELIM,delimCT_P-1);
-    //vals[CHANGE_T]=raw.substr(delimB_CT+1,delimCT_P-delimB_CT-1);
-    //int delimFSN_I = raw.find(DELIM);
-    //int delimI_MSC = raw.find(DELIM,delimFSN_I+1);
-    //int delimMSC_FS = raw.find(DELIM,delimI_MSC+1);
-    //vals[MISC_ATTR] = raw.substr(delimI_MSC+1,delimMSC_FS-delimI_MSC-1);
 
     type = '_';
     for(int i = 0 ; i < vals[MISC_ATTR].length();i++){
@@ -85,7 +81,7 @@ struct Record
     }
 
 	if(type=='O')
-	{	
+	{
 		cerr<<"Found socket/device."<<endl;
 	}
 
@@ -93,16 +89,14 @@ struct Record
       cerr<<"Found malformed MISC"<<endl;
       isValid=false;
     }
-    //cout<<"Path:"<<vals[PATH]<<endl
-    //<<"Change Time:"<<vals[CHANGE_T]<<endl
-    //<<"MISC:"<<vals[MISC_ATTR]<<endl<<endl;
+
   }
   void fillAll(){
     stringstream ss(raw);
     string temp;
     for(int i = 0 ; i < ARR_LENGTH;i++)
-      { 
-	getline(ss,temp,DELIM);
+      {
+        getline(ss,temp,DELIM);
         vals[i]=temp;
       }
     flags="";
@@ -130,11 +124,7 @@ struct Record
 
 ostream& operator<<(ostream& out, const Record& rec)
 {
-  out<<rec[PATH];//<<"\t"<<rec[SIZE];
-  //if(rec.flags=="")
-  //out<<rec[PATH];
-  //else
-  //out<<rec[PATH]<<DELIM<<rec.flags;
+  out<<rec[PATH];
   return out;
 }
 
@@ -143,17 +133,25 @@ string compareLikeRecords(Record rec1, Record rec2)
   if(rec1[CHANGE_T]==rec2[CHANGE_T])
     return "";
 
-  //rec1.fillAll();
-  //rec2.fillAll();
-
   string res = "";
 
   for(int i = 0 ; i < ARR_LENGTH-1; i++)
-    if(i!=ACCESS_T && rec1[i]!=rec2[i])//don't report access time change                                           
+    if(i!=ACCESS_T && rec1[i]!=rec2[i])//don't report access time change
       res+=flagSymbols[i];
 
   return res;
 }
+
+
+struct Job{
+    double totalSize;
+    unsigned int fileCount;
+    Job(){totalSize = 0 ; fileCount=0;}
+    void reset(){totalSize=0;fileCount=0;}
+    void addFile(Record &r){totalSize += atof(r[SIZE].c_str()); fileCount++;}
+};
+
+Job modJob,createJob,removeJob; //used to count job files
 
 bool safeOpenFStream(fstream & fs,ios::openmode mode,  int i, int argc, char** argv)
 {
@@ -171,8 +169,6 @@ bool safeOpenFStream(fstream & fs,ios::openmode mode,  int i, int argc, char** a
   }
   return true;
 }
-
-string folder;
 
 bool parseArgs(int argc, char** argv, fstream &n, fstream &o, fstream &c, fstream &d, fstream &m,fstream &cd,fstream &dd, fstream &lc)
 {
@@ -200,7 +196,7 @@ bool parseArgs(int argc, char** argv, fstream &n, fstream &o, fstream &c, fstrea
 		  folder+='/';
 		foundFolder = true;
       }
-      else{ 
+      else{
 		cerr<<"No foldername specified.";
 		return false;
       }
@@ -226,59 +222,55 @@ bool parseArgs(int argc, char** argv, fstream &n, fstream &o, fstream &c, fstrea
   }
 }
 
-void evalJobSplit(unsigned int nRec, fstream & stream, string type)
+
+
+void evalJobSplit(Job & job, Record & r,  fstream & stream, string type)
 {
+    job.addFile(r);
   static unsigned int jobFileCount = 1;
-  if(nRec % NUM_ENTRIES_IN_JOB_FILE==0)
+  if(job.fileCount >= NUM_ENTRIES_IN_JOB_FILE || job.totalSize > MAX_JOB_FILE_SIZE)
   {
     stream.close();
     jobFileCount++;
     string newFile = folder+type + SSTR(jobFileCount);
-    cout<<"Splitting new file: "<<newFile<<" rec:"<<nRec<<endl;
+    cout<<"Splitting new file: "<<newFile<<" rec:"<<job.fileCount<<endl;
     stream.open((newFile).c_str(),ios::out);
+    job.reset();
   }
 }
 
-
-
 //used for old records
 void printRec(Record & rec, fstream &file, fstream &dir){
-        static unsigned int rmD=0,rmF=0;
 	if(rec.type=='D'){
-	         rmD++;
 	        dir<<rec<<endl;
 		//WE DONT SPLIT DIR's
-		//evalJobSplit(rmD,dir,"R");
 	}
 	else{ //counts files, pipes, devices, soft links
-	  rmF++;
 	  file<<rec<<endl;
-	  evalJobSplit(rmF,file,"D");
+	  evalJobSplit(removeJob,rec,file,"D");
 	}
 }
 //used for new records
 void printRec(Record &rec, fstream &file, fstream &dir,fstream &hlink){
-        static unsigned int crF=0;
         if(rec.type!='D' && rec[NLINK]!="1"){
 		hlink<<rec<<endl;
-		//WE DONT SPLIT M
+		//WE DONT SPLIT L
 	}
 	else if(rec.type=='D'){
 		dir<<rec<<endl;
 		//WE DONT SPIT C
 	}
 	else{ //counts files, pipes, devices, soft links
-	        crF++;
 	        file<<rec<<endl;
-		evalJobSplit(crF,file,"A");
+		evalJobSplit(createJob,rec,file,"A");
 	}
 }
 
 
 int main(int argc, char** argv)
-{ 
+{
         int jobFileCount=1;
-	
+
   	fstream inNew, inOld,outFCreated,outFDeleted,outModified,outDCreated,outDDeleted,outLCreated;
   	if(parseArgs(argc, argv,inNew,inOld,outFCreated,outFDeleted,outModified,outDCreated,outDDeleted,outLCreated))
   	{
@@ -286,6 +278,7 @@ int main(int argc, char** argv)
 		string line;
 		Record newRec, oldRec;
 		unsigned int nRecords=0,nChanged=0,nUnchanged=0,nCreated=0,nDeleted=0;
+
 
 		while(inNew && inOld){
 			if(newRec.isValid && oldRec.isValid){
@@ -295,7 +288,7 @@ int main(int argc, char** argv)
 					if(newRec.flags!=""){
 						outModified<<newRec<<endl;
 						nChanged++;
-						evalJobSplit(nChanged,outModified,"M");
+						evalJobSplit(modJob,newRec,outModified,"M");
 					}
 					else
 						nUnchanged++;
@@ -320,7 +313,7 @@ int main(int argc, char** argv)
 				nRecords++;getline(inOld,line);oldRec.init(line);
 			}
 		}
-   
+
 		while(newRec.isValid){
 			nCreated++;
 			printRec(newRec,outFCreated,outDCreated,outLCreated);
@@ -345,7 +338,7 @@ int main(int argc, char** argv)
 			<<"#Unchanged:"<<nUnchanged<<endl
 			<<"#Changed:"<<nChanged<<endl;
 
-	
+
 		inNew.close();
 		inOld.close();
 	 	outFCreated.close();
@@ -354,8 +347,8 @@ int main(int argc, char** argv)
 	 	outDCreated.close();
 	 	outDDeleted.close();
 	 	outLCreated.close();
-	 	
+
   	}
-  
+
   	return 0;
 }

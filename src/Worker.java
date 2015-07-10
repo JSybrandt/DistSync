@@ -129,15 +129,15 @@ public class Worker extends Thread {
 
         Scanner scan = new Scanner(new File(job.path));
 
-        String cmd[] = {"mcp","-P","--preserve=all","--sparse=never","",""};
+        String cmd[] = {"mcp","-P","--preserve=all","",""};
 
         while(scan.hasNext())
         {
             for(int i = 0;i < procs.length; i++) {
                 if(scan.hasNext() && (procs[i]==null || !isRunning(procs[i]))) {
                     String path = scan.nextLine();
-                    cmd[4]=job.upToDateMountPoint+path;
-                    cmd[5]=job.outOfDateMountPoint+path;
+                    cmd[3]=job.upToDateMountPoint+path;
+                    cmd[4]=job.outOfDateMountPoint+path;
                     procs[i] = r.exec(cmd);
                 }
             }
@@ -284,7 +284,7 @@ public class Worker extends Thread {
 
     private void preformBuildLinks(Job job) throws IOException{
 
-        String cmd[] = {"rsync","-laSHAX","--files-from="+job.path,Job.upToDateMountPoint,Job.outOfDateMountPoint};
+        String cmd[] = {"rsync","-laSHAXd","--files-from="+job.path,Job.upToDateMountPoint,Job.outOfDateMountPoint};
 
         Process p = Runtime.getRuntime().exec(cmd);
         try {
