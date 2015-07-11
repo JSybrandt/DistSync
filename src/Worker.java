@@ -9,7 +9,7 @@ import java.util.logging.Logger;
  */
 public class Worker extends Thread {
 
-    final int NUM_AVAILABLE_PROCS = 16;//keep it low
+    private int numAvalibleProcs;
 
     ObjectInputStream in;
     ObjectOutputStream out;
@@ -19,12 +19,13 @@ public class Worker extends Thread {
     {
         try {
             socket = new Socket(serverAddress, Constants.PORT);
-
         }
         catch(Exception e)
         {
             System.err.println("Worker failed to connect to server. " + e);
         }
+        numAvalibleProcs = Runtime.getRuntime().availableProcessors();
+        numAvalibleProcs = Math.max(1,numAvalibleProcs-1);//we want to make sure theres room for this worker
     }
 
     @Override
@@ -108,7 +109,9 @@ public class Worker extends Thread {
             System.err.println("Client Failed to listen: " + e);
             e.printStackTrace();
         }
-
+        finally{
+            CustomLog.close();
+        }
     }
 
     private boolean isRunning(Process p)
@@ -122,36 +125,31 @@ public class Worker extends Thread {
     }
 
     private void preformCopy(Job job) throws IOException, InterruptedException{
-        Runtime r = Runtime.getRuntime();
-        //for right now we are just going to use cp, because its the dumb answer
 
-        Process procs[] = new Process[NUM_AVAILABLE_PROCS];
 
         Scanner scan = new Scanner(new File(job.path));
 
         String cmd[] = {"mcp","-P","--preserve=all","",""};
 
+        SystemRunner runners[] = new SystemRunner[numAvalibleProcs];
         while(scan.hasNext())
         {
-            for(int i = 0;i < procs.length; i++) {
-                if(scan.hasNext() && (procs[i]==null || !isRunning(procs[i]))) {
+            for(int i = 0 ; i < runners.length;i++)
+            {
+                if(scan.hasNext() && (runners[i]==null || runners[i].isComplete.get()))
+                {
                     String path = scan.nextLine();
                     cmd[3]=job.upToDateMountPoint+path;
                     cmd[4]=job.outOfDateMountPoint+path;
-                    procs[i] = r.exec(cmd);
+                    runners[i]= new SystemRunner(cmd,job.logFile);
                 }
             }
         }
 
-        for(Process p : procs)
+        for(SystemRunner s : runners)
         {
-            try {
-                if(p != null)
-                    p.waitFor();
-            }
-            catch(InterruptedException e) {
-                System.err.println("CP Interupted. " + e);
-            }
+            if(s != null)
+                s.join();
         }
     }
 
@@ -166,36 +164,28 @@ public class Worker extends Thread {
     }
 
     private void preformRemoveFiles(Job job) throws IOException, InterruptedException{
-        Runtime r = Runtime.getRuntime();
-        //for right now we are just going to use cp, because its the dumb answer
-
-        Process procs[] = new Process[NUM_AVAILABLE_PROCS];
-
         Scanner scan = new Scanner(new File(job.path));
 
-        String cmd[] = {"rm","",""};
+        String cmd[] = {"rm",""};
 
+        SystemRunner runners[] = new SystemRunner[numAvalibleProcs];
         while(scan.hasNext())
         {
-            for(int i = 0;i < procs.length; i++) {
-                if(scan.hasNext() && (procs[i]==null || !isRunning(procs[i]))) {
+            for(int i = 0 ; i < runners.length;i++)
+            {
+                if(scan.hasNext() && (runners[i]==null || runners[i].isComplete.get()))
+                {
                     String path = scan.nextLine();
-                    cmd[1]=job.upToDateMountPoint+path;
-                    cmd[2]=job.outOfDateMountPoint+path;
-                    procs[i] = r.exec(cmd);
+                    cmd[1]=job.outOfDateMountPoint+path;
+                    runners[i]= new SystemRunner(cmd,job.logFile);
                 }
             }
         }
 
-        for(Process p : procs)
+        for(SystemRunner s : runners)
         {
-            try {
-                if(p != null)
-                    p.waitFor();
-            }
-            catch(InterruptedException e) {
-                System.err.println("RM Interupted. " + e);
-            }
+            if(s != null)
+                s.join();
         }
 
     }
@@ -226,59 +216,29 @@ public class Worker extends Thread {
     }
 
     private void preformSyncFiles(Job job) throws IOException, InterruptedException{
-        /*Runtime r = Runtime.getRuntime();
-
-        Scanner scan = new Scanner(new File(job.path));
-
-        Process shiftc = r.exec("shiftc --hosts=16 --sync-fast --host-list=localhost --wait -P");
-        PrintWriter writer = new PrintWriter(shiftc.getOutputStream());
-
-        while(scan.hasNext())
-        {
-            String path = scan.nextLine();
-            String line = job.upToDateMountPoint+path + "\t" + job.outOfDateMountPoint+path;
-            writer.println(line);
-            System.out.println(line);
-
-        }
-
-        writer.close();
-
-        shiftc.waitFor();
-
-        if(shiftc.exitValue()!=0)
-            throw new IOException("SHIFTC --sync had an error somewhere in " + job.fileName);
-           */
-        Runtime r = Runtime.getRuntime();
-        //for right now we are just going to use cp, because its the dumb answer
-
-        Process procs[] = new Process[NUM_AVAILABLE_PROCS];
-
         Scanner scan = new Scanner(new File(job.path));
 
         String cmd[] = {"rsync","laSHAXd","",""};
 
+        SystemRunner runners[] = new SystemRunner[numAvalibleProcs];
         while(scan.hasNext())
         {
-            for(int i = 0;i < procs.length; i++) {
-                if(scan.hasNext() && (procs[i]==null || !isRunning(procs[i]))) {
+            for(int i = 0 ; i < runners.length;i++)
+            {
+                if(scan.hasNext() && (runners[i]==null || runners[i].isComplete.get()))
+                {
                     String path = scan.nextLine();
-                    cmd[2]=job.upToDateMountPoint+path;
-                    cmd[3]=job.outOfDateMountPoint+path;
-                    procs[i] = r.exec(cmd);
+                    cmd[3]=job.upToDateMountPoint+path;
+                    cmd[4]=job.outOfDateMountPoint+path;
+                    runners[i]= new SystemRunner(cmd,job.logFile);
                 }
             }
         }
 
-        for(Process p : procs)
+        for(SystemRunner s : runners)
         {
-            try {
-                if(p != null)
-                    p.waitFor();
-            }
-            catch(InterruptedException e) {
-                System.err.println("RSYNC -laSHAXd Interupted. " + e);
-            }
+            if(s != null)
+                s.join();
         }
     }
 

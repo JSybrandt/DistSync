@@ -141,16 +141,13 @@ public class Manager extends Thread {
             while (!checkIsFinished())
             {
                 Job j = selectNextJob();
-                if(j!=null)
-                {
+                if(j!=null) {
                     //System.out.println("Selected " + j);
-                    for(Socket s : sockets)
-                    {
-                        if(connectionStatus.get(s)==Constants.State.NOT_STARTED
-                                || connectionStatus.get(s) == Constants.State.FINISHED)
-                        {
+                    for (Socket s : sockets) {
+                        if (connectionStatus.get(s) == Constants.State.NOT_STARTED
+                                || connectionStatus.get(s) == Constants.State.FINISHED) {
                             cons++;
-                            JobSender sender = new JobSender(s,j,this);
+                            JobSender sender = new JobSender(s, j, this);
                             senders.add(sender);
                             j.state = Constants.State.ASSIGNED;
                             connectionStatus.put(s, Constants.State.ASSIGNED);
@@ -196,7 +193,8 @@ public class Manager extends Thread {
         try {
             CustomLog.log(diffTime.toString(), Constants.LOG_DIR + "MASTER.log");
         }catch(IOException e){System.err.println("Log failed");}
-    }
 
+        CustomLog.close();
+    }
 
 }
