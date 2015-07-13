@@ -1,3 +1,5 @@
+import java.io.BufferedReader;
+import java.util.Scanner;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
@@ -16,11 +18,18 @@ public class SystemRunner extends Thread {
     public void run(){
         try {
             Process proc = Runtime.getRuntime().exec(command);
+            Scanner scan = new Scanner(proc.getErrorStream());
 
             proc.waitFor();
 
-            if(proc.exitValue()!=0)
-                throw new Exception(command[0] + " returned " + proc.exitValue() + " " + command[command.length-1]);
+
+
+            if(proc.exitValue()!=0) {
+                String err = "";
+                while(scan.hasNextLine())err += scan.nextLine() + "\n";
+                CustomLog.log(err,logfile);
+                throw new Exception(command[0] + " returned " + proc.exitValue() + " " + command[command.length - 1]);
+            }
 
         }catch(Exception e){
             try {
