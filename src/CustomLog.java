@@ -11,31 +11,31 @@ import java.util.concurrent.ConcurrentHashMap;
 public class CustomLog {
 
     //mapping of logfile to tool
-    private static ConcurrentHashMap <String,Pair<PrintWriter,Mutex>> openFiles = new ConcurrentHashMap<>();
+    private static ConcurrentHashMap <String,PrintWriter> openFiles = new ConcurrentHashMap<>();
 
     public static void log(String msg, String logName) throws IOException
     {
-        Pair<PrintWriter,Mutex> writePermissions = null;
+        PrintWriter writer = null;
         if(openFiles.containsKey(logName))
-            writePermissions = openFiles.get(logName);
+            writer = openFiles.get(logName);
         else {
             PrintWriter p = new PrintWriter(new FileOutputStream(new File(logName), true));
-            Mutex m = new Mutex();
-            Pair<PrintWriter,Mutex> pair = new Pair<>(p,m);
-            openFiles.put(logName,pair);
+           // Mutex m = new Mutex();
+            //Pair<PrintWriter,Mutex> pair = new Pair<>(p,m);
+            openFiles.put(logName,p);
         }
-        writePermissions.getValue().lock();
-        writePermissions.getKey().println("------" + new Date() + "--------");
-        writePermissions.getKey().println(msg);
-        writePermissions.getValue().unlock();
+        //writePermissions.getValue().lock();
+        writer.println("------" + new Date() + "--------");
+        writer.println(msg);
+        //writePermissions.getValue().unlock();
 
     }
 
     public static void close()
     {
-        for(Pair<PrintWriter,Mutex> pair : openFiles.values())
+        for(PrintWriter p : openFiles.values())
         {
-            pair.getKey().close();
+            p.close();
         }
     }
 
