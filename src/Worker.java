@@ -140,7 +140,7 @@ public class Worker extends Thread {
                     String path = scan.nextLine();
                     cmd[2]=job.upToDateMountPoint+path;
                     cmd[3]=job.outOfDateMountPoint+path;
-                    runners[i]= new SystemRunner(cmd,job.logFile);
+                    runners[i]= new SystemRunner(cmd.clone(),job.logFile);
                     runners[i].start();
                     break;
                 }
