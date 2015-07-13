@@ -20,11 +20,11 @@ public class SystemRunner extends Thread {
             proc.waitFor();
 
             if(proc.exitValue()!=0)
-                throw new Exception(command[0] + " Failed to run properly.");
+                throw new Exception(command[0] + " returned " + proc.exitValue() + " " + command[command.length-1]);
 
         }catch(Exception e){
             try {
-                System.err.println("Running ERR:" + e);
+                System.err.println(e);
                 CustomLog.log(e.getClass().toString() + ":" + e.getMessage(), logfile);
             }catch(Exception ignore) {}
         }
