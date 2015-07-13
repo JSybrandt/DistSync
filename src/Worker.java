@@ -24,8 +24,8 @@ public class Worker extends Thread {
         {
             System.err.println("Worker failed to connect to server. " + e);
         }
-        numAvalibleProcs = Runtime.getRuntime().availableProcessors();
-        numAvalibleProcs = Math.max(1,numAvalibleProcs-1);//we want to make sure theres room for this worker
+        numAvalibleProcs = Runtime.getRuntime().availableProcessors()/2;//slowing down
+        //numAvalibleProcs = Math.max(1,numAvalibleProcs-1);//we want to make sure theres room for this worker
     }
 
     @Override
