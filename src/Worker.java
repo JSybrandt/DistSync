@@ -131,17 +131,18 @@ public class Worker extends Thread {
         String cmd[] = {"cp","-Pp","",""};
 
         SystemRunner runners[] = new SystemRunner[numAvalibleProcs];
-        while(scan.hasNext())
+        while(scan.hasNextLine())
         {
             for(int i = 0 ; i < runners.length;i++)
             {
-                if(scan.hasNext() && (runners[i]==null || runners[i].isComplete.get()))
+                if(runners[i]==null || runners[i].isComplete.get())
                 {
                     String path = scan.nextLine();
                     cmd[2]=job.upToDateMountPoint+path;
                     cmd[3]=job.outOfDateMountPoint+path;
                     runners[i]= new SystemRunner(cmd,job.logFile);
                     runners[i].start();
+                    break;
                 }
             }
         }
