@@ -19,10 +19,10 @@ public class CustomLog {
         if(openFiles.containsKey(logName))
             writer = openFiles.get(logName);
         else {
-            PrintWriter p = new PrintWriter(new FileOutputStream(new File(logName), true));
+            writer = new PrintWriter(new FileOutputStream(new File(logName), true));
            // Mutex m = new Mutex();
             //Pair<PrintWriter,Mutex> pair = new Pair<>(p,m);
-            openFiles.put(logName,p);
+            openFiles.put(logName,writer);
         }
         //writePermissions.getValue().lock();
         writer.println("------" + new Date() + "--------");
