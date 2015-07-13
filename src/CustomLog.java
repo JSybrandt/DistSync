@@ -21,7 +21,8 @@ public class CustomLog {
         else {
             PrintWriter p = new PrintWriter(new FileOutputStream(new File(logName), true));
             Mutex m = new Mutex();
-            openFiles.put(logName,new Pair<>(p,m));
+            Pair<PrintWriter,Mutex> pair = new Pair<>(p,m);
+            openFiles.put(logName,pair);
         }
         writePermissions.getValue().lock();
         writePermissions.getKey().println("------" + new Date() + "--------");
