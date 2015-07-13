@@ -17,11 +17,14 @@ public class SystemRunner extends Thread {
     @Override
     public void run(){
         try {
+            System.out.print("Starting:");
+            for(String s : command)System.out.print(s+" ");
+            System.out.println();
+
             Process proc = Runtime.getRuntime().exec(command);
             Scanner scan = new Scanner(proc.getErrorStream());
 
             proc.waitFor();
-
 
 
             if(proc.exitValue()!=0) {
