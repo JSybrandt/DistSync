@@ -129,7 +129,7 @@ public class Worker extends Thread {
 
         Scanner scan = new Scanner(new File(job.path));
 
-        String cmd[] = {"mcp","-P","--preserve=all","",""};
+        String cmd[] = {"cp","-Pp","",""};
 
         SystemRunner runners[] = new SystemRunner[numAvalibleProcs];
         while(scan.hasNext())
@@ -139,8 +139,8 @@ public class Worker extends Thread {
                 if(scan.hasNext() && (runners[i]==null || runners[i].isComplete.get()))
                 {
                     String path = scan.nextLine();
-                    cmd[3]=job.upToDateMountPoint+path;
-                    cmd[4]=job.outOfDateMountPoint+path;
+                    cmd[2]=job.upToDateMountPoint+path;
+                    cmd[3]=job.outOfDateMountPoint+path;
                     runners[i]= new SystemRunner(cmd,job.logFile);
                 }
             }
