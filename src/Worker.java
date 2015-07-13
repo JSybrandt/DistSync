@@ -170,16 +170,17 @@ public class Worker extends Thread {
         String cmd[] = {"rm",""};
 
         SystemRunner runners[] = new SystemRunner[numAvalibleProcs];
-        while(scan.hasNext())
+        while(scan.hasNextLine())
         {
             for(int i = 0 ; i < runners.length;i++)
             {
-                if(scan.hasNext() && (runners[i]==null || runners[i].isComplete.get()))
+                if(runners[i]==null || runners[i].isComplete.get())
                 {
                     String path = scan.nextLine();
                     cmd[1]=job.outOfDateMountPoint+path;
-                    runners[i]= new SystemRunner(cmd,job.logFile);
+                    runners[i]= new SystemRunner(cmd.clone(),job.logFile);
                     runners[i].start();
+                    break;
                 }
             }
         }
@@ -223,17 +224,18 @@ public class Worker extends Thread {
         String cmd[] = {"rsync","laSHAXd","",""};
 
         SystemRunner runners[] = new SystemRunner[numAvalibleProcs];
-        while(scan.hasNext())
+        while(scan.hasNextLine())
         {
             for(int i = 0 ; i < runners.length;i++)
             {
-                if(scan.hasNext() && (runners[i]==null || runners[i].isComplete.get()))
+                if(runners[i]==null || runners[i].isComplete.get())
                 {
                     String path = scan.nextLine();
                     cmd[2]=job.upToDateMountPoint+path;
                     cmd[3]=job.outOfDateMountPoint+path;
-                    runners[i]= new SystemRunner(cmd,job.logFile);
+                    runners[i]= new SystemRunner(cmd.clone(),job.logFile);
                     runners[i].start();
+                    break;
                 }
             }
         }
