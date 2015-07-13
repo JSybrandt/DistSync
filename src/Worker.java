@@ -142,6 +142,7 @@ public class Worker extends Thread {
                     cmd[2]=job.upToDateMountPoint+path;
                     cmd[3]=job.outOfDateMountPoint+path;
                     runners[i]= new SystemRunner(cmd,job.logFile);
+                    runners[i].start();
                     System.out.println("Runner#:"+i+" CP " + cmd[2] + "->" + cmd[3]);
                 }
             }
@@ -181,6 +182,7 @@ public class Worker extends Thread {
                     String path = scan.nextLine();
                     cmd[1]=job.outOfDateMountPoint+path;
                     runners[i]= new SystemRunner(cmd,job.logFile);
+                    runners[i].start();
                 }
             }
         }
@@ -236,6 +238,7 @@ public class Worker extends Thread {
                     cmd[2]=job.upToDateMountPoint+path;
                     cmd[3]=job.outOfDateMountPoint+path;
                     runners[i]= new SystemRunner(cmd,job.logFile);
+                    runners[i].start();
                 }
             }
         }
