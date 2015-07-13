@@ -142,6 +142,7 @@ public class Worker extends Thread {
                     cmd[2]=job.upToDateMountPoint+path;
                     cmd[3]=job.outOfDateMountPoint+path;
                     runners[i]= new SystemRunner(cmd,job.logFile);
+                    System.out.println("CP " + path);
                 }
             }
         }
