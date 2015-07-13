@@ -136,7 +136,7 @@ public class Worker extends Thread {
         {
             for(int i = 0 ; i < runners.length;i++)
             {
-                if(scan.hasNext() && (runners[i]==null || runners[i].isComplete.get()))
+                if(scan.hasNext() && (runners[i]==null || runners[i].isComplete))
                 {
                     String path = scan.nextLine();
                     cmd[2]=job.upToDateMountPoint+path;
@@ -174,7 +174,7 @@ public class Worker extends Thread {
         {
             for(int i = 0 ; i < runners.length;i++)
             {
-                if(scan.hasNext() && (runners[i]==null || runners[i].isComplete.get()))
+                if(scan.hasNext() && (runners[i]==null || runners[i].isComplete))
                 {
                     String path = scan.nextLine();
                     cmd[1]=job.outOfDateMountPoint+path;
@@ -226,7 +226,7 @@ public class Worker extends Thread {
         {
             for(int i = 0 ; i < runners.length;i++)
             {
-                if(scan.hasNext() && (runners[i]==null || runners[i].isComplete.get()))
+                if(scan.hasNext() && (runners[i]==null || runners[i].isComplete))
                 {
                     String path = scan.nextLine();
                     cmd[2]=job.upToDateMountPoint+path;

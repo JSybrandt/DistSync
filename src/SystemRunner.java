@@ -5,7 +5,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
  */
 public class SystemRunner extends Thread {
     private String command[], logfile;
-    AtomicBoolean isComplete = new AtomicBoolean(false);
+    boolean isComplete = false;
     SystemRunner(String cmd[],String lFile)
     {
         command = cmd;
@@ -28,7 +28,7 @@ public class SystemRunner extends Thread {
             }catch(Exception ignore) {}
         }
         finally{
-            isComplete.set(true);
+            isComplete=true;
         }
     }
 }
