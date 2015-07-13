@@ -24,6 +24,7 @@ public class SystemRunner extends Thread {
 
         }catch(Exception e){
             try {
+                System.err.println("Running ERR:" + e);
                 CustomLog.log(e.getClass().toString() + ":" + e.getMessage(), logfile);
             }catch(Exception ignore) {}
         }
