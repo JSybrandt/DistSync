@@ -125,7 +125,6 @@ public class Worker extends Thread {
     }
 
     private void preformCopy(Job job) throws IOException, InterruptedException{
-        System.out.println("COPYING FILES");
 
         Scanner scan = new Scanner(new File(job.path));
 
@@ -136,14 +135,13 @@ public class Worker extends Thread {
         {
             for(int i = 0 ; i < runners.length;i++)
             {
-                if(scan.hasNext() && (runners[i]==null || runners[i].isComplete))
+                if(scan.hasNext() && (runners[i]==null || runners[i].isComplete.get()))
                 {
                     String path = scan.nextLine();
                     cmd[2]=job.upToDateMountPoint+path;
                     cmd[3]=job.outOfDateMountPoint+path;
                     runners[i]= new SystemRunner(cmd,job.logFile);
                     runners[i].start();
-                    System.out.println("Runner#:"+i+" CP " + cmd[2] + "->" + cmd[3]);
                 }
             }
         }
@@ -157,7 +155,6 @@ public class Worker extends Thread {
 
     //this relies on the job file listing dirs in order
     private void preformCreateDir(Job job)throws IOException{
-        System.out.println("CREATING DIRS");
         Scanner scan = new Scanner(new File(job.path));
         while(scan.hasNext())
         {
@@ -167,7 +164,6 @@ public class Worker extends Thread {
     }
 
     private void preformRemoveFiles(Job job) throws IOException, InterruptedException{
-        System.out.println("RM FILES");
         Scanner scan = new Scanner(new File(job.path));
 
         String cmd[] = {"rm",""};
@@ -177,7 +173,7 @@ public class Worker extends Thread {
         {
             for(int i = 0 ; i < runners.length;i++)
             {
-                if(scan.hasNext() && (runners[i]==null || runners[i].isComplete))
+                if(scan.hasNext() && (runners[i]==null || runners[i].isComplete.get()))
                 {
                     String path = scan.nextLine();
                     cmd[1]=job.outOfDateMountPoint+path;
@@ -196,7 +192,6 @@ public class Worker extends Thread {
     }
 
     private void preformRemoveDirectory(Job job) throws IOException{
-        System.out.println("REMOVING DIRS");
         boolean containedErrors = false;
         Runtime r = Runtime.getRuntime();
         Scanner scan = new Scanner(new File(job.path));
@@ -222,7 +217,6 @@ public class Worker extends Thread {
     }
 
     private void preformSyncFiles(Job job) throws IOException, InterruptedException{
-        System.out.println("SYNCING FILES!");
         Scanner scan = new Scanner(new File(job.path));
 
         String cmd[] = {"rsync","laSHAXd","",""};
@@ -232,7 +226,7 @@ public class Worker extends Thread {
         {
             for(int i = 0 ; i < runners.length;i++)
             {
-                if(scan.hasNext() && (runners[i]==null || runners[i].isComplete))
+                if(scan.hasNext() && (runners[i]==null || runners[i].isComplete.get()))
                 {
                     String path = scan.nextLine();
                     cmd[2]=job.upToDateMountPoint+path;
@@ -251,7 +245,6 @@ public class Worker extends Thread {
     }
 
     private void preformBuildLinks(Job job) throws IOException{
-        System.out.println("BUILDING LINKS");
         String cmd[] = {"rsync","-laSHAXd","--files-from="+job.path,Job.upToDateMountPoint,Job.outOfDateMountPoint};
 
         Process p = Runtime.getRuntime().exec(cmd);
