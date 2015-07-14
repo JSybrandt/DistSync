@@ -1,15 +1,14 @@
 #!/bin/bash
 
-rm -r /dnaNEW/experiments/fresh
-rm -r /dnaNEW/experiments/stale
-rm -r /dnaNEW/experiments/tmp/jobs/
+rm -r ./expirement/fresh
+rm -r ./expirement/stale
+rm -r ./tmp/jobs #we replace this dir
+rm ./tmp/logs/*
 
 unzip -o expirement.zip
 
-mv  exampleCurr /dnaNEW/experiments/fresh
-mv  exampleOld /dnaNEW/experiments/stale
-mv  exampleJobs /dnaNEW/experiments/tmp/jobs
+mv  ./expirement/exampleCurr ./expirement/fresh
+mv  ./expirement/exampleOld  ./expirement/stale
+mv  ./expirement/exampleJobs ./tmp/jobs
 
-#rm -r exampleCurr
-#rm -r exampleOld
-#rm -r exampleJobs
+rm ./expirement/fresh/.zip
