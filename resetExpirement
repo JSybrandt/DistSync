@@ -10,3 +10,8 @@ unzip -o expirement.zip
 mv  ./expirement/exampleCurr ./expirement/fresh
 mv  ./expirement/exampleOld  ./expirement/stale
 mv  ./expirement/exampleJobs ./tmp/jobs
+<<<<<<< HEAD
+=======
+
+rm ./expirement/fresh/.zip
+>>>>>>> 04f35a7ced2f06f63561fb756b81c4bf4a5bab9f

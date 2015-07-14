@@ -1,3 +1,0 @@
-#!/bin/bash
-
-java -jar distsync.jar -f ./expirement/fresh -s ./expirement/stale -m 

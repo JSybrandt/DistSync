@@ -221,7 +221,7 @@ public class Worker extends Thread {
     private void preformSyncFiles(Job job) throws IOException, InterruptedException{
         Scanner scan = new Scanner(new File(job.path));
 
-        String cmd[] = {"rsync","laSHAXd","",""};
+        String cmd[] = {"rsync","-laSHAXd","",""};
 
         SystemRunner runners[] = new SystemRunner[numAvalibleProcs];
         while(scan.hasNextLine())
