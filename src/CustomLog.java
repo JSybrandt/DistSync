@@ -28,7 +28,7 @@ public class CustomLog {
         writer.println("------" + new Date() + "--------");
         writer.println(msg);
         //writePermissions.getValue().unlock();
-
+        System.out.println(msg);
     }
 
     public static void close()
