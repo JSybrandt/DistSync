@@ -131,10 +131,10 @@ ostream& operator<<(ostream& out, const Record& rec)
 bool isRecModified(Record &rec1, Record &rec2)
 {
 
-  for(int i = 0 ; i < ARR_LENGTH-1; i++)
-    if(i!=ACCESS_T && i!=INODE && i!=PATH && i!=CHANGE_T && rec1[i]!=rec2[i])//don't report access time change
-         return true;
-  return false;
+    for(int i = 0 ; i < ARR_LENGTH-1; i++)
+      if(i!=BLOCKSIZE && i!=ACCESS_T && i!=INODE && i!=PATH && i!=CHANGE_T && rec1[i]!=rec2[i])//don't report access time change
+	return true;
+    return false;
 }
 
 
@@ -277,9 +277,10 @@ int main(int argc, char** argv)
 
 		while(inNew && inOld){
 			if(newRec.isValid && oldRec.isValid){
-				//cout<<"Comparing N:"<<newRec[PATH]<<" O:"<<oldRec[PATH]<<endl;
-				if(oldRec == newRec){
-					if(isRecModified(newRec, oldRec))
+			  //cout<<"N:"<<newRec[PATH]<<"\nO:"<<oldRec[PATH]<<endl;
+				if(oldRec[PATH] == newRec[PATH]){
+				  //cout<<"\tEQUAL"<<endl;
+				  if(isRecModified(newRec, oldRec))
 					{
 						outModified<<newRec<<endl;
 						nChanged++;
@@ -289,14 +290,16 @@ int main(int argc, char** argv)
 						nUnchanged++;
     					newRec.isValid=false; oldRec.isValid = false;
 				}
-				else if(oldRec < newRec){ //old rec doesn't have a match
-					printRec(oldRec,outFDeleted, outDDeleted);
+				else if(oldRec[PATH] < newRec[PATH]){ //old rec doesn't have a match
+				  //cout<<"\tDeleted"<<endl;
+				  printRec(oldRec,outFDeleted, outDDeleted);
 					nDeleted++;
 					oldRec.isValid=false;
 				}
 				else{ //new rec dosn't have a match
 				  //we only care about new links for the link job
-				        printRec(newRec,outFCreated,outDCreated,outLCreated);
+				  //cout<<"\tAdded"<<endl;      
+				  printRec(newRec,outFCreated,outDCreated,outLCreated);
       					nCreated++;
 					newRec.isValid=false;
 				}

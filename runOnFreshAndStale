@@ -1,7 +1,3 @@
 #!/bin/bash
 
-java -jar distsync.jar -f fresh -s stale -m &
-java -jar distsync.jar -f fresh -s stale -w localhost &
-java -jar distsync.jar -f fresh -s stale -w localhost &
-java -jar distsync.jar -f fresh -s stale -w localhost &
-java -jar distsync.jar -f fresh -s stale -w localhost &
+java -jar distsync.jar -f ./expirement/fresh -s ./expirement/stale -m 
