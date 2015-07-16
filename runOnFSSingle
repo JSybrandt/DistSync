@@ -1,6 +1,6 @@
 #!/bin/bash
 ./resetExpirement > /dev/null
-/usr/bin/time shiftc --wait --host-list=dlsv225 --sync-fast -R -P -d --clients=38 ./expirement/fresh/* ./expirement/stale/
+/usr/bin/time shiftc --wait --host-list=dlsv75 --sync-fast -R -P -d --clients=38 ./expirement/fresh/* ./expirement/stale/
 
 read -p "Press Enter to see diff."
 
@@ -9,7 +9,7 @@ diff -qr ./expirement/fresh ./expirement/stale
 read -p "Press Enter to run distsync."
 
 ./resetExpirement > /dev/null
-/usr/bin/time java -jar distsync.jar -f ./expirement/fresh -s ./expirement/stale -m dlsv225
+/usr/bin/time java -jar distsync.jar -f ./expirement/fresh -s ./expirement/stale -m dlsv75
 
 read -p "Press Enter to see diff."
 

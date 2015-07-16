@@ -86,7 +86,7 @@ struct Record
 	}
 
     if(type=='_'){
-      cerr<<"Found malformed MISC:"<<vals[MISC_ATTR]<<endl;
+      cerr<<"Found malformed MISC"<<endl;
       isValid=false;
     }
 
