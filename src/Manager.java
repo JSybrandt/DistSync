@@ -124,8 +124,7 @@ public class Manager extends Thread {
             System.out.println("Making Connections:");
             getConnections();
             //System.out.println("Reading and Splitting Jobs.");
-            //JobSplitter jobSplitter = new JobSplitter();
-            //jobSplitter.run();
+
             //jobSplitter.join();
             //System.out.println("Getting Results:");
             //jobs = jobSplitter.getResults();

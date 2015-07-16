@@ -23,9 +23,9 @@ public class CustomLog {
            // Mutex m = new Mutex();
             //Pair<PrintWriter,Mutex> pair = new Pair<>(p,m);
             openFiles.put(logName,writer);
+            writer.println("------" + new Date() + "--------");
         }
         //writePermissions.getValue().lock();
-        writer.println("------" + new Date() + "--------");
         writer.println(msg);
         //writePermissions.getValue().unlock();
         System.out.println(msg);

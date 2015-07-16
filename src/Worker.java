@@ -81,6 +81,8 @@ public class Worker extends Thread {
                         case MODIFY_FILES:
                             preformSyncFiles(received);
                             break;
+                        case MODIFY_DIRS:
+                            preformSyncDirs(received);
                         case BUILD_LINKS:
                             preformBuildLinks(received);
                             break;
@@ -233,6 +235,35 @@ public class Worker extends Thread {
                     String path = scan.nextLine();
                     cmd[2]=job.upToDateMountPoint+path;
                     cmd[3]=job.outOfDateMountPoint+path;
+                    runners[i]= new SystemRunner(cmd.clone(),job.logFile);
+                    runners[i].start();
+                    break;
+                }
+            }
+        }
+
+        for(SystemRunner s : runners)
+        {
+            if(s != null)
+                s.join();
+        }
+    }
+
+    private void preformSyncDirs(Job job) throws IOException, InterruptedException{
+        Scanner scan = new Scanner(new File(job.path));
+
+        String cmd[] = {"chown","","",";","chmod","",""};
+
+        SystemRunner runners[] = new SystemRunner[numAvalibleProcs];
+        while(scan.hasNextLine())
+        {
+            for(int i = 0 ; i < runners.length;i++)
+            {
+                if(runners[i]==null || runners[i].isComplete.get())
+                {
+                    String path = scan.nextLine();
+                    cmd[1] = cmd[5]="--reference="+job.upToDateMountPoint+path;
+                    cmd[2] = cmd[6]=job.outOfDateMountPoint+path;
                     runners[i]= new SystemRunner(cmd.clone(),job.logFile);
                     runners[i].start();
                     break;
