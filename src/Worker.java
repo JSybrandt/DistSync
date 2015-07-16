@@ -252,29 +252,33 @@ public class Worker extends Thread {
     private void preformSyncDirs(Job job) throws IOException, InterruptedException{
         Scanner scan = new Scanner(new File(job.path));
 
-        String cmd[] = {"chown","","",";","chmod","",""};
+        String cmd1[] = {"chown","",""};
+        String cmd2[] = {"chmod","",""};
 
-        SystemRunner runners[] = new SystemRunner[numAvalibleProcs];
+        SystemRunner runners[][] = new SystemRunner[numAvalibleProcs/2][2];
         while(scan.hasNextLine())
         {
             for(int i = 0 ; i < runners.length;i++)
             {
-                if(runners[i]==null || runners[i].isComplete.get())
+                if(runners[i]==null || (runners[i][0].isComplete.get()&&runners[i][1].isComplete.get()))
                 {
                     String path = scan.nextLine();
-                    cmd[1] = cmd[5]="--reference="+job.upToDateMountPoint+path;
-                    cmd[2] = cmd[6]=job.outOfDateMountPoint+path;
-                    runners[i]= new SystemRunner(cmd.clone(),job.logFile);
-                    runners[i].start();
+                    cmd1[1] = cmd2[1]="--reference="+job.upToDateMountPoint+path;
+                    cmd1[2] = cmd2[2]=job.outOfDateMountPoint+path;
+                    runners[i][0]= new SystemRunner(cmd1.clone(),job.logFile);
+                    runners[i][1]= new SystemRunner(cmd2.clone(),job.logFile);
+                    runners[i][0].start();
+                    runners[i][1].start();
                     break;
                 }
             }
         }
 
-        for(SystemRunner s : runners)
+        for(SystemRunner s[] : runners)
         {
-            if(s != null)
-                s.join();
+            for(SystemRunner r : s)
+                if(r != null)
+                     r.join();
         }
     }
 
