@@ -260,7 +260,8 @@ public class Worker extends Thread {
         {
             for(int i = 0 ; i < runners.length;i++)
             {
-                if(runners[i]==null || (runners[i][0].isComplete.get()&&runners[i][1].isComplete.get()))
+                if((runners[i][0]==null && runners[i][1]==null)
+                        || (runners[i][0].isComplete.get()&&runners[i][1].isComplete.get()))
                 {
                     String path = scan.nextLine();
                     cmd1[1] = cmd2[1]="--reference="+job.upToDateMountPoint+path;
