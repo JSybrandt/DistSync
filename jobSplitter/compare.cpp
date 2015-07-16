@@ -165,7 +165,7 @@ bool safeOpenFStream(fstream & fs,ios::openmode mode,  int i, int argc, char** a
   return true;
 }
 
-bool parseArgs(int argc, char** argv, fstream &n, fstream &o, fstream &c, fstream &d, fstream &m,fstream &cd,fstream &dd, fstream &lc)
+bool parseArgs(int argc, char** argv, fstream &n, fstream &o, fstream &c, fstream &d, fstream &m,fstream &cd,fstream &dd, fstream &lc, fstream &md)
 {
   bool foundNew=false, foundOld=false, foundFolder=false;
   folder = "res/";
@@ -204,12 +204,13 @@ bool parseArgs(int argc, char** argv, fstream &n, fstream &o, fstream &c, fstrea
 
   if(foundNew && foundOld){
     system(("mkdir -p " + folder).c_str());
-    c.open((folder + "A.out").c_str(),ios::out);
-    d.open((folder + "D.out").c_str(),ios::out);
-    m.open((folder + "M.out").c_str(),ios::out);
-    cd.open((folder + "C.out").c_str(),ios::out);
-    dd.open((folder + "R.out").c_str(),ios::out);
-    lc.open((folder + "L.out").c_str(),ios::out);
+    c.open((folder + "A").c_str(),ios::out);
+    d.open((folder + "D").c_str(),ios::out);
+    m.open((folder + "M").c_str(),ios::out);
+    cd.open((folder + "C").c_str(),ios::out);
+    dd.open((folder + "R").c_str(),ios::out);
+    lc.open((folder + "L").c_str(),ios::out);
+    md.open((folder + "Y").c_str(),ios::out);
   }
   else{
     cerr<<"Must supply new and old files."<<endl;
@@ -266,8 +267,8 @@ int main(int argc, char** argv)
 {
         int jobFileCount=1;
 
-  	fstream inNew, inOld,outFCreated,outFDeleted,outModified,outDCreated,outDDeleted,outLCreated;
-  	if(parseArgs(argc, argv,inNew,inOld,outFCreated,outFDeleted,outModified,outDCreated,outDDeleted,outLCreated))
+  	fstream inNew, inOld,outFCreated,outFDeleted,outModified,outDCreated,outDDeleted,outLCreated,outDirMod;
+  	if(parseArgs(argc, argv,inNew,inOld,outFCreated,outFDeleted,outModified,outDCreated,outDDeleted,outLCreated,outDirMod))
   	{
 
 		string line;
@@ -282,9 +283,8 @@ int main(int argc, char** argv)
 				  //cout<<"\tEQUAL"<<endl;
 				  if(isRecModified(newRec, oldRec))
 					{
-						outModified<<newRec<<endl;
-						nChanged++;
-						evalJobSplit(modJob,newRec,outModified,"M");
+					  printRec(newRec,outModified,outDirMod);
+					  nChanged++;
 					}
 					else
 						nUnchanged++;
@@ -345,6 +345,7 @@ int main(int argc, char** argv)
 	 	outDCreated.close();
 	 	outDDeleted.close();
 	 	outLCreated.close();
+		outDirMod.close();
 
   	}
 
