@@ -40,7 +40,7 @@ public class Manager extends Thread {
     public void getConnections() throws IOException
     {
         ServerSocket listener = new ServerSocket(Constants.PORT);
-        listener.setSoTimeout(2000);
+        listener.setSoTimeout(500);
 
         while(!listener.isClosed())
         {
@@ -201,7 +201,7 @@ public class Manager extends Thread {
                     timings.add(t);
                 }
             GanttChartGenerator.printImage(timings, Constants.LOG_DIR + "schedule.bmp");
-            Runtime.getRuntime().exec("echo \"mails here\" | mail -a " + Constants.LOG_DIR + "schedule.bmp -s \"Shedule From Last Run\" jsybrandt@lbl.gov");
+            Runtime.getRuntime().exec("echo \"mails here\" | mail -a " + Constants.LOG_DIR + "schedule.bmp -s \"Schedule From Last Run\" jsybrandt@lbl.gov");
         }catch(IOException e){System.err.println("Log failed");}
 
 
