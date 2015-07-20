@@ -25,6 +25,7 @@ public class GanttChartGenerator {
     static final int YColor = 0xB276B2;//purple
     static final int LColor = 0xDECF3F;//yellow
     static final int MasterColor = 0xF15854; //red
+    static final int TimeSliceColor = 0xC0C0C0; //grey
     //colors from http://www.mulinblog.com/a-color-palette-optimized-for-data-visualization/
 
 
@@ -76,7 +77,8 @@ public class GanttChartGenerator {
             rectangle.top = 0;
             rectangle.bottom = height;
             rectangle.left = rectangle.right = (int)(l/(double)largestTiming * width);
-            fillRectangle(rectangle,borderColor,image);
+            rectangle.right++;
+            fillRectangle(rectangle,TimeSliceColor,image);
         }
 
         BmpImage bmp = new BmpImage();

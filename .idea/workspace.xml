@@ -8,7 +8,6 @@
   <component name="ChangeListManager">
     <list default="true" id="30f412aa-f65f-49c7-be2c-2daaaee86faa" name="Default" comment="Init Commit">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/GanttChartGenerator.java" afterPath="$PROJECT_DIR$/src/GanttChartGenerator.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Manager.java" afterPath="$PROJECT_DIR$/src/Manager.java" />
     </list>
     <ignored path="Distributed_Copy.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -55,8 +54,8 @@
       <file leaf-file-name="GanttChartGenerator.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/GanttChartGenerator.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.31944445">
-              <caret line="50" column="48" selection-start-line="50" selection-start-column="48" selection-end-line="50" selection-end-column="48" />
+            <state vertical-scroll-proportion="0.4861111">
+              <caret line="80" column="50" selection-start-line="80" selection-start-column="50" selection-end-line="80" selection-end-column="50" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -503,7 +502,7 @@
       <breakpoints-defaults>
         <breakpoint suspend="THREAD" type="java-line" />
       </breakpoints-defaults>
-      <option name="time" value="38" />
+      <option name="time" value="39" />
     </breakpoint-manager>
     <watches-manager />
   </component>
@@ -943,8 +942,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/GanttChartGenerator.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.31944445">
-          <caret line="50" column="48" selection-start-line="50" selection-start-column="48" selection-end-line="50" selection-end-column="48" />
+        <state vertical-scroll-proportion="0.4861111">
+          <caret line="80" column="50" selection-start-line="80" selection-start-column="50" selection-end-line="80" selection-end-column="50" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
