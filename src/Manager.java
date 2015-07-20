@@ -194,7 +194,7 @@ public class Manager extends Thread {
             CustomLog.log("MASTER:" + (endTime - startTime), Constants.LOG_DIR + "MASTER.log");
 
             ArrayList<JobTiming> timings = new ArrayList<>();
-            timings.add(new JobTiming("MASTER", "?", 0L, endTime - startTime));
+            //timings.add(new JobTiming("MASTER", "?", 0L, endTime - startTime));
             for(Socket s : sockets)
                 for(JobTiming t : startEndMapping.get(s)) {
                     t.SetZeroTime(startTime);
@@ -202,9 +202,9 @@ public class Manager extends Thread {
                 }
             GanttChartGenerator.printImage(timings, Constants.LOG_DIR + "schedule.bmp");
 
-            System.out.println("echo \"mailtest\" | mail -a " + Constants.LOG_DIR + "schedule.bmp -s \"Schedule From Last Run\" jsybrandt@lbl.gov");
+            Runtime.getRuntime().exec("echo \"mailtest\" | mail -a " + Constants.LOG_DIR + "schedule.bmp -s \"Schedule From Last Run\" jsybrandt@lbl.gov").waitFor();
         }catch(IOException e){System.err.println("Log failed");}
-        //catch(InterruptedException e){System.err.println("Mail Failed");}
+        catch(InterruptedException e){System.err.println("Mail Failed");}
 
 
 
