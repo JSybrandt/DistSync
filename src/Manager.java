@@ -40,7 +40,7 @@ public class Manager extends Thread {
     public void getConnections() throws IOException
     {
         ServerSocket listener = new ServerSocket(Constants.PORT);
-        listener.setSoTimeout(500);
+        listener.setSoTimeout(1000);
 
         while(!listener.isClosed())
         {
