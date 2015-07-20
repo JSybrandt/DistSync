@@ -68,6 +68,16 @@ public class GanttChartGenerator {
             }catch (Exception e){System.err.println(t.jobName + " " + rectangle);throw e;}
         }
 
+        //make lines to show every 5 sec
+        for(long l = 0; l < largestTiming;l+=5e9)
+        {
+            Rectangle rectangle = new Rectangle();
+            rectangle.top = 0;
+            rectangle.bottom = height;
+            rectangle.left = rectangle.right = (int)(l/(double)largestTiming * width);
+            fillRectangle(rectangle,borderColor,image);
+        }
+
         BmpImage bmp = new BmpImage();
         bmp.image = image;
         FileOutputStream out = new FileOutputStream(file);
