@@ -47,8 +47,8 @@ public class GanttChartGenerator {
         }
 
 
-        int width = (int)(largestTiming * 1e-9 * 10); //nanoSeconds -> seconds -> 100px per sec
-        int height = devices.size() * 10; //100 px per device
+        int width = 1000; //nanoSeconds -> seconds -> 100px per sec
+        int height = 500; //100 px per device
 
         System.out.println("W:"+width+" Height:"+height);
         Rgb888ImageArray image = new Rgb888ImageArray(width,height,backGroundColor);
@@ -59,10 +59,10 @@ public class GanttChartGenerator {
             int color = getColorFromJobName(t.jobName);
             Rectangle rectangle = new Rectangle();
 
-            rectangle.top = devices.get(t.deviceName) * 10;
-            rectangle.bottom = rectangle.top + 10;
-            rectangle.left = (int)(t.startTime * 1e-9 * 10);
-            rectangle.right = (int)(t.endTime * 1e-9 * 10);
+            rectangle.top = devices.get(t.deviceName)/devices.keySet().size()*height;
+            rectangle.bottom = (devices.get(t.deviceName)+1)/devices.keySet().size()*height;
+            rectangle.left = (int)(t.startTime/largestTiming * width);
+            rectangle.right = (int)(t.endTime/largestTiming * width);
             try{
             fillRectangle(rectangle, color, image);
             }catch (Exception e){System.err.println(t.jobName + " " + rectangle);throw e;}
