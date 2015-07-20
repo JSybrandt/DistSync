@@ -59,11 +59,12 @@ public class GanttChartGenerator {
             int color = getColorFromJobName(t.jobName);
             Rectangle rectangle = new Rectangle();
 
-            rectangle.top = devices.get(t.deviceName)/devices.keySet().size()*height;
-            rectangle.bottom = (devices.get(t.deviceName)+1)/devices.keySet().size()*height;
-            rectangle.left = (int)(t.startTime/largestTiming * width);
-            rectangle.right = (int)(t.endTime/largestTiming * width);
+            rectangle.top = (int)(devices.get(t.deviceName)/(double)devices.keySet().size()*height);
+            rectangle.bottom = (int)((devices.get(t.deviceName)+1)/(double)devices.keySet().size()*height);
+            rectangle.left = (int)(t.startTime/(double)largestTiming * width);
+            rectangle.right = (int)(t.endTime/(double)largestTiming * width);
             try{
+                System.out.println("Printing:"+t.jobName + " " +rectangle);
             fillRectangle(rectangle, color, image);
             }catch (Exception e){System.err.println(t.jobName + " " + rectangle);throw e;}
         }
