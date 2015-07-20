@@ -1,6 +1,8 @@
 import java.io.File;
+import java.io.IOException;
 import java.net.InetAddress;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 
 /**
  * Created by jsybrand on 6/25/15.
@@ -22,7 +24,16 @@ public class main {
      */
 
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException{
+
+        ArrayList<JobTiming> test = new ArrayList<>();
+
+        test.add(new JobTiming("Master","?",0L,12000000000L));
+        test.add(new JobTiming("dlsv75","C",0L,1000000000L));
+        test.add(new JobTiming("dlsv74","D",2000000000L,10000000000L));
+        test.add(new JobTiming("dlsv73","R",5000000000L,6000000000L));
+
+        GanttChartGenerator.printImage(test,"test.bmp");
 
         Manager manager = null;
         Worker worker = null;

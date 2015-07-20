@@ -41,6 +41,7 @@ public class GanttChartGenerator {
             largestTiming = Math.max(largestTiming,t.endTime);
         }
 
+
         int width = (int)(largestTiming * 1e-9 * 100); //nanoSeconds -> seconds -> 100px per sec
         int height = devices.size() * 100; //100 px per device
 
@@ -84,11 +85,11 @@ public class GanttChartGenerator {
     }
     private static void fillRectangle(Rectangle rec, int color, Rgb888ImageArray image)
     {
-        for(int i = rec.left; i <= rec.right; i++)
+        for(int i = rec.left; i < rec.right; i++)
         {
-            for(int j = rec.top; j<=rec.bottom;j++)
+            for(int j = rec.top; j<rec.bottom;j++)
             {
-                if(i==rec.left || i==rec.right || j==rec.top || j==rec.bottom)
+                if(i==rec.left || i==rec.right-1 || j==rec.top || j==rec.bottom-1)
                     image.setRgb888Pixel(i,j,borderColor);
                 else
                     image.setRgb888Pixel(i,j,color);
