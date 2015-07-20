@@ -30,6 +30,9 @@ public class GanttChartGenerator {
 
     public static void printImage(ArrayList<JobTiming> timings, String filename) throws IOException
     {
+
+        System.out.println("Printing Image...");
+
         File file = new File(filename);
 
         HashMap<String,Integer>devices = new HashMap<>();
@@ -51,7 +54,7 @@ public class GanttChartGenerator {
 
         for(JobTiming t : timings)
         {
-
+            System.out.println("Printing:"+t.jobName);
             int color = getColorFromJobName(t.jobName);
             Rectangle rectangle = new Rectangle();
 
