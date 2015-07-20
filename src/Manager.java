@@ -201,8 +201,10 @@ public class Manager extends Thread {
                     timings.add(t);
                 }
             GanttChartGenerator.printImage(timings, Constants.LOG_DIR + "schedule.bmp");
-            Runtime.getRuntime().exec("echo \"mails here\" | mail -a " + Constants.LOG_DIR + "schedule.bmp -s \"Schedule From Last Run\" jsybrandt@lbl.gov");
+
+            Runtime.getRuntime().exec("echo \"mailtest\" | mail -a " + Constants.LOG_DIR + "schedule.bmp -s \"Schedule From Last Run\" jsybrandt@lbl.gov").waitFor();
         }catch(IOException e){System.err.println("Log failed");}
+        catch(InterruptedException e){System.err.println("Mail Failed");}
 
 
 
