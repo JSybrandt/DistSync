@@ -2,6 +2,8 @@
  * Created by jsybrand on 6/25/15.
  */
 
+import javafx.util.Pair;
+
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -18,13 +20,8 @@ public class Manager extends Thread {
     ConcurrentHashMap<Socket,Constants.State> connectionStatus = new ConcurrentHashMap<>();
     Job[] jobs;
 
-
-    public void setUpDirStructure() throws IOException
-    {
-        new File(Constants.TEMP_DIR).mkdir();
-        new File(Constants.JOB_DIR).mkdir();
-        new File(Constants.LOG_DIR).mkdir();
-    }
+    //each connected device has a list of start,end times
+    ConcurrentHashMap<Socket,ArrayList<JobTiming>> startEndMapping = new ConcurrentHashMap<>();
 
     @Override
     public void finalize(){
@@ -119,7 +116,6 @@ public class Manager extends Thread {
     public void run()
     {
         long startTime = System.nanoTime();
-        int cons = 0;
         try {
             System.out.println("Making Connections:");
             getConnections();
@@ -145,7 +141,6 @@ public class Manager extends Thread {
                     for (Socket s : sockets) {
                         if (connectionStatus.get(s) == Constants.State.NOT_STARTED
                                 || connectionStatus.get(s) == Constants.State.FINISHED) {
-                            cons++;
                             JobSender sender = new JobSender(s, j, this);
                             senders.add(sender);
                             j.state = Constants.State.ASSIGNED;
@@ -188,9 +183,20 @@ public class Manager extends Thread {
         //deletePath(new File(Constants.TEMP_DIR));
 
         System.out.println("SYNC COMPLETE!");
-        Long diffTime = System.nanoTime() - startTime;
+        Long endTime = System.nanoTime();
         try {
-            CustomLog.log(diffTime.toString(), Constants.LOG_DIR + "MASTER.log");
+
+            String logResults="MASTER,"+startTime+","+endTime+"\n";
+            for(Socket s  : sockets)
+            {
+                for(JobTiming t : startEndMapping.get(s))
+                {
+                    logResults += s.getInetAddress().getCanonicalHostName()+","+t.startTime + "," + t.endTime +","+ t.jobName +"\n";
+                }
+            }
+
+
+            CustomLog.log(logResults, Constants.LOG_DIR + "MASTER.log");
         }catch(IOException e){System.err.println("Log failed");}
 
         CustomLog.close();

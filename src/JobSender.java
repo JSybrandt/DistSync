@@ -1,3 +1,5 @@
+import javafx.util.Pair;
+
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -17,6 +19,7 @@ public class JobSender extends Thread{
     private ObjectInputStream in;
     private ObjectOutputStream out;
     private JobAgreementProtocol protocol;
+    private Long startTime,endTime;
 
     JobSender(Socket s, Job j, Manager m) throws IOException
     {
@@ -45,7 +48,7 @@ public class JobSender extends Thread{
     @Override
     public void run(){
         try{
-
+            startTime = System.nanoTime();
             String msg = "";
             while(job.state!= Constants.State.FINISHED && job.state!= Constants.State.ERROR)
             {
@@ -76,6 +79,8 @@ public class JobSender extends Thread{
                 //manager.connectionStatus.put(socket, job.state);
             //DIABLED ERROR
             manager.connectionStatus.put(socket, Constants.State.FINISHED);
+            endTime = System.nanoTime();
+            manager.startEndMapping.get(socket).add(new JobTiming(job.fileName,startTime,endTime));
         }
     }
 }

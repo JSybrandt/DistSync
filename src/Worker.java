@@ -157,12 +157,38 @@ public class Worker extends Thread {
     }
 
     //this relies on the job file listing dirs in order
-    private void preformCreateDir(Job job)throws IOException{
+    private void preformCreateDir(Job job)throws IOException, InterruptedException{
         Scanner scan = new Scanner(new File(job.path));
-        while(scan.hasNext())
+
+        String cmd1[] = {"chown","",""};
+        String cmd2[] = {"chmod","",""};
+
+        SystemRunner runners[][] = new SystemRunner[numAvalibleProcs/2][2];
+        while(scan.hasNextLine())
         {
-            String path = job.outOfDateMountPoint+scan.nextLine();
-            new File(path).mkdir();
+            for(int i = 0 ; i < runners.length;i++)
+            {
+                if((runners[i][0]==null && runners[i][1]==null)
+                        || (runners[i][0].isComplete.get()&&runners[i][1].isComplete.get()))
+                {
+                    String path = scan.nextLine();
+                    new File(job.outOfDateMountPoint+path).mkdir();
+                    cmd1[1] = cmd2[1]="--reference="+job.upToDateMountPoint+path;
+                    cmd1[2] = cmd2[2]=job.outOfDateMountPoint+path;
+                    runners[i][0]= new SystemRunner(cmd1.clone(),job.logFile);
+                    runners[i][1]= new SystemRunner(cmd2.clone(),job.logFile);
+                    runners[i][0].start();
+                    runners[i][1].start();
+                    break;
+                }
+            }
+        }
+
+        for(SystemRunner s[] : runners)
+        {
+            for(SystemRunner r : s)
+                if(r != null)
+                    r.join();
         }
     }
 
