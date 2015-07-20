@@ -35,7 +35,9 @@ public class Rgb888ImageArray implements Rgb888Image {
 
     public void setRgb888Pixel(int x, int y, int color)
     {
-        data[x][y]= color;
+        try {
+            data[x][y] = color;
+        }catch (Exception e){System.err.println(x + "," + y);throw e;}
     }
 
     public static int getColor(byte r, byte g, byte b)

@@ -37,27 +37,31 @@ public class GanttChartGenerator {
 
         for(JobTiming t : timings)
         {
-            devices.put(t.deviceName, devices.keySet().size());
+            if(!devices.containsKey(t.deviceName))
+                devices.put(t.deviceName,devices.keySet().size());
             largestTiming = Math.max(largestTiming,t.endTime);
         }
 
 
-        int width = (int)(largestTiming * 1e-9 * 100); //nanoSeconds -> seconds -> 100px per sec
-        int height = devices.size() * 100; //100 px per device
+        int width = (int)(largestTiming * 1e-9 * 10); //nanoSeconds -> seconds -> 100px per sec
+        int height = devices.size() * 10; //100 px per device
 
+        //System.out.println("W:"+width+" Height:"+height);
         Rgb888ImageArray image = new Rgb888ImageArray(width,height,backGroundColor);
 
         for(JobTiming t : timings)
         {
+
             int color = getColorFromJobName(t.jobName);
             Rectangle rectangle = new Rectangle();
 
-            rectangle.top = devices.get(t.deviceName) * 100;
-            rectangle.bottom = rectangle.top + 100;
-            rectangle.left = (int)(t.startTime * 1e-9 * 100);
-            rectangle.right = (int)(t.endTime * 1e-9 * 100);
-
-            fillRectangle(rectangle,color,image);
+            rectangle.top = devices.get(t.deviceName) * 10;
+            rectangle.bottom = rectangle.top + 10;
+            rectangle.left = (int)(t.startTime * 1e-9 * 10);
+            rectangle.right = (int)(t.endTime * 1e-9 * 10);
+            try{
+            fillRectangle(rectangle, color, image);
+            }catch (Exception e){System.err.println(t.jobName + " " + rectangle);throw e;}
         }
 
         BmpImage bmp = new BmpImage();
@@ -102,6 +106,8 @@ public class GanttChartGenerator {
         public int top,bottom,left,right;
         public Rectangle(int t,int b,int l, int r){top=t;bottom=b;left=l;right=r;}
         public Rectangle(){top=bottom=left=right=0;}
+
+        public String toString(){return "T:"+top + " B:"+bottom + " L:"+left + " R:"+right;}
 
     }
 }
