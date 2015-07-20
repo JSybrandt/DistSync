@@ -49,7 +49,7 @@ public class GanttChartGenerator {
         int width = (int)(largestTiming * 1e-9 * 10); //nanoSeconds -> seconds -> 100px per sec
         int height = devices.size() * 10; //100 px per device
 
-        //System.out.println("W:"+width+" Height:"+height);
+        System.out.println("W:"+width+" Height:"+height);
         Rgb888ImageArray image = new Rgb888ImageArray(width,height,backGroundColor);
 
         for(JobTiming t : timings)
