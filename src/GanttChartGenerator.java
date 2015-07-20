@@ -40,6 +40,7 @@ public class GanttChartGenerator {
 
         for(JobTiming t : timings)
         {
+            System.out.println("Ping");
             if(!devices.containsKey(t.deviceName))
                 devices.put(t.deviceName,devices.keySet().size());
             largestTiming = Math.max(largestTiming,t.endTime);
