@@ -80,7 +80,7 @@ public class JobSender extends Thread{
             //DIABLED ERROR
             manager.connectionStatus.put(socket, Constants.State.FINISHED);
             endTime = System.nanoTime();
-            manager.startEndMapping.get(socket).add(new JobTiming(job.fileName,startTime,endTime));
+            manager.startEndMapping.get(socket).add(new JobTiming(ID,job.fileName,startTime,endTime));
         }
     }
 }

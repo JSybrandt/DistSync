@@ -13,6 +13,9 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.concurrent.ConcurrentHashMap;
 
+
+import p79068.bmpio.*;
+
 public class Manager extends Thread {
 
     ArrayList<JobSender> senders = new ArrayList<>();
@@ -188,19 +191,17 @@ public class Manager extends Thread {
         System.out.println("SYNC COMPLETE!");
         Long endTime = System.nanoTime();
         try {
+            CustomLog.log("MASTER:" + (endTime - startTime), Constants.LOG_DIR + "MASTER.log");
 
-            String logResults="MASTER,"+startTime+","+endTime+"\n";
-            for(Socket s  : sockets)
-            {
+            ArrayList<JobTiming> timings = new ArrayList<>();
+            timings.add(new JobTiming("MASTER","?",startTime,endTime));
+            for(Socket s : sockets)
                 for(JobTiming t : startEndMapping.get(s))
-                {
-                    logResults += s.getInetAddress().getCanonicalHostName()+","+t.startTime + "," + t.endTime +","+ t.jobName +"\n";
-                }
-            }
-
-
-            CustomLog.log(logResults, Constants.LOG_DIR + "MASTER.log");
+                    timings.add(t);
+            GanttChartGenerator.printImage(timings,Constants.LOG_DIR+"schedule.bmp");
         }catch(IOException e){System.err.println("Log failed");}
+
+
 
         CustomLog.close();
     }
