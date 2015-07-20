@@ -48,6 +48,9 @@ public class Manager extends Thread {
                 System.out.println("Made Connection with " + s.getLocalAddress().toString());
             }catch(SocketTimeoutException e){listener.close();/*who cares*/}
         }
+
+        for(Socket s : sockets)
+            startEndMapping.put(s,new ArrayList<JobTiming>());
     }
 
     //returns true if finished
