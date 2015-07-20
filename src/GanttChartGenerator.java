@@ -31,7 +31,7 @@ public class GanttChartGenerator {
     public static void printImage(ArrayList<JobTiming> timings, String filename) throws IOException
     {
 
-        System.out.println("Printing Image...");
+        //System.out.println("Printing Image...");
 
         File file = new File(filename);
 
@@ -40,22 +40,21 @@ public class GanttChartGenerator {
 
         for(JobTiming t : timings)
         {
-            System.out.println("Ping");
             if(!devices.containsKey(t.deviceName))
                 devices.put(t.deviceName,devices.keySet().size());
             largestTiming = Math.max(largestTiming,t.endTime);
         }
 
 
-        int width = 1000; //nanoSeconds -> seconds -> 100px per sec
-        int height = 500; //100 px per device
+        int width = 2000;
+        int height = 500;
 
         System.out.println("W:"+width+" Height:"+height);
         Rgb888ImageArray image = new Rgb888ImageArray(width,height,backGroundColor);
 
         for(JobTiming t : timings)
         {
-            System.out.println("Printing:"+t.jobName);
+            //System.out.println("Printing:"+t.jobName);
             int color = getColorFromJobName(t.jobName);
             Rectangle rectangle = new Rectangle();
 
@@ -64,7 +63,7 @@ public class GanttChartGenerator {
             rectangle.left = (int)(t.startTime/(double)largestTiming * width);
             rectangle.right = (int)(t.endTime/(double)largestTiming * width);
             try{
-                System.out.println("Printing:"+t.jobName + " " +rectangle);
+                //System.out.println("Printing:"+t.jobName + " " +rectangle);
             fillRectangle(rectangle, color, image);
             }catch (Exception e){System.err.println(t.jobName + " " + rectangle);throw e;}
         }
