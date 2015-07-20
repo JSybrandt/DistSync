@@ -194,11 +194,13 @@ public class Manager extends Thread {
             CustomLog.log("MASTER:" + (endTime - startTime), Constants.LOG_DIR + "MASTER.log");
 
             ArrayList<JobTiming> timings = new ArrayList<>();
-            timings.add(new JobTiming("MASTER","?",startTime,endTime));
+            timings.add(new JobTiming("MASTER","?",0L,endTime-startTime));
             for(Socket s : sockets)
-                for(JobTiming t : startEndMapping.get(s))
+                for(JobTiming t : startEndMapping.get(s)) {
+                    t.SetZeroTime(startTime);
                     timings.add(t);
-            GanttChartGenerator.printImage(timings,Constants.LOG_DIR+"schedule.bmp");
+                }
+            GanttChartGenerator.printImage(timings, Constants.LOG_DIR + "schedule.bmp");
         }catch(IOException e){System.err.println("Log failed");}
 
 
