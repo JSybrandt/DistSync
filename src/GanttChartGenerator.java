@@ -46,8 +46,8 @@ public class GanttChartGenerator {
         }
 
 
-        int width = 2000;
-        int height = 500;
+        int width = (int) (largestTiming * 1e-9  * 50);
+        int height = devices.keySet().size()*100;
 
         System.out.println("W:"+width+" Height:"+height);
         Rgb888ImageArray image = new Rgb888ImageArray(width,height,backGroundColor);
