@@ -75,13 +75,13 @@ public class Job implements Serializable, Comparable {
     {
         switch (t)
         {
-            case CREATE_DIR:    return 1;
+            case CREATE_DIR:    return 0;
             case RM_DIR:        return 2;
             case CREATE_FILES:  return 2;
             case RM_FILES:      return 1;
             case MODIFY_FILES:  return 1;
             case MODIFY_DIRS:   return 1;
-            case BUILD_LINKS:   return 1;
+            case BUILD_LINKS:   return 0;
             case OTHER:         return 3;
             default:            return 3;
         }

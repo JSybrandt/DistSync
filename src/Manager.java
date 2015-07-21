@@ -101,7 +101,7 @@ public class Manager extends Thread {
 
                 if(j.state==Constants.State.NOT_STARTED)
                 {
-                    if(j.getType() == Job.Type.CREATE_FILES) {
+                    if(j.getType() == Job.Type.CREATE_FILES || j.getType()==Job.Type.BUILD_LINKS) {
                         if (maySelectCreateFiles) {
                             return j;
                         }
