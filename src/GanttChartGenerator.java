@@ -70,6 +70,7 @@ public class GanttChartGenerator {
             }catch (Exception e){System.err.println(t.jobName + " " + rectangle);throw e;}
         }
 
+        /*
         //make lines to show every 5 sec
         for(long l = 0; l < largestTiming;l+=5e9)
         {
@@ -80,6 +81,7 @@ public class GanttChartGenerator {
             rectangle.right++;
             fillRectangle(rectangle,TimeSliceColor,image);
         }
+        */
 
         BmpImage bmp = new BmpImage();
         bmp.image = image;
