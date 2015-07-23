@@ -81,6 +81,7 @@ public class JobSender extends Thread{
             manager.connectionStatus.put(socket, Constants.State.FINISHED);
             endTime = System.nanoTime();
             manager.startEndMapping.get(socket).add(new JobTiming(ID,job.fileName,startTime,endTime));
+            System.out.println(job.fileName + " has completed.");
         }
     }
 }
