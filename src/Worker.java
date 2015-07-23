@@ -113,7 +113,7 @@ public class Worker extends Thread {
             CustomLog.close();
         }
     }
-    
+
 
     private void preformCopy(Job job) throws IOException, InterruptedException{
 
@@ -154,7 +154,7 @@ public class Worker extends Thread {
         String cmd1[] = {"chown","",""};
         String cmd2[] = {"chmod","",""};
 
-        SystemRunner runners[][] = new SystemRunner[numAvalibleProcs/2][2];
+        SystemRunner runners[][] = new SystemRunner[Math.max(1,numAvalibleProcs/2)][2];
         while(scan.hasNextLine())
         {
             for(int i = 0 ; i < runners.length;i++)
@@ -164,6 +164,7 @@ public class Worker extends Thread {
                 {
                     String path = scan.nextLine();
                     new File(job.outOfDateMountPoint+path).mkdir();
+                    System.out.println("Making : " + job.outOfDateMountPoint+path);
                     cmd1[1] = cmd2[1]="--reference="+job.upToDateMountPoint+path;
                     cmd1[2] = cmd2[2]=job.outOfDateMountPoint+path;
                     runners[i][0]= new SystemRunner(cmd1.clone(),job.logFile);
