@@ -24,7 +24,7 @@ public class Worker extends Thread {
         {
             System.err.println("Worker failed to connect to server. " + e);
         }
-        numAvalibleProcs = Math.max(1,numAvalibleProcs-1);//we want to make sure theres room for this worker
+        numAvalibleProcs = Math.max(1,numAvalibleProcs/2);//we want to make sure theres room for this worker
     }
 
     @Override
@@ -128,7 +128,7 @@ public class Worker extends Thread {
 
         Scanner scan = new Scanner(new File(job.path));
 
-        String cmd[] = {"cp","-Pp","",""};
+        String cmd[] = {"mcp","-Pp","",""};
 
         SystemRunner runners[] = new SystemRunner[numAvalibleProcs];
         while(scan.hasNextLine())
