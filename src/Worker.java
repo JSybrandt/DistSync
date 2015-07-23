@@ -24,14 +24,12 @@ public class Worker extends Thread {
         {
             System.err.println("Worker failed to connect to server. " + e);
         }
-        numAvalibleProcs = Runtime.getRuntime().availableProcessors()/2;//slowing down
-        //numAvalibleProcs = Math.max(1,numAvalibleProcs-1);//we want to make sure theres room for this worker
+        numAvalibleProcs = Math.max(1,numAvalibleProcs-1);//we want to make sure theres room for this worker
     }
 
     @Override
     public void finalize() throws Throwable{
         try {
-            //System.out.println("Finalize Called");
             in.close();
             out.close();
             socket.close();
@@ -130,7 +128,7 @@ public class Worker extends Thread {
 
         Scanner scan = new Scanner(new File(job.path));
 
-        String cmd[] = {"cp","-Pp","",""};
+        String cmd[] = {"mcp","-Pp","",""};
 
         SystemRunner runners[] = new SystemRunner[numAvalibleProcs];
         while(scan.hasNextLine())
@@ -249,7 +247,7 @@ public class Worker extends Thread {
     private void preformSyncFiles(Job job) throws IOException, InterruptedException{
         Scanner scan = new Scanner(new File(job.path));
 
-        String cmd[] = {"rsync","-laSHAXd","",""};
+        String cmd[] = {"rsync","-aSHAXd","",""};
 
         SystemRunner runners[] = new SystemRunner[numAvalibleProcs];
         while(scan.hasNextLine())
@@ -310,7 +308,7 @@ public class Worker extends Thread {
     }
 
     private void preformBuildLinks(Job job) throws IOException{
-        String cmd[] = {"rsync","-laSHAXd","--files-from="+job.path,Job.upToDateMountPoint,Job.outOfDateMountPoint};
+        String cmd[] = {"rsync","-aSHAXd","--files-from="+job.path,Job.upToDateMountPoint,Job.outOfDateMountPoint};
 
         Process p = Runtime.getRuntime().exec(cmd);
         try {

@@ -5,8 +5,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Set;
 
 import p79068.bmpio.*;
 
@@ -49,39 +47,43 @@ public class GanttChartGenerator {
 
         int width = (int) (largestTiming * 1e-9  * 75);
         if(width > 10000) width=10000;
-        int height = devices.keySet().size()*50;
+        int barAreaHeight = devices.keySet().size()*50;
+        int height = barAreaHeight+25;
 
         System.out.println("W:"+width+" Height:"+height);
         Rgb888ImageArray image = new Rgb888ImageArray(width,height,backGroundColor);
 
         for(JobTiming t : timings)
         {
-            //System.out.println("Printing:"+t.jobName);
             int color = getColorFromJobName(t.jobName);
             Rectangle rectangle = new Rectangle();
 
-            rectangle.top = (int)(devices.get(t.deviceName)/(double)devices.keySet().size()*height);
-            rectangle.bottom = (int)((devices.get(t.deviceName)+1)/(double)devices.keySet().size()*height);
+            rectangle.top = (int)(devices.get(t.deviceName)/(double)devices.keySet().size()*barAreaHeight);
+            rectangle.bottom = (int)((devices.get(t.deviceName)+1)/(double)devices.keySet().size()*barAreaHeight);
             rectangle.left = (int)(t.startTime/(double)largestTiming * width);
             rectangle.right = (int)(t.endTime/(double)largestTiming * width);
             try{
-                //System.out.println("Printing:"+t.jobName + " " +rectangle);
             fillRectangle(rectangle, color, image);
             }catch (Exception e){System.err.println(t.jobName + " " + rectangle);throw e;}
         }
 
-        /*
+
         //make lines to show every 5 sec
+        boolean longDash = false;
         for(long l = 0; l < largestTiming;l+=5e9)
         {
             Rectangle rectangle = new Rectangle();
-            rectangle.top = 0;
-            rectangle.bottom = height;
+            rectangle.top = barAreaHeight;
+            if(longDash)
+                rectangle.bottom = height;
+            else
+                rectangle.bottom = (barAreaHeight+height)/2;
             rectangle.left = rectangle.right = (int)(l/(double)largestTiming * width);
             rectangle.right++;
             fillRectangle(rectangle,TimeSliceColor,image);
+            longDash = !longDash;
         }
-        */
+
 
         BmpImage bmp = new BmpImage();
         bmp.image = image;

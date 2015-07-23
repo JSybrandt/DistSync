@@ -10,11 +10,8 @@ import java.net.Socket;
 import java.net.SocketTimeoutException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.concurrent.ConcurrentHashMap;
 
-
-import p79068.bmpio.*;
 
 public class Manager extends Thread {
 
@@ -125,12 +122,6 @@ public class Manager extends Thread {
         try {
             System.out.println("Making Connections:");
             getConnections();
-            //System.out.println("Reading and Splitting Jobs.");
-
-            //jobSplitter.join();
-            //System.out.println("Getting Results:");
-            //jobs = jobSplitter.getResults();
-            //GET JOB FILES FROM JOBS FOLDER
 
             String[] strs = new File(Constants.JOB_DIR).list();
             jobs = new Job[strs.length];
@@ -194,17 +185,13 @@ public class Manager extends Thread {
             CustomLog.log("MASTER:" + (endTime - startTime), Constants.LOG_DIR + "MASTER.log");
 
             ArrayList<JobTiming> timings = new ArrayList<>();
-            //timings.add(new JobTiming("MASTER", "?", 0L, endTime - startTime));
             for(Socket s : sockets)
                 for(JobTiming t : startEndMapping.get(s)) {
                     t.SetZeroTime(startTime);
                     timings.add(t);
                 }
             GanttChartGenerator.printImage(timings, Constants.LOG_DIR + "schedule.bmp");
-
-            Runtime.getRuntime().exec("echo \"mailtest\" | mail -a " + Constants.LOG_DIR + "schedule.bmp -s \"Schedule From Last Run\" jsybrandt@lbl.gov").waitFor();
         }catch(IOException e){System.err.println("Log failed");}
-        catch(InterruptedException e){System.err.println("Mail Failed");}
 
 
 

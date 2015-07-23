@@ -26,17 +26,6 @@ public class main {
 
     public static void main(String[] args) throws IOException{
 
-        /*ArrayList<JobTiming> test = new ArrayList<>();
-
-        test.add(new JobTiming("Master","?",0L,12000000000L));
-        test.add(new JobTiming("dlsv75","C",0L,1000000000L));
-        test.add(new JobTiming("dlsv74","D",2000000000L,10000000000L));
-        test.add(new JobTiming("dlsv73","R",5000000000L,6000000000L));
-        test.add(new JobTiming("dlsv73","R1",6500000000L,9000000000L));
-        test.add(new JobTiming("dlsv73","R2",2000000000L,4000000000L));
-
-        GanttChartGenerator.printImage(test,"test.bmp");*/
-
         Manager manager = null;
         Worker worker = null;
 
