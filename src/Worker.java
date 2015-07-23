@@ -24,7 +24,7 @@ public class Worker extends Thread {
         {
             System.err.println("Worker failed to connect to server. " + e);
         }
-        numAvalibleProcs = Math.max(1,numAvalibleProcs/2);//we want to make sure theres room for this worker
+        numAvalibleProcs = Math.max(1,Runtime.getRuntime().availableProcessors()-1);//we want to make sure theres room for this worker
     }
 
     @Override
@@ -121,7 +121,7 @@ public class Worker extends Thread {
 
         Scanner scan = new Scanner(new File(job.path));
 
-        String cmd[] = {"cp","-Pp","",""};
+        String cmd[] = {"mcp","-Pp","",""};
 
         SystemRunner runners[] = new SystemRunner[numAvalibleProcs];
         while(scan.hasNextLine())
@@ -164,7 +164,7 @@ public class Worker extends Thread {
                 {
                     String path = scan.nextLine();
                     new File(job.outOfDateMountPoint+path).mkdir();
-                    System.out.println("Making : " + job.outOfDateMountPoint+path);
+                    //System.out.println("Making : " + job.outOfDateMountPoint+path);
                     cmd1[1] = cmd2[1]="--reference="+job.upToDateMountPoint+path;
                     cmd1[2] = cmd2[2]=job.outOfDateMountPoint+path;
                     runners[i][0]= new SystemRunner(cmd1.clone(),job.logFile);

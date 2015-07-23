@@ -7,6 +7,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="30f412aa-f65f-49c7-be2c-2daaaee86faa" name="Default" comment="Init Commit">
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/SystemRunner.java" afterPath="$PROJECT_DIR$/src/SystemRunner.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Worker.java" afterPath="$PROJECT_DIR$/src/Worker.java" />
     </list>
     <ignored path="Distributed_Copy.iws" />
@@ -101,8 +102,8 @@
       <file leaf-file-name="Worker.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/Worker.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.68035716">
-              <caret line="166" column="83" selection-start-line="166" selection-start-column="83" selection-end-line="166" selection-end-column="83" />
+            <state vertical-scroll-proportion="4.339286">
+              <caret line="166" column="22" selection-start-line="166" selection-start-column="22" selection-end-line="166" selection-end-column="22" />
               <folding />
             </state>
           </provider>
@@ -112,7 +113,7 @@
         <entry file="file://$PROJECT_DIR$/src/SystemRunner.java">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="13" column="24" selection-start-line="13" selection-start-column="24" selection-end-line="13" selection-end-column="24" />
+              <caret line="20" column="28" selection-start-line="20" selection-start-column="28" selection-end-line="20" selection-end-column="28" />
               <folding />
             </state>
           </provider>
@@ -166,8 +167,8 @@
         <option value="$PROJECT_DIR$/src/Manager.java" />
         <option value="$PROJECT_DIR$/src/GanttChartGenerator.java" />
         <option value="$PROJECT_DIR$/src/JobSender.java" />
-        <option value="$PROJECT_DIR$/src/SystemRunner.java" />
         <option value="$PROJECT_DIR$/src/Worker.java" />
+        <option value="$PROJECT_DIR$/src/SystemRunner.java" />
       </list>
     </option>
   </component>
@@ -429,7 +430,7 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="396" y="24" width="960" height="877" extended-state="0" />
+    <frame x="396" y="24" width="960" height="877" extended-state="1" />
     <editor active="true" />
     <layout>
       <window_info id="Palette&#9;" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -885,16 +886,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/Manager.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="145" column="34" selection-start-line="145" selection-start-column="34" selection-end-line="145" selection-end-column="34" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/JobTiming.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
@@ -911,18 +902,28 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/Manager.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="145" column="34" selection-start-line="145" selection-start-column="34" selection-end-line="145" selection-end-column="34" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/SystemRunner.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="13" column="24" selection-start-line="13" selection-start-column="24" selection-end-line="13" selection-end-column="24" />
+          <caret line="20" column="28" selection-start-line="20" selection-start-column="28" selection-end-line="20" selection-end-column="28" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/Worker.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.68035716">
-          <caret line="166" column="83" selection-start-line="166" selection-start-column="83" selection-end-line="166" selection-end-column="83" />
+        <state vertical-scroll-proportion="4.339286">
+          <caret line="166" column="22" selection-start-line="166" selection-start-column="22" selection-end-line="166" selection-end-column="22" />
           <folding />
         </state>
       </provider>

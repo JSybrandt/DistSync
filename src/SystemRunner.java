@@ -18,10 +18,9 @@ public class SystemRunner extends Thread {
     public void run(){
         try {
 
-            String cmd="";
-            for(String s : command)cmd+=s;
-
-            System.out.println(cmd);
+            //String cmd="";
+            //for(String s : command)cmd+=s;
+            //System.out.println(cmd);
 
             Process proc = Runtime.getRuntime().exec(command);
             Scanner scan = new Scanner(proc.getErrorStream());
