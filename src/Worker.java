@@ -113,22 +113,15 @@ public class Worker extends Thread {
             CustomLog.close();
         }
     }
-
-    private boolean isRunning(Process p)
-    {
-        try{
-            p.exitValue();
-            return false;
-        }catch(IllegalThreadStateException e){
-            return true;
-        }
-    }
+    
 
     private void preformCopy(Job job) throws IOException, InterruptedException{
 
+        System.out.println("COPY STARTED");
+
         Scanner scan = new Scanner(new File(job.path));
 
-        String cmd[] = {"mcp","-Pp","",""};
+        String cmd[] = {"cp","-Pp","",""};
 
         SystemRunner runners[] = new SystemRunner[numAvalibleProcs];
         while(scan.hasNextLine())
