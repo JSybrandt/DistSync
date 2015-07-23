@@ -69,7 +69,7 @@ public class GanttChartGenerator {
 
 
         //make lines to show every 5 sec
-        boolean longDash = false;
+        boolean longDash = true; //dash at 0 should be large
         for(long l = 0; l < largestTiming;l+=5e9)
         {
             Rectangle rectangle = new Rectangle();
