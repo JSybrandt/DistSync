@@ -11,7 +11,7 @@
 echo "reseting expirement, making scan files, making jobs."
 ./resetExpirement 
 
-java -jar distsync.jar -f ./expirement/fresh -s ./expirement/stale -m dlsv72
+java -jar distsync.jar -f ./expirement/fresh -s ./expirement/stale -m tlfssv229 tlfssv230 tlfssv231 tlfssv232
 
 read -p "Press Enter "
 

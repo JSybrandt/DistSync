@@ -6,21 +6,21 @@
 
 if [ $# == 2 ]
 then
-	rm /global/dv_scratch/jsybrandt/DistSync/tmp/jobs/*
-	rm /global/dv_scratch/jsybrandt/DistSync/tmp/logs/*
+	rm -f /common/jsybrandt/DistSync/tmp/jobs/*
+	rm -f /common/jsybrandt/DistSync/tmp/logs/*
 	echo "Syncing $1 with $2"
 	pushd $1
-	scandir /global/dv_scratch/jsybrandt/source.scan
+	/common/jsybrandt/DistSync/fakeScans/runScan.sh /common/jsybrandt/source.scan
 	popd
 	pushd $2
-	scandir /global/dv_scratch/jsybrandt/dest.scan
+	/common/jsybrandt/DistSync/fakeScans/runScan.sh /common/jsybrandt/dest.scan
 	popd
-	/global/dv_scratch/jsybrandt/DistSync/jobSplitter/compare -n /global/dv_scratch/jsybrandt/source.scan -o /global/dv_scratch/jsybrandt/dest.scan -f /global/dv_scratch/jsybrandt/DistSync/tmp/jobs
-	java -Xmx4G -jar /global/dv_scratch/jsybrandt/DistSync/distsync.jar -f $1 -s $2 -m tlfssv75 tlfssv74 tlfssv73 tlfssv72
-	echo "Syncing $1 and $2 has completed." | mail -a /global/dv_scratch/jsybrandt/DistSync/tmp/logs/MASTER.log -a /global/dv_scratch/jsybrandt/DistSync/tmp/logs/schedule.bmp -s "DistSync Completed" jsybrandt@lbl.gov
+	/common/jsybrandt/DistSync/jobSplitter/compare -n /common/jsybrandt/source.scan -o /common/jsybrandt/dest.scan -f /common/jsybrandt/DistSync/tmp/jobs
+	java -Xmx4G -jar /common/jsybrandt/DistSync/distsync.jar -f $1 -s $2 -m tlfssv229 tlfssv230 tlfssv231 tlfssv232 tlfssv233 tlfssv234 tlfssv235 tlfssv236
+	echo "Syncing $1 and $2 has completed." | mail -a /common/jsybrandt/DistSync/tmp/logs/MASTER.log -a /common/jsybrandt/DistSync/tmp/logs/schedule.bmp -s "DistSync Completed" jsybrandt@lbl.gov
 
-	rm /global/dv_scratch/jsybrandt/source.scan
-	rm /global/dv_scratch/jsybrandt/dest.scan
+	rm -f /common/jsybrandt/source.scan
+	rm -f /common/jsybrandt/dest.scan
 	
 
 else
