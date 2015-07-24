@@ -9,9 +9,9 @@ done
 
 if [ $# -ge 1 ]
 then
-	sort --parallel=8 -S 20G -t "|" -k 13 -o $1 tmp.out
+	sort -S 10G -t "|" -k 13 -o $1 tmp.out
 else 
-	sort --parallel=8 -S 20G -t "|" -k 13  tmp.out
+	sort -S 10G -t "|" -k 13  tmp.out
 fi
 
 rm tmp.out
