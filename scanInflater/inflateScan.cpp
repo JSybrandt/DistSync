@@ -159,6 +159,6 @@ int main(int argc, char** argv)
 	run("ln -s ./link \"" + rootDir + rec[PATH]+"\"");
       }
     }
-  run("cat mail.txt | mail -s \"Data Gen Done\" jsybrandt@lbl.gov");
+  run("echo "" | mail -s \"Job Done\" jsybrandt@lbl.gov");
   return 0;
 }

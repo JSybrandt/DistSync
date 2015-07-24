@@ -211,6 +211,7 @@ bool parseArgs(int argc, char** argv, fstream &n, fstream &o, fstream &c, fstrea
     dd.open((folder + "R").c_str(),ios::out);
     lc.open((folder + "L").c_str(),ios::out);
     md.open((folder + "Y").c_str(),ios::out);
+    return true;
   }
   else{
     cerr<<"Must supply new and old files."<<endl;
