@@ -29,6 +29,8 @@ public class main {
         Manager manager = null;
         Worker worker = null;
 
+
+
         if(!checkForJobs())
         {
             System.err.println("No job files found in " + Paths.get("").toAbsolutePath().toString()+"/" + Constants.JOB_DIR);
@@ -73,7 +75,8 @@ public class main {
                     if (args.length-i >= 2) {
 
                         String managerHostname = InetAddress.getLocalHost().getHostName();
-                        String pathToJar = Paths.get("").toAbsolutePath().toString() + "/" + Constants.JAR_FILE_NAME;
+                        String pathToJar = new File(main.class.getProtectionDomain().getCodeSource().getLocation().getPath()).getAbsolutePath();
+                        System.out.println("JAR located at : " + pathToJar);
 
                         Runtime runtime = Runtime.getRuntime();
 
