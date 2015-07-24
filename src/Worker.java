@@ -187,7 +187,7 @@ public class Worker extends Thread {
     private void preformRemoveFiles(Job job) throws IOException, InterruptedException{
         Scanner scan = new Scanner(new File(job.path));
 
-        String cmd[] = {"rm",""};
+        String cmd[] = {"rm","-f",""};
 
         SystemRunner runners[] = new SystemRunner[numAvalibleProcs];
         while(scan.hasNextLine())
@@ -197,7 +197,7 @@ public class Worker extends Thread {
                 if(runners[i]==null || runners[i].isComplete.get())
                 {
                     String path = scan.nextLine();
-                    cmd[1]=job.outOfDateMountPoint+path;
+                    cmd[2]=job.outOfDateMountPoint+path;
                     runners[i]= new SystemRunner(cmd.clone(),job.logFile);
                     runners[i].start();
                     break;
@@ -222,7 +222,7 @@ public class Worker extends Thread {
             String path = job.outOfDateMountPoint+scan.nextLine();
             stack.push(path);
         }
-        String cmd[] = {"rm","-r",""};
+        String cmd[] = {"rm","-rf",""};
         while(!stack.empty()){
             cmd[2]=stack.pop();
             try {
