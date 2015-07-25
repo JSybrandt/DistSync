@@ -33,7 +33,7 @@ public class main {
 
         if(!checkForJobs())
         {
-            System.err.println("No job files found in " + Paths.get("").toAbsolutePath().toString()+"/" + Constants.JOB_DIR);
+            System.err.println("No job files found in " + Constants.JOB_DIR);
             createTempDirs();
             //return;
         }
@@ -76,8 +76,8 @@ public class main {
 
                         String managerHostname = InetAddress.getLocalHost().getHostName();
                         String pathToJar = new File(main.class.getProtectionDomain().getCodeSource().getLocation().getPath()).getAbsolutePath();
-                        System.out.println("JAR located at : " + pathToJar);
-
+                        System.out.println("JAR located at : " + Constants.JAR_PATH);
+                        System.out.println("tmp located at : " + Constants.TEMP_DIR);
                         Runtime runtime = Runtime.getRuntime();
 
                         for (i++; i < args.length; i++) {
