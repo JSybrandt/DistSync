@@ -59,9 +59,9 @@ public class JobSender extends Thread{
                 }
                 if(job.state!= Constants.State.FINISHED && job.state!= Constants.State.ERROR){
                     Object obj = in.readObject();
-                    if(obj instanceof IOException) {
+                    if(!(obj instanceof String)) {
                         System.out.println("Error Received:" + obj);
-                        ((IOException) obj).printStackTrace();
+                        ((Exception) obj).printStackTrace();
                         msg = "ERROR";
                         job.state = Constants.State.ERROR;
                     }
