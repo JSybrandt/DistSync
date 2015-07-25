@@ -55,12 +55,12 @@ public class JobSender extends Thread{
                 JobAgreementProtocol.Action action = protocol.processInput(msg);
                 if(action== JobAgreementProtocol.Action.SEND_JOB){
                     out.writeObject(job);
-                    System.out.println("Sent " + ID + " " + job.fileName);
+                    System.out.println("Sent " + ID + " " + job.path);
                 }
                 if(job.state!= Constants.State.FINISHED && job.state!= Constants.State.ERROR){
                     Object obj = in.readObject();
                     if(obj instanceof IOException) {
-                        System.out.println("Error Received:");
+                        System.out.println("Error Received:" + obj);
                         ((IOException) obj).printStackTrace();
                         msg = "ERROR";
                         job.state = Constants.State.ERROR;
@@ -70,10 +70,15 @@ public class JobSender extends Thread{
 
             }
         }
-        catch (Exception e)
+        catch (IOException e)
         {
             System.err.println(ID+": IO Failed " + e);
             job.state = Constants.State.ERROR;
+        }
+        catch (ClassNotFoundException e){
+            System.err.println(ID+": Class not found when receiving input: " + e);
+            e.printStackTrace();
+
         }
         finally {
                 //manager.connectionStatus.put(socket, job.state);

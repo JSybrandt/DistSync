@@ -100,8 +100,10 @@ public class Worker extends Thread {
                     }
                     else
                         CustomLog.log(e.getMessage(),received.logFile);
-                    out.writeObject(e);
-                    System.err.println(e);
+
+                    Exception newE = new Exception(e.getMessage() + "\nLog file should be:" + received.logFile+"\nWas given " + received.path);
+                    out.writeObject(newE);
+                    System.err.println(newE);
                 }
             }
         }
