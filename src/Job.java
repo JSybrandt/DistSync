@@ -24,8 +24,8 @@ public class Job implements Serializable, Comparable {
     public Job(String s) throws IOException{
 
         fileName = s;
-        path = Paths.get("").toAbsolutePath().toString() + "/" + Constants.JOB_DIR+fileName;
-        logFile = Paths.get("").toAbsolutePath().toString() + "/" + Constants.LOG_DIR+fileName+".log";
+        path = Constants.JOB_DIR+fileName;
+        logFile = Constants.LOG_DIR+fileName+".log";
         state = Constants.State.NOT_STARTED;
         type = determineType(fileName);
 
