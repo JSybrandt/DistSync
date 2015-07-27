@@ -3,6 +3,7 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 /**
  * Created by jsybrand on 6/25/15.
@@ -51,6 +52,14 @@ public class main {
                     Job.upToDateMountPoint = new File(args[i]).getAbsolutePath();
                     if(!Job.upToDateMountPoint.endsWith("/"))Job.upToDateMountPoint+="/";
                     System.out.println("Fresh: " + Job.upToDateMountPoint);
+
+                    Process getUpDev = Runtime.getRuntime().exec("df " +Job.upToDateMountPoint+ " | awk '$1~/dev/{print $1}'");
+                    Scanner scanUp = new Scanner(getUpDev.getInputStream());
+                    getUpDev.waitFor();
+                    Job.upToDateDevice = scanUp.next();
+
+                    System.out.println("Fresh Device: " + Job.upToDateDevice);
+
                 }
                 else if(args[i].equals("-s"))
                 {
@@ -58,6 +67,13 @@ public class main {
                     Job.outOfDateMountPoint=new File(args[i]).getAbsolutePath();
                     if(!Job.outOfDateMountPoint.endsWith("/"))Job.outOfDateMountPoint+="/";
                     System.out.println("Stale: " + Job.outOfDateMountPoint);
+
+                    Process getOutDev = Runtime.getRuntime().exec("df " +Job.outOfDateMountPoint+ " | awk '$1~/dev/{print $1}'");
+                    Scanner scanOut = new Scanner(getOutDev.getInputStream());
+                    getOutDev.waitFor();
+                    Job.outOfDateDevice = scanOut.next();
+
+                    System.out.println("Stale Device: " + Job.outOfDateDevice);
                 }
 
                 else if (args[i].equals("-w")) {

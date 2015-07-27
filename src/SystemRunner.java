@@ -8,6 +8,9 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public class SystemRunner extends Thread {
     private String command[], logfile;
     AtomicBoolean isComplete = new AtomicBoolean(false);
+    AtomicBoolean staleNFS = new AtomicBoolean(false);
+    int numberOfTries = 0;
+    final int MAX_TRIES=3;
     SystemRunner(String cmd[],String lFile)
     {
         command = cmd;
@@ -18,13 +21,9 @@ public class SystemRunner extends Thread {
     public void run(){
         try {
 
-            //String cmd="";
-            //for(String s : command)cmd+=s;
-            //System.out.println(cmd);
-
             Process proc = Runtime.getRuntime().exec(command);
             Scanner scan = new Scanner(proc.getErrorStream());
-
+            numberOfTries++;
             proc.waitFor();
 
 
@@ -32,7 +31,10 @@ public class SystemRunner extends Thread {
                 String err = "";
                 while(scan.hasNextLine())err += scan.nextLine() + "\n";
                 CustomLog.log(err,logfile);
-                throw new Exception(command[0] + " returned " + proc.exitValue() + " " + command[command.length - 1]);
+                if(numberOfTries < MAX_TRIES && err.contains("Stale NFS"))
+                    staleNFS.set(true);
+                else
+                    throw new Exception(command[0] + " returned " + proc.exitValue() + " " + command[command.length - 1]);
             }
 
         }catch(Exception e){
@@ -45,4 +47,6 @@ public class SystemRunner extends Thread {
             isComplete.set(true);
         }
     }
+
+    public String getLogfile(){return logfile;}
 }

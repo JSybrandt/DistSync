@@ -60,8 +60,13 @@ public class Job implements Serializable, Comparable {
     private Type type;
     public Type getType(){return type;}
 
-    public static String upToDateMountPoint = null;
-    public static String outOfDateMountPoint = null;
+
+    //these are filled in using command line arguments from main
+    public static String upToDateMountPoint;
+    public static String outOfDateMountPoint;
+    public static String upToDateDevice;
+    public static String outOfDateDevice;
+
 
 
     public int compareTo(Object o)

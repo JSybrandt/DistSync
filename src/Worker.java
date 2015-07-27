@@ -1,3 +1,5 @@
+import sun.rmi.runtime.Log;
+
 import java.io.*;
 import java.net.Socket;
 import java.util.Scanner;
@@ -102,7 +104,7 @@ public class Worker extends Thread {
                         CustomLog.log(e.getMessage(),received.logFile);
 
                     Exception newE = new Exception(e.getMessage() + "\nLog file should be:" + received.logFile+"\nWas given " + received.path);
-                    out.writeObject(newE);
+                    //out.writeObject(newE);
                     System.err.println(newE);
                 }
             }
@@ -116,6 +118,40 @@ public class Worker extends Thread {
         }
     }
 
+    private boolean checkAndRepairStaleNSF(SystemRunner [] runners) throws IOException, InterruptedException
+    {
+        boolean ret = false;
+        //pre check for stale nfs (if the whole file system drops out, this is a fixable issue
+        for(int i = 0 ; i < runners.length;i++)
+        {
+            //if any runner has a stale nsf handle
+            if(runners[i]!=null && runners[i].staleNFS.get())
+            {
+                ret = true;
+                CustomLog.log("Attempting to reset NFS Handle: Up:" + Job.upToDateDevice + " Out:" + Job.outOfDateDevice, runners[i].getLogfile());
+
+                //attempt to toggle the mounts of
+                Runtime.getRuntime().exec("umount " + Job.upToDateDevice).waitFor();
+                Runtime.getRuntime().exec("mount " + Job.upToDateDevice).waitFor();
+                Runtime.getRuntime().exec("umount " + Job.outOfDateDevice).waitFor();
+                Runtime.getRuntime().exec("mount " + Job.outOfDateDevice).waitFor();
+
+                //loop through all runners and restart any that have failed.
+                for(int j = 0 ; j < runners.length;j++)
+                {
+                    if(runners[j]!=null && runners[j].staleNFS.get())
+                    {
+                        runners[j].staleNFS.set(false);
+                        runners[j].isComplete.set(false);
+                        runners[j].start();
+                    }
+                }
+
+                break;
+            }
+        }
+        return ret;
+    }
 
     private void preformCopy(Job job) throws IOException, InterruptedException{
 
@@ -128,6 +164,7 @@ public class Worker extends Thread {
         SystemRunner runners[] = new SystemRunner[numAvalibleProcs];
         while(scan.hasNextLine())
         {
+            checkAndRepairStaleNSF(runners);
             for(int i = 0 ; i < runners.length;i++)
             {
                 if(runners[i]==null || runners[i].isComplete.get())
@@ -194,6 +231,7 @@ public class Worker extends Thread {
         SystemRunner runners[] = new SystemRunner[numAvalibleProcs];
         while(scan.hasNextLine())
         {
+            checkAndRepairStaleNSF(runners);
             for(int i = 0 ; i < runners.length;i++)
             {
                 if(runners[i]==null || runners[i].isComplete.get())
@@ -248,6 +286,7 @@ public class Worker extends Thread {
         SystemRunner runners[] = new SystemRunner[numAvalibleProcs];
         while(scan.hasNextLine())
         {
+            checkAndRepairStaleNSF(runners);
             for(int i = 0 ; i < runners.length;i++)
             {
                 if(runners[i]==null || runners[i].isComplete.get())
