@@ -58,7 +58,7 @@ public class Manager extends Thread {
         boolean hasAliveSockets=false;
         for(Socket s : sockets)
         {
-            if(connectionStatus.get(s)!= Constants.State.ERROR) {
+            if(s.isConnected() && connectionStatus.get(s)!= Constants.State.ERROR) {
                 hasAliveSockets = true;
                 break;
             }
