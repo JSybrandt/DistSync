@@ -105,6 +105,7 @@ public class Worker extends Thread {
 
                     Exception newE = new Exception(e.getMessage() + "\nLog file should be:" + received.logFile+"\nWas given " + received.path);
                     //out.writeObject(newE);
+                    out.writeObject("FINISHED");
                     System.err.println(newE);
                 }
             }
@@ -135,6 +136,8 @@ public class Worker extends Thread {
                 Runtime.getRuntime().exec("mount " + Job.upToDateDevice).waitFor();
                 Runtime.getRuntime().exec("umount " + Job.outOfDateDevice).waitFor();
                 Runtime.getRuntime().exec("mount " + Job.outOfDateDevice).waitFor();
+
+                sleep(10000);
 
                 //loop through all runners and restart any that have failed.
                 for(int j = 0 ; j < runners.length;j++)

@@ -27,22 +27,17 @@ public class SystemRunner extends Thread {
             proc.waitFor();
 
 
-            if(proc.exitValue()!=0) {
+            if (proc.exitValue() != 0) {
                 String err = "";
-                while(scan.hasNextLine())err += scan.nextLine() + "\n";
-                CustomLog.log(err,logfile);
-                if(numberOfTries < MAX_TRIES && err.contains("Stale NFS"))
+                while (scan.hasNextLine()) err += scan.nextLine() + "\n";
+                CustomLog.log("Attempt #" + numberOfTries + "\t" + err, logfile);
+                if (numberOfTries < MAX_TRIES && err.contains("Stale NFS"))
                     staleNFS.set(true);
                 else
-                    throw new Exception(command[0] + " returned " + proc.exitValue() + " " + command[command.length - 1]);
+                    CustomLog.log("FAILURE:" + proc.exitValue(), logfile);
             }
-
-        }catch(Exception e){
-            try {
-                System.err.println(e);
-                CustomLog.log(e.getClass().toString() + ":" + e.getMessage(), logfile);
-            }catch(Exception ignore) {}
         }
+        catch(Exception ignore){}
         finally{
             isComplete.set(true);
         }
