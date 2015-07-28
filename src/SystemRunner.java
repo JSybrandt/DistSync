@@ -14,6 +14,7 @@ public class SystemRunner extends Thread {
     SystemRunner(String cmd[],String lFile)
     {
         command = cmd;
+        command[0] = "nice --15 " + command[0];
         logfile = lFile;
     }
 
