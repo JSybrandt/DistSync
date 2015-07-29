@@ -237,14 +237,14 @@ void evalJobSplit(Job & job, Record & r,  fstream & stream, string type)
 }
 
 //used for old records
-void printRec(Record & rec, fstream &file, fstream &dir){
+void printRec(Record & rec, fstream &file, fstream &dir, string type){
 	if(rec.type=='D'){
 	        dir<<rec<<endl;
 		//WE DONT SPLIT DIR's
 	}
 	else{ //counts files, pipes, devices, soft links
 	  file<<rec<<endl;
-	  evalJobSplit(removeJob,rec,file,"D");
+	  evalJobSplit(removeJob,rec,file,type);
 	}
 }
 //used for new records
@@ -284,7 +284,7 @@ int main(int argc, char** argv)
 				  //cout<<"\tEQUAL"<<endl;
 				  if(isRecModified(newRec, oldRec))
 					{
-					  printRec(newRec,outModified,outDirMod);
+					  printRec(newRec,outModified,outDirMod,"M");
 					  nChanged++;
 					}
 					else
@@ -293,7 +293,7 @@ int main(int argc, char** argv)
 				}
 				else if(oldRec[PATH] < newRec[PATH]){ //old rec doesn't have a match
 				  //cout<<"\tDeleted"<<endl;
-				  printRec(oldRec,outFDeleted, outDDeleted);
+				  printRec(oldRec,outFDeleted, outDDeleted,"D");
 					nDeleted++;
 					oldRec.isValid=false;
 				}
@@ -324,7 +324,7 @@ int main(int argc, char** argv)
 
 		while(oldRec.isValid){
 			nDeleted++;
-			printRec(oldRec,outFDeleted, outDDeleted);
+			printRec(oldRec,outFDeleted, outDDeleted,"D");
 			//(oldRec.type=='D' ? outDDeleted : outFDeleted)<<oldRec<<endl;
 			getline(inOld,line);
 			oldRec.init(line);
