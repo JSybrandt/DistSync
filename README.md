@@ -9,7 +9,7 @@ Distsync currently is comprised of two seperate software components. The job gen
 Job Generator
 -------------
 
-##File Scans##
+###File Scans###
 
 Two scan files are needed to produce jobs. One which is taken from an up-to-date file system, and one which is taken from an out-of-date file system. They scan must be sorted alphabetically by path, and must contain the following attributes, in order, seperated by the pipe character "|".
 
@@ -28,7 +28,7 @@ The attributes are:
 12. Change Time
 13. Path
 
-##Generation Options##
+###Generation Options###
 
 The Job Generator requires three command line arguments to run.
 
@@ -41,7 +41,7 @@ The Job Generator requires three command line arguments to run.
 Example:
 ./jobGenerator/compare -o /scan/oldScan.txt -n /scan/newScan.txt -f ./tmp/jobs/
 
-##Output##
+###Output###
 
 The job generator lists its status to stdout, and outputs jobs in the directory spedified by the -f flag. A series of number pairs are output to stdout every time a job is generated. The first number represents the number of files in the job, and the second represents the number of bytes. Any errors or problematic records are also reported to stdout. At the end of generation, a simple overview of the number of changes is output as well. 
 
@@ -49,15 +49,15 @@ The job generator lists its status to stdout, and outputs jobs in the directory 
 Distsync Runner
 ---------------
 
-##Distributed Architecture##
+###Distributed Architecture###
 
 Distsync.jar is used to start both the distsync manager and worker. Both the manager and a set of workers can be spawned by a single call to distsync using the -m option as described below. 
 
-##Job Files##
+###Job Files###
 
 The distsync java program will respond to jobs located in "./tmp/jobs" and place log files for each job in "./tmp/logs". 
 
-##Distsync Options##
+###Distsync Options###
 
 **-f [directory]** - the -f flag specifies the fresh, or up-to-date directory. This must be the root directory that was used in the up-to-date scan. In order words, every path in the up-to-date scan must be valid if referenced relative to this directory.
 
@@ -71,7 +71,7 @@ The distsync java program will respond to jobs located in "./tmp/jobs" and place
 
 java -jar distsync.jar -f /global/FRESH -s /global/STALE/ -m tlfssv75 tlfssv74 tlfssv73 tlfssv72
 
-##Output##
+###Output###
 
 The distsync manager will produce debugging output to stdout, describing the jobs that are being sent to each worker. Each worker will output debugging information to stdout, although this output is normally not assiciated with any screen and therefore ignored. Each worker will also output results to "./tmp/logs/"  with the time of that log, followed by any errors that occured. The number at the end of the logfile is the numer of nanoseconds that worker spent processing. A successful run with no errors will still result in a time being output. After all workers have finished, the distsync manager outputs some debugging information regarding the time spent in the run, and produces an image at "./tmp/logs/schedule.bmp". This diagram details the job scheduling from that run. 
 
