@@ -114,7 +114,7 @@ struct Record
 
   bool operator==(Record const & rec) const
   {
-    return vals[PATH]==rec[PATH];
+    return vals[PATH]==rec[PATH] && type==rec.type;
   }
   bool operator<(Record const & rec) const
   {
@@ -130,11 +130,20 @@ ostream& operator<<(ostream& out, const Record& rec)
 
 bool isRecModified(Record &rec1, Record &rec2)
 {
-
-    for(int i = 0 ; i < ARR_LENGTH-1; i++)
-      if(i!=BLOCKSIZE && i!=ACCESS_T && i!=INODE && i!=PATH && i!=CHANGE_T && rec1[i]!=rec2[i])//don't report access time change
-	return true;
-    return false;
+  if(rec1 == rec2)
+    {
+      if(rec1.type=='D'){
+	return  rec1[USER]!=rec2[USER] || rec1[MODE]!=rec2[MODE] || rec1[GROUP]!=rec2[GROUP];
+      }
+      else {
+	for(int i = 0 ; i < ARR_LENGTH-1; i++)
+	  if(i!=BLOCKSIZE && i!=ACCESS_T && i!=INODE && i!=PATH && i!=FILE_SET && i!=CHANGE_T && rec1[i]!=rec2[i])//don't report access time change
+	    return true;
+	return false;
+      }
+    }
+  else
+    cerr<<"BAD RECORDS"<<endl;
 }
 
 
@@ -282,7 +291,12 @@ int main(int argc, char** argv)
 			  //cout<<"N:"<<newRec[PATH]<<"\nO:"<<oldRec[PATH]<<endl;
 				if(oldRec[PATH] == newRec[PATH]){
 				  //cout<<"\tEQUAL"<<endl;
-				  if(isRecModified(newRec, oldRec))
+				  
+					if(oldRec.type!='D' && oldRec[NLINK]!="1")
+					{
+						outLCreated<<oldRec<<endl;
+					}
+					else if(isRecModified(newRec, oldRec))
 					{
 					  printRec(newRec,outModified,outDirMod,"M");
 					  nChanged++;
