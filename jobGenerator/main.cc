@@ -77,7 +77,7 @@ int main(int argc, char** argv)
 		}
 		return 2;
 	}
-
+	
 	try{
 		JobOutputStream createDirs("C",outputDirPath);
 		JobOutputStream removeDirs("R",outputDirPath);
@@ -135,7 +135,7 @@ int main(int argc, char** argv)
 				getline(freshScan,tmp);
 				freshRec.init(tmp);
 				if(oldPath!="" &&freshRec[PATH]<oldPath){
-					throw InvalidScanFileException("|"+freshScanPath+":"+freshRec[PATH]+":"+tmp+"|");
+					throw InvalidScanFileException(freshScanPath+"\t"+freshRec[PATH]+"\t"+oldPath);
 				}
 			}
 			if(!staleRec.isValid()){
@@ -143,7 +143,7 @@ int main(int argc, char** argv)
 				getline(staleScan,tmp);
 				staleRec.init(tmp);
 				if(oldPath!="" &&staleRec[PATH]<oldPath){
-					throw InvalidScanFileException("|"+staleScanPath+":"+staleRec[PATH]+":"+tmp+"|");
+					throw InvalidScanFileException(staleScanPath+"\t"+staleRec[PATH]+"\t"+oldPath);
 				}
 			}
 		}//while both inputs are valid
@@ -166,7 +166,7 @@ int main(int argc, char** argv)
 				getline(freshScan,tmp);
 				freshRec.init(tmp);
 				if(oldPath!="" &&freshRec[PATH]<oldPath){
-					throw InvalidScanFileException("|"+freshScanPath+":"+freshRec[PATH]+":"+tmp+"|");
+					throw InvalidScanFileException(freshScanPath+"\t"+freshRec[PATH]+"\t"+oldPath);
 				}
 			}
 		}
@@ -186,7 +186,7 @@ int main(int argc, char** argv)
 				getline(staleScan,tmp);
 				staleRec.init(tmp);
 				if(oldPath!="" &&staleRec[PATH]<oldPath){
-					throw InvalidScanFileException("|"+staleScanPath+":"+staleRec[PATH]+":"+tmp+"|");
+					throw InvalidScanFileException(staleScanPath+"\t"+staleRec[PATH]+"\t"+oldPath);
 				}
 			}
 		}
