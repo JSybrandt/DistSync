@@ -27,19 +27,24 @@ int main(int argc, char** argv)
 	//get command line args
 	for(int i=1; i<argc; i++)
 	{
-		if(i!=argc-1){
-			if(argv[i]=="-n"){
+		if(i<argc-1){
+			if(string(argv[i])=="-n"){
 				i++;
 				freshScanPath = argv[i];
 			}
-			if(argv[i]=="-o"){
+			else if(string(argv[i])=="-o"){
 				i++;
 				staleScanPath = argv[i];
 			}
-			if(argv[i]=="-f"){
+			else if(string(argv[i])=="-f"){
 				i++;
 				outputDirPath = argv[i];
 			}
+			else{
+				cerr<<"Invalid Option:"<<argv[i]<<endl;
+				return 1;
+			}
+			
 		}
 	}
 
