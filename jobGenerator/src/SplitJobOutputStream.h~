@@ -1,0 +1,11 @@
+#pragma once
+#include "JobOutputStream.h"
+class SplitJobOutputStream: public JobOutputStream{
+public:
+	SplitJobOutputStream(string fileRoot, string path);
+	void writeRecord(Record const & rec); //overloaded
+private:
+	void openNewFile();
+	int jobCount,numberOfFiles;
+	double totalSize;
+};

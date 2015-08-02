@@ -1,0 +1,25 @@
+#include "JobOutputStream.h"
+
+JobOutputStream::JobOutputStream(string fileRoot, string path)
+{
+	this->fileRoot = fileRoot;
+	this->path = path;
+	safeOpenOutputStream(this->out,path+fileRoot);
+}
+
+JobOutputStream::~JobOutputStream(){out.close();}
+
+void JobOutputStream::writeRecord(Record const & rec){
+	if(rec.isValid())
+		out<<rec[PATH]<<endl;
+	else
+		throw OutputInvalidRecordException();
+}
+
+void JobOutputStream::safeOpenOutputStream(fstream & fout, string path){
+	fout.open(path.c_str(),ios::out);
+	if(!fout.good())
+	{
+		throw OutputFailedToOpenException();
+	}
+}
