@@ -133,14 +133,14 @@ int main(int argc, char** argv)
 			if(!freshRec.isValid()){
 				getline(freshScan,tmp);
 				if(tmp!="" &&freshRec[PATH]>tmp){
-					throw InvalidScanFileException(freshScanPath);
+					throw InvalidScanFileException("|"+freshScanPath+":"+freshRec[PATH]+":"+tmp+"|");
 				}
 				freshRec.init(tmp);
 			}
 			if(!staleRec.isValid()){
 				getline(staleScan,tmp);
 				if(tmp!="" &&staleRec[PATH]>tmp){
-					throw InvalidScanFileException(staleScanPath);
+					throw InvalidScanFileException("|"+staleScanPath+":"+staleRec[PATH]+":"+tmp+"|");
 				}
 				staleRec.init(tmp);
 			}
@@ -162,7 +162,7 @@ int main(int argc, char** argv)
 			if(!freshRec.isValid()){
 				getline(freshScan,tmp);
 				if(tmp!="" && freshRec[PATH]>tmp){
-					throw InvalidScanFileException(freshScanPath);
+					throw InvalidScanFileException("|"+freshScanPath+":"+freshRec[PATH]+":"+tmp+"|");
 				}
 				freshRec.init(tmp);
 			}
@@ -181,7 +181,7 @@ int main(int argc, char** argv)
 			if(!staleRec.isValid()){
 				getline(staleScan,tmp);
 				if(tmp!="" &&staleRec[PATH]>tmp){
-					throw InvalidScanFileException(staleScanPath);
+					throw InvalidScanFileException("|"+staleScanPath+":"+staleRec[PATH]+":"+tmp+"|");
 				}
 				staleRec.init(tmp);
 			}
