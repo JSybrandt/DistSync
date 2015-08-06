@@ -29,6 +29,13 @@ void Record::init(string data){
 		throw InvalidInputException();
 	}
 
+	//being type OTHER is not exception worthy, but it isn't valid.
+	if(type==Other){
+		cerr<<"Found Device, Socket, or Other Type. Will Not Move.\t"
+			<<vals[PATH]<<endl;
+		return;
+	}
+
 	//if we make it here, its good
 	valid = true;
 	
