@@ -14,6 +14,7 @@ Job Generator
 Two scan files are needed to produce jobs. One which is taken from an up-to-date file system, and one which is taken from an out-of-date file system. They scan must be sorted alphabetically by path, and must contain the following attributes, in order, seperated by the pipe character "|".
 
 The attributes are:
+
 1. File Set Name
 2. Inode Number
 3. Misc Attributes (as defined by https://www-01.ibm.com/support/knowledgecenter/api/content/SSFKCN_4.1.0/com.ibm.cluster.gpfs.v4r1.gpfs200.doc/bl1adv_usngfileattrbts.htm?locale=en )
